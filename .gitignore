@@ -1,0 +1,16 @@
+# Generated documentation (keep README.md)
+docs/*.html
+docs/*.md
+docs/*.json
+!docs/README.md
+
+# But allow index.html for GitHub Pages
+!docs/index.html
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+

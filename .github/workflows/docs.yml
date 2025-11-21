@@ -1,0 +1,57 @@
+name: Generate Documentation
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - '**.proto'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - '**.proto'
+  workflow_dispatch:
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+      
+      - name: Install protoc-gen-doc
+        run: go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
+      
+      - name: Add Go bin to PATH
+        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+      
+      - name: Generate HTML documentation
+        run: |
+          mkdir -p docs
+          protoc --doc_out=docs --doc_opt=html,index.html \
+            common/*.proto \
+            article/*.proto \
+            contact/*.proto \
+            ticket/*.proto \
+            *.proto
+      
+      - name: Generate Markdown documentation
+        run: |
+          protoc --doc_out=docs --doc_opt=markdown,api.md \
+            common/*.proto \
+            article/*.proto \
+            contact/*.proto \
+            ticket/*.proto \
+            *.proto
+      
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: false
+
