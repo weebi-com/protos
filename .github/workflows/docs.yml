@@ -28,6 +28,11 @@ jobs:
       - name: Add Go bin to PATH
         run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
       
+      - name: Install protoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+      
       - name: Generate HTML documentation
         run: |
           mkdir -p docs
