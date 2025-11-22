@@ -1,3 +1,7 @@
+# 1.1.3
+
+- update MarkEmailVerifiedRequest
+
 # 1.1.2
 
 - added rpc updateSubscriberId in fence_service
