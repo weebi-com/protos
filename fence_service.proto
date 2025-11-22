@@ -257,7 +257,8 @@ message PasswordResetConfirmRequest {
 }
 
 message MarkEmailVerifiedRequest {
-  string userId = 1 [json_name = 'userId'];
+  string mail = 1 [json_name = 'mail']; // Required - email is unique per user
+  string userId = 2 [json_name = 'userId']; // Optional - if provided, used directly for better performance
 }
 
 message UpdateSubscriberIdRequest {
