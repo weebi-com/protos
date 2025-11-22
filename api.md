@@ -2375,7 +2375,8 @@ Health check response with service versions
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| userId | [string](#string) |  |  |
+| mail | [string](#string) |  | Required - email is unique per user |
+| userId | [string](#string) |  | Optional - if provided, used directly for better performance |
 
 
 
