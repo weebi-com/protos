@@ -1,6 +1,10 @@
+# 1.1.2
+
+- added rpc updateSubscriberId in fence_service
+
 # 1.1.1
 
-- Added 
+- Added subscriberId in UserPrivate
 
 # 1.1.0
 

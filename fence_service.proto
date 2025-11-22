@@ -56,6 +56,9 @@ service FenceService {
   // Email verification - marks a user's email as verified
   rpc markEmailVerified(MarkEmailVerifiedRequest) returns (google.retail.common.StatusResponse);
   
+  // Update subscriber ID - links a user to a newsletter subscriber
+  rpc updateSubscriberId(UpdateSubscriberIdRequest) returns (google.retail.common.StatusResponse);
+
   rpc createOneChain(weebi.chain.Chain) returns (google.retail.common.StatusResponse);
   rpc readAllChains(weebi.common.empty.Empty) returns (ReadAllChainsResponse);
   // only update fiels not boutiques, not upsert, do nothing if unfound
@@ -255,6 +258,12 @@ message PasswordResetConfirmRequest {
 
 message MarkEmailVerifiedRequest {
   string userId = 1 [json_name = 'userId'];
+}
+
+message UpdateSubscriberIdRequest {
+  string mail = 1 [json_name = 'mail']; // Required - email is unique per user
+  string subscriberId = 2 [json_name = 'subscriberId']; // Required - subscriber ID to link
+  string userId = 3 [json_name = 'userId']; // Optional - if provided, used directly for better performance
 }
 
 /// Health check response with service versions
