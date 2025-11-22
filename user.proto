@@ -43,7 +43,8 @@ message UserPrivate {
   google.protobuf.Timestamp creationDateUTC = 12 [json_name = 'creationDateUTC'];
   bool mustChangePassword = 13 [json_name = 'mustChangePassword']; // Forces password change on first login
   bool emailVerificationSent = 14 [json_name = 'emailVerificationSent']; // Track if setup email was sent
-  reserved 15 to 98;
+  string subscriberId = 15 [json_name = 'subscriberId']; // Optional - created when first subscribing to a newsletter 14
+  reserved 16 to 98;
   map<string, string> othersAttributes = 99 [json_name = 'othersAttributes'];
 }
 

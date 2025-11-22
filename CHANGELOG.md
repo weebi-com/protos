@@ -1,3 +1,7 @@
+# 1.1.1
+
+- Added 
+
 # 1.1.0
 
 - Added `markEmailVerified` RPC to `FenceService` for email verification tracking
