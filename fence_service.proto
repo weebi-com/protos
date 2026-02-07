@@ -196,6 +196,7 @@ message Access {
 message Credentials {
   string mail = 1;
   string password = 2;
+  bool isWebApp = 3;
 }
 
 message DeviceCredentials {
@@ -214,6 +215,7 @@ message Tokens {
   string accessToken = 1;
   string refreshToken = 2;
   bool mustChangePassword = 3;
+  string sessionId = 4;
 }
 
 message UpdateDevicePasswordRequest {
