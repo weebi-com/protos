@@ -2277,6 +2277,7 @@ deviceId == userId, so front can reuse deviceId to try login in
 | ----- | ---- | ----- | ----------- |
 | mail | [string](#string) |  |  |
 | password | [string](#string) |  |  |
+| isWebApp | [bool](#bool) |  |  |
 
 
 
@@ -2570,6 +2571,7 @@ Health check response with service versions
 | accessToken | [string](#string) |  |  |
 | refreshToken | [string](#string) |  |  |
 | mustChangePassword | [bool](#bool) |  |  |
+| sessionId | [string](#string) |  |  |
 
 
 
