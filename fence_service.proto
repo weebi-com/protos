@@ -23,6 +23,8 @@ service FenceService {
   rpc signUp(weebi.user.SignUpRequest) returns (weebi.user.SignUpResponse);
   rpc authenticateWithCredentials (Credentials) returns (Tokens);
   rpc authenticateWithRefreshToken (RefreshToken) returns (Tokens);
+  /// Web session logout - invalidates session server-side. Envoy clears the cookie on success.
+  rpc logout(weebi.common.empty.Empty) returns (weebi.common.empty.Empty);
   
   // Password reset functionality
   rpc requestPasswordReset(PasswordResetRequest) returns (google.retail.common.StatusResponse);
