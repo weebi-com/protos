@@ -2658,6 +2658,7 @@ boutiques &amp; users
 | signUp | [.weebi.user.SignUpRequest](#weebi-user-SignUpRequest) | [.weebi.user.SignUpResponse](#weebi-user-SignUpResponse) |  |
 | authenticateWithCredentials | [Credentials](#weebi-fence-service-Credentials) | [Tokens](#weebi-fence-service-Tokens) |  |
 | authenticateWithRefreshToken | [RefreshToken](#weebi-fence-service-RefreshToken) | [Tokens](#weebi-fence-service-Tokens) |  |
+| logout | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | Web session logout - invalidates session server-side. Envoy clears the cookie on success. |
 | requestPasswordReset | [PasswordResetRequest](#weebi-fence-service-PasswordResetRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Password reset functionality |
 | confirmPasswordReset | [PasswordResetConfirmRequest](#weebi-fence-service-PasswordResetConfirmRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
 | createFirm | [.weebi.firm.CreateFirmRequest](#weebi-firm-CreateFirmRequest) | [.weebi.firm.CreateFirmResponse](#weebi-firm-CreateFirmResponse) | only one firm per &#39;company&#39; / 1. user signup and get a userId &amp; create firm permission / 2. A. user create a firm / Chain and Boutique will be created by default and will use the same firmId / Since createFirm also updates user permission, clientApp needs to reauthent using refresh right after / 2. B. user joins a firm is a different use case detailed in createPendingUser rpc |
