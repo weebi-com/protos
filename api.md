@@ -2037,6 +2037,9 @@ consider adding isDeleted param
 | creationDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | lastUpdateTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | lastUpdatedByuserId | [string](#string) |  |  |
+| isDeleted | [bool](#bool) |  |  |
+| deletedBy | [string](#string) |  | userId who deleted it |
+| restoredBy | [string](#string) |  | userId who restored it (empty if never restored) |
 
 
 
