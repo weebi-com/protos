@@ -1,3 +1,7 @@
+# 1.1.5
+
+- added soft delete fields in Chain
+
 # 1.1.4
 
 - added fields in auth rpc to build sessionId logic in envoy proxy and remove JWT from webapp

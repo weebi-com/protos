@@ -32,6 +32,9 @@ message Chain {
   google.protobuf.Timestamp creationDateUTC = 5 [json_name = 'creationDateUTC'];
   google.protobuf.Timestamp lastUpdateTimestampUTC = 6 [json_name = 'lastUpdateTimestampUTC'];;
   string lastUpdatedByuserId = 7 [json_name = 'lastUpdatedByuserId'];
+  bool isDeleted = 8 [json_name = 'isDeleted'];
+  string deletedBy = 9 [json_name = 'deletedBy']; // userId who deleted it
+  string restoredBy = 10 [json_name = 'restoredBy']; // userId who restored it (empty if never restored)
 }
 
 message Chains {

@@ -69,7 +69,16 @@ import 'package:protos_weebi/protos_weebi.dart';
 
 ### Go
 
-See `weebi_express/scripts/generate_protos.ps1` or `generate_protos.sh`
+This repo includes generated Go code. To regenerate:
+
+```bash
+# From this repo root (requires protoc, protoc-gen-go, protoc-gen-go-grpc)
+bash scripts/generate_go.sh
+```
+
+Or run protoc manually – see `scripts/generate_go.sh` for the exact command.
+
+Consumers (e.g. weebi_express) can use `replace github.com/weebi-com/protos => ../protos` for local development, or depend on the published module once pushed to GitHub.
 
 
 ## Contributing
