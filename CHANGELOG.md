@@ -1,24 +1,33 @@
-# 1.1.5
+# changelog
+## 1.1.6
+
+- Create license proto
+- Create billing_service 
+- Deprecate subscription fields in Firm message
+
+- Added new fields: stripeCustomerId, licenses (repeated License), and providerCustomerIds (map) to enhance firm management capabilities.
+
+## 1.1.5
 
 - added soft delete fields in Chain
 
-# 1.1.4
+## 1.1.4
 
 - added fields in auth rpc to build sessionId logic in envoy proxy and remove JWT from webapp
 
-# 1.1.3
+## 1.1.3
 
 - update MarkEmailVerifiedRequest
 
-# 1.1.2
+## 1.1.2
 
 - added rpc updateSubscriberId in fence_service
 
-# 1.1.1
+## 1.1.1
 
 - Added subscriberId in UserPrivate
 
-# 1.1.0
+## 1.1.0
 
 - Added `markEmailVerified` RPC to `FenceService` for email verification tracking
   - New RPC: `markEmailVerified(MarkEmailVerifiedRequest) returns (StatusResponse)`
@@ -26,6 +35,6 @@
   - Allows service accounts to mark a user's email as verified by setting `emailVerificationSent = true`
   - Used by weebi_express service to track email verification status after users click verification links
 
-# 1.0.0
+## 1.0.0
 
 - 1st 

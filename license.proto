@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package weebi.license;
+
+import "common/g_timestamp.proto";
+
+/// License plan tiers. Maps to payment provider products.
+enum LicensePlan {
+  LICENSE_PLAN_UNKNOWN = 0;
+  STARTER = 1;        // 1 user, €14
+  BOUTIQUE_3X3 = 2;  // 3 users, €29
+  PRO = 3;            // 10 users, €79
+}
+
+/// A license purchase. One purchase can cover multiple users (seats).
+/// Each seat has its own validity period.
+message License {
+  string licenseId = 1 [json_name = 'licenseId'];  // Unique id, e.g. from payment provider
+  LicensePlan licensePlan = 2 [json_name = 'licensePlan'];
+  string providerProductId = 3 [json_name = 'providerProductId'];
+  string providerPriceId = 4 [json_name = 'providerPriceId'];
+  int32 maxUsers = 5 [json_name = 'maxUsers'];
+  google.protobuf.Timestamp validFrom = 6 [json_name = 'validFrom'];
+  /// Omitted = lifetime license
+  google.protobuf.Timestamp validUntil = 7 [json_name = 'validUntil'];
+  repeated LicenseSeat seats = 8 [json_name = 'seats'];
+  /// Which provider processed this purchase: "stripe", "pawapay", etc.
+  string paymentProvider = 9 [json_name = 'paymentProvider'];
+}
+
+/// Per-seat validity. Each user (seat) has its own start/end dates.
+/// firmId is denormalized for efficient MongoDB queries (no joins).
+message LicenseSeat {
+  string firmId = 1 [json_name = 'firmId'];
+  string userId = 2 [json_name = 'userId'];
+  google.protobuf.Timestamp validFrom = 3 [json_name = 'validFrom'];
+  /// Omitted = lifetime for this seat
+  google.protobuf.Timestamp validUntil = 4 [json_name = 'validUntil'];
+}

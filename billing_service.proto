@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package weebi.billing.service;
+
+import "common/empty.proto";
+import "common/g_common.proto";
+import "license.proto";
+
+/// License CRUD and payment handling. Operates on Firm.licenses (embedded).
+/// firmId is derived from the authenticated user's context.
+service BillingService {
+  /// Create a license and append to firm.licenses.
+  rpc createLicense(CreateLicenseRequest) returns (CreateLicenseResponse);
+  /// Read all licenses for the user's firm.
+  rpc readLicenses(weebi.common.empty.Empty) returns (ReadLicensesResponse);
+  /// Update an existing license by licenseId.
+  rpc updateLicense(UpdateLicenseRequest) returns (google.retail.common.StatusResponse);
+  /// Remove a license from firm.licenses.
+  rpc deleteLicense(DeleteLicenseRequest) returns (google.retail.common.StatusResponse);
+  /// Set the customer ID for a payment provider on the firm.
+  rpc updatePaymentCustomerId(UpdatePaymentCustomerIdRequest) returns (google.retail.common.StatusResponse);
+}
+
+message CreateLicenseRequest {
+  weebi.license.License license = 1 [json_name = 'license'];
+}
+
+message CreateLicenseResponse {
+  google.retail.common.StatusResponse statusResponse = 1 [json_name = 'statusResponse'];
+  weebi.license.License license = 2 [json_name = 'license'];
+}
+
+message ReadLicensesResponse {
+  repeated weebi.license.License licenses = 1 [json_name = 'licenses'];
+}
+
+message UpdateLicenseRequest {
+  string licenseId = 1 [json_name = 'licenseId'];
+  weebi.license.License license = 2 [json_name = 'license'];
+}
+
+message DeleteLicenseRequest {
+  string licenseId = 1 [json_name = 'licenseId'];
+}
+
+message UpdatePaymentCustomerIdRequest {
+  string provider = 1 [json_name = 'provider'];  // "stripe", "pawapay", etc.
+  string paymentCustomerId = 2 [json_name = 'paymentCustomerId'];
+}
