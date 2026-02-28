@@ -117,6 +117,16 @@
 - [ticket/ticket_type.proto](#ticket_ticket_type-proto)
     - [TicketTypePb](#weebi-ticket_type-TicketTypePb)
   
+- [billing_service.proto](#billing_service-proto)
+    - [CreateLicenseRequest](#weebi-billing-service-CreateLicenseRequest)
+    - [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse)
+    - [DeleteLicenseRequest](#weebi-billing-service-DeleteLicenseRequest)
+    - [ReadLicensesResponse](#weebi-billing-service-ReadLicensesResponse)
+    - [UpdateLicenseRequest](#weebi-billing-service-UpdateLicenseRequest)
+    - [UpdatePaymentCustomerIdRequest](#weebi-billing-service-UpdatePaymentCustomerIdRequest)
+  
+    - [BillingService](#weebi-billing-service-BillingService)
+  
 - [boutique.proto](#boutique-proto)
     - [BoutiqueMongo](#weebi-boutique-BoutiqueMongo)
     - [BoutiqueMongo.AdditionalAttributesEntry](#weebi-boutique-BoutiqueMongo-AdditionalAttributesEntry)
@@ -170,6 +180,13 @@
     - [CreateFirmRequest](#weebi-firm-CreateFirmRequest)
     - [CreateFirmResponse](#weebi-firm-CreateFirmResponse)
     - [Firm](#weebi-firm-Firm)
+    - [Firm.ProviderCustomerIdsEntry](#weebi-firm-Firm-ProviderCustomerIdsEntry)
+  
+- [license.proto](#license-proto)
+    - [License](#weebi-license-License)
+    - [LicenseSeat](#weebi-license-LicenseSeat)
+  
+    - [LicensePlan](#weebi-license-LicensePlan)
   
 - [user.proto](#user-proto)
     - [PendingUserRequest](#weebi-user-PendingUserRequest)
@@ -1909,6 +1926,130 @@ consider adding isDeleted param
 
 
 
+<a name="billing_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## billing_service.proto
+
+
+
+<a name="weebi-billing-service-CreateLicenseRequest"></a>
+
+### CreateLicenseRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| license | [weebi.license.License](#weebi-license-License) |  |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-CreateLicenseResponse"></a>
+
+### CreateLicenseResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| statusResponse | [google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |  |
+| license | [weebi.license.License](#weebi-license-License) |  |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-DeleteLicenseRequest"></a>
+
+### DeleteLicenseRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| licenseId | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-ReadLicensesResponse"></a>
+
+### ReadLicensesResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| licenses | [weebi.license.License](#weebi-license-License) | repeated |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-UpdateLicenseRequest"></a>
+
+### UpdateLicenseRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| licenseId | [string](#string) |  |  |
+| license | [weebi.license.License](#weebi-license-License) |  |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-UpdatePaymentCustomerIdRequest"></a>
+
+### UpdatePaymentCustomerIdRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | &#34;stripe&#34;, &#34;pawapay&#34;, etc. |
+| paymentCustomerId | [string](#string) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="weebi-billing-service-BillingService"></a>
+
+### BillingService
+License CRUD and payment handling. Operates on Firm.licenses (embedded).
+/ firmId is derived from the authenticated user&#39;s context.
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| createLicense | [CreateLicenseRequest](#weebi-billing-service-CreateLicenseRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | Create a license and append to firm.licenses. |
+| readLicenses | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [ReadLicensesResponse](#weebi-billing-service-ReadLicensesResponse) | Read all licenses for the user&#39;s firm. |
+| updateLicense | [UpdateLicenseRequest](#weebi-billing-service-UpdateLicenseRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Update an existing license by licenseId. |
+| deleteLicense | [DeleteLicenseRequest](#weebi-billing-service-DeleteLicenseRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Remove a license from firm.licenses. |
+| updatePaymentCustomerId | [UpdatePaymentCustomerIdRequest](#weebi-billing-service-UpdatePaymentCustomerIdRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Set the customer ID for a payment provider on the firm. |
+
+ 
+
+
+
 <a name="boutique-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -2744,22 +2885,116 @@ boutiques &amp; users
 | ----- | ---- | ----- | ----------- |
 | firmId | [string](#string) |  |  |
 | name | [string](#string) |  |  |
-| subscriptionPlan | [string](#string) |  |  |
-| subscriptionSeats | [int32](#int32) |  | 1 seat == 1 user/device |
-| subscriptionStartTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| subscriptionEndTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| subscriptionPlan | [string](#string) |  | **Deprecated.** @deprecated Use licenses instead. |
+| subscriptionSeats | [int32](#int32) |  | **Deprecated.** @deprecated Use licenses[].maxUsers instead.
+
+1 seat == 1 user/device |
+| subscriptionStartTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | **Deprecated.** @deprecated Use licenses[].validFrom instead. |
+| subscriptionEndTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | **Deprecated.** @deprecated Use licenses[].validUntil and LicenseSeat.validUntil instead. |
 | status | [bool](#bool) |  |  |
 | statusUpdateTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | if weebi disables date will be in UTC time not local |
 | lastUpdateTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | lastUpdatedByuserId | [string](#string) |  |  |
 | isMailVerified | [bool](#bool) |  |  |
 | creationDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| stripeCustomerId | [string](#string) |  |  |
+| licenses | [weebi.license.License](#weebi-license-License) | repeated | Active licenses. A firm can have multiple licenses (e.g. add-ons, renewals). |
+| providerCustomerIds | [Firm.ProviderCustomerIdsEntry](#weebi-firm-Firm-ProviderCustomerIdsEntry) | repeated | Customer IDs per payment provider. Keys: &#34;stripe&#34;, &#34;pawapay&#34;, etc. |
+
+
+
+
+
+
+<a name="weebi-firm-Firm-ProviderCustomerIdsEntry"></a>
+
+### Firm.ProviderCustomerIdsEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [string](#string) |  |  |
 
 
 
 
 
  
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="license-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## license.proto
+
+
+
+<a name="weebi-license-License"></a>
+
+### License
+A license purchase. One purchase can cover multiple users (seats).
+/ Each seat has its own validity period.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| licenseId | [string](#string) |  | Unique id, e.g. from payment provider |
+| licensePlan | [LicensePlan](#weebi-license-LicensePlan) |  |  |
+| providerProductId | [string](#string) |  |  |
+| providerPriceId | [string](#string) |  |  |
+| maxUsers | [int32](#int32) |  |  |
+| validFrom | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| validUntil | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | Omitted = lifetime license |
+| seats | [LicenseSeat](#weebi-license-LicenseSeat) | repeated |  |
+| paymentProvider | [string](#string) |  | Which provider processed this purchase: &#34;stripe&#34;, &#34;pawapay&#34;, etc. |
+
+
+
+
+
+
+<a name="weebi-license-LicenseSeat"></a>
+
+### LicenseSeat
+Per-seat validity. Each user (seat) has its own start/end dates.
+/ firmId is denormalized for efficient MongoDB queries (no joins).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| firmId | [string](#string) |  |  |
+| userId | [string](#string) |  |  |
+| validFrom | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| validUntil | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | Omitted = lifetime for this seat |
+
+
+
+
+
+ 
+
+
+<a name="weebi-license-LicensePlan"></a>
+
+### LicensePlan
+License plan tiers. Maps to payment provider products.
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| LICENSE_PLAN_UNKNOWN | 0 |  |
+| STARTER | 1 | 1 user, €14 |
+| BOUTIQUE_3X3 | 2 | 3 users, €29 |
+| PRO | 3 | 10 users, €79 |
+
 
  
 

@@ -647,6 +647,45 @@
         
           
           <li>
+            <a href="#billing_service.proto">billing_service.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#weebi.billing.service.CreateLicenseRequest"><span class="badge">M</span>CreateLicenseRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.CreateLicenseResponse"><span class="badge">M</span>CreateLicenseResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.DeleteLicenseRequest"><span class="badge">M</span>DeleteLicenseRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.ReadLicensesResponse"><span class="badge">M</span>ReadLicensesResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.UpdateLicenseRequest"><span class="badge">M</span>UpdateLicenseRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.UpdatePaymentCustomerIdRequest"><span class="badge">M</span>UpdatePaymentCustomerIdRequest</a>
+                </li>
+              
+              
+              
+              
+                <li>
+                  <a href="#weebi.billing.service.BillingService"><span class="badge">S</span>BillingService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+          
+          <li>
             <a href="#boutique.proto">boutique.proto</a>
             <ul>
               
@@ -866,6 +905,33 @@
                   <a href="#weebi.firm.Firm"><span class="badge">M</span>Firm</a>
                 </li>
               
+                <li>
+                  <a href="#weebi.firm.Firm.ProviderCustomerIdsEntry"><span class="badge">M</span>Firm.ProviderCustomerIdsEntry</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#license.proto">license.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#weebi.license.License"><span class="badge">M</span>License</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.license.LicenseSeat"><span class="badge">M</span>LicenseSeat</a>
+                </li>
+              
+              
+                <li>
+                  <a href="#weebi.license.LicensePlan"><span class="badge">E</span>LicensePlan</a>
+                </li>
               
               
               
@@ -4937,6 +5003,232 @@ the server will check they fit the permissions </p></td>
     
       
       <div class="file-heading">
+        <h2 id="billing_service.proto">billing_service.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="weebi.billing.service.CreateLicenseRequest">CreateLicenseRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>license</td>
+                  <td><a href="#weebi.license.License">weebi.license.License</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.CreateLicenseResponse">CreateLicenseResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>statusResponse</td>
+                  <td><a href="#google.retail.common.StatusResponse">google.retail.common.StatusResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>license</td>
+                  <td><a href="#weebi.license.License">weebi.license.License</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.DeleteLicenseRequest">DeleteLicenseRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>licenseId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.ReadLicensesResponse">ReadLicensesResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>licenses</td>
+                  <td><a href="#weebi.license.License">weebi.license.License</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.UpdateLicenseRequest">UpdateLicenseRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>licenseId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>license</td>
+                  <td><a href="#weebi.license.License">weebi.license.License</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.UpdatePaymentCustomerIdRequest">UpdatePaymentCustomerIdRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>provider</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>&#34;stripe&#34;, &#34;pawapay&#34;, etc. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>paymentCustomerId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+        <h3 id="weebi.billing.service.BillingService">BillingService</h3>
+        <p>License CRUD and payment handling. Operates on Firm.licenses (embedded).</p><p>/ firmId is derived from the authenticated user's context.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>createLicense</td>
+                <td><a href="#weebi.billing.service.CreateLicenseRequest">CreateLicenseRequest</a></td>
+                <td><a href="#weebi.billing.service.CreateLicenseResponse">CreateLicenseResponse</a></td>
+                <td><p>Create a license and append to firm.licenses.</p></td>
+              </tr>
+            
+              <tr>
+                <td>readLicenses</td>
+                <td><a href="#weebi.common.empty.Empty">.weebi.common.empty.Empty</a></td>
+                <td><a href="#weebi.billing.service.ReadLicensesResponse">ReadLicensesResponse</a></td>
+                <td><p>Read all licenses for the user&#39;s firm.</p></td>
+              </tr>
+            
+              <tr>
+                <td>updateLicense</td>
+                <td><a href="#weebi.billing.service.UpdateLicenseRequest">UpdateLicenseRequest</a></td>
+                <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
+                <td><p>Update an existing license by licenseId.</p></td>
+              </tr>
+            
+              <tr>
+                <td>deleteLicense</td>
+                <td><a href="#weebi.billing.service.DeleteLicenseRequest">DeleteLicenseRequest</a></td>
+                <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
+                <td><p>Remove a license from firm.licenses.</p></td>
+              </tr>
+            
+              <tr>
+                <td>updatePaymentCustomerId</td>
+                <td><a href="#weebi.billing.service.UpdatePaymentCustomerIdRequest">UpdatePaymentCustomerIdRequest</a></td>
+                <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
+                <td><p>Set the customer ID for a payment provider on the firm.</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
+    
+      
+      <div class="file-heading">
         <h2 id="boutique.proto">boutique.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -6961,28 +7253,30 @@ TODO rename this create</p></td>
                   <td>subscriptionPlan</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p><strong>Deprecated.</strong> @deprecated Use licenses instead. </p></td>
                 </tr>
               
                 <tr>
                   <td>subscriptionSeats</td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
-                  <td><p>1 seat == 1 user/device </p></td>
+                  <td><p><strong>Deprecated.</strong> @deprecated Use licenses[].maxUsers instead.
+
+1 seat == 1 user/device </p></td>
                 </tr>
               
                 <tr>
                   <td>subscriptionStartTimestampUTC</td>
                   <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p><strong>Deprecated.</strong> @deprecated Use licenses[].validFrom instead. </p></td>
                 </tr>
               
                 <tr>
                   <td>subscriptionEndTimestampUTC</td>
                   <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p><strong>Deprecated.</strong> @deprecated Use licenses[].validUntil and LicenseSeat.validUntil instead. </p></td>
                 </tr>
               
                 <tr>
@@ -7027,6 +7321,94 @@ TODO rename this create</p></td>
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>stripeCustomerId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>licenses</td>
+                  <td><a href="#weebi.license.License">weebi.license.License</a></td>
+                  <td>repeated</td>
+                  <td><p>Active licenses. A firm can have multiple licenses (e.g. add-ons, renewals). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>providerCustomerIds</td>
+                  <td><a href="#weebi.firm.Firm.ProviderCustomerIdsEntry">Firm.ProviderCustomerIdsEntry</a></td>
+                  <td>repeated</td>
+                  <td><p>Customer IDs per payment provider. Keys: &#34;stripe&#34;, &#34;pawapay&#34;, etc. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+            
+            
+            <h4>Fields with deprecated option</h4>
+            <table>
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Option</td>
+                </tr>
+              </thead>
+              <tbody>
+              
+                <tr>
+                  <td>subscriptionPlan</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+                <tr>
+                  <td>subscriptionSeats</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+                <tr>
+                  <td>subscriptionStartTimestampUTC</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+                <tr>
+                  <td>subscriptionEndTimestampUTC</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+              </tbody>
+            </table>
+            
+          
+
+        
+      
+        <h3 id="weebi.firm.Firm.ProviderCustomerIdsEntry">Firm.ProviderCustomerIdsEntry</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>key</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>value</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -7035,6 +7417,180 @@ TODO rename this create</p></td>
         
       
 
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="license.proto">license.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="weebi.license.License">License</h3>
+        <p>A license purchase. One purchase can cover multiple users (seats).</p><p>/ Each seat has its own validity period.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>licenseId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Unique id, e.g. from payment provider </p></td>
+                </tr>
+              
+                <tr>
+                  <td>licensePlan</td>
+                  <td><a href="#weebi.license.LicensePlan">LicensePlan</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>providerProductId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>providerPriceId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>maxUsers</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>validFrom</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>validUntil</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p>Omitted = lifetime license </p></td>
+                </tr>
+              
+                <tr>
+                  <td>seats</td>
+                  <td><a href="#weebi.license.LicenseSeat">LicenseSeat</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>paymentProvider</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Which provider processed this purchase: &#34;stripe&#34;, &#34;pawapay&#34;, etc. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.license.LicenseSeat">LicenseSeat</h3>
+        <p>Per-seat validity. Each user (seat) has its own start/end dates.</p><p>/ firmId is denormalized for efficient MongoDB queries (no joins).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>firmId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>userId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>validFrom</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>validUntil</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p>Omitted = lifetime for this seat </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+        <h3 id="weebi.license.LicensePlan">LicensePlan</h3>
+        <p>License plan tiers. Maps to payment provider products.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>LICENSE_PLAN_UNKNOWN</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>STARTER</td>
+                <td>1</td>
+                <td><p>1 user, €14</p></td>
+              </tr>
+            
+              <tr>
+                <td>BOUTIQUE_3X3</td>
+                <td>2</td>
+                <td><p>3 users, €29</p></td>
+              </tr>
+            
+              <tr>
+                <td>PRO</td>
+                <td>3</td>
+                <td><p>10 users, €79</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
       
 
       
