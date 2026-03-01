@@ -651,6 +651,18 @@
             <ul>
               
                 <li>
+                  <a href="#weebi.billing.service.BillingProduct"><span class="badge">M</span>BillingProduct</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.CreateCheckoutSessionRequest"><span class="badge">M</span>CreateCheckoutSessionRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.CreateCheckoutSessionResponse"><span class="badge">M</span>CreateCheckoutSessionResponse</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.billing.service.CreateLicenseRequest"><span class="badge">M</span>CreateLicenseRequest</a>
                 </li>
               
@@ -663,7 +675,23 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.billing.service.FulfillLicenseFromStripeRequest"><span class="badge">M</span>FulfillLicenseFromStripeRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.GetReferralInfoResponse"><span class="badge">M</span>GetReferralInfoResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.ReadBillingProductsResponse"><span class="badge">M</span>ReadBillingProductsResponse</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.billing.service.ReadLicensesResponse"><span class="badge">M</span>ReadLicensesResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.RequestReferralPayoutResponse"><span class="badge">M</span>RequestReferralPayoutResponse</a>
                 </li>
               
                 <li>
@@ -5008,6 +5036,183 @@ the server will check they fit the permissions </p></td>
       <p></p>
 
       
+        <h3 id="weebi.billing.service.BillingProduct">BillingProduct</h3>
+        <p>Billing product (license plan). Stored in billing_products collection.</p><p>/ Single source of truth for price mapping; replaces STRIPE_PRICE_* and STRIPE_PRODUCT_* env vars.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>productId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>e.g. &#34;solo&#34;, &#34;trio&#34;, &#34;pro&#34; </p></td>
+                </tr>
+              
+                <tr>
+                  <td>licensePlan</td>
+                  <td><a href="#weebi.license.LicensePlan">weebi.license.LicensePlan</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>maxUsers</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>amountCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>stripeProductId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>stripePriceId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Used for checkout and webhook </p></td>
+                </tr>
+              
+                <tr>
+                  <td>pawapayProductId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Optional, for future </p></td>
+                </tr>
+              
+                <tr>
+                  <td>creationDateUTC</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>updateDateUTC</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>deletionDateUTC</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isDeleted</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.CreateCheckoutSessionRequest">CreateCheckoutSessionRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>priceId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Stripe Price ID (from billing_products collection, e.g. readBillingProducts). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>successUrl</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>URL to redirect after successful payment. May include {CHECKOUT_SESSION_ID}. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>cancelUrl</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>URL to redirect if customer cancels. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>referralCode</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Optional referral code to apply. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>creditAppliedCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Optional credit (cents) to apply. Deducted from firm balance. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.CreateCheckoutSessionResponse">CreateCheckoutSessionResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>checkoutUrl</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Redirect customer here </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.billing.service.CreateLicenseRequest">CreateLicenseRequest</h3>
         <p></p>
 
@@ -5023,6 +5228,20 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#weebi.license.License">weebi.license.License</a></td>
                   <td></td>
                   <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>referralCode</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Referral code used by the buyer (e.g. from shopkeeper who referred them). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>creditAppliedCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Amount of referral credit (cents) to apply. Deducted from buyer&#39;s firm balance. </p></td>
                 </tr>
               
             </tbody>
@@ -5087,6 +5306,127 @@ the server will check they fit the permissions </p></td>
 
         
       
+        <h3 id="weebi.billing.service.FulfillLicenseFromStripeRequest">FulfillLicenseFromStripeRequest</h3>
+        <p>priceId is the single source of truth; billing_service maps it via billing_products collection.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>firmId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>licenseId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>priceId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Stripe price ID; billing_service looks up in billing_products </p></td>
+                </tr>
+              
+                <tr>
+                  <td>stripeCustomerId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>referralCode</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>creditAppliedCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.GetReferralInfoResponse">GetReferralInfoResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>referralCode</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>creditBalanceCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>minPayoutCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>1500 = €15 </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.ReadBillingProductsResponse">ReadBillingProductsResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>products</td>
+                  <td><a href="#weebi.billing.service.BillingProduct">BillingProduct</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.billing.service.ReadLicensesResponse">ReadLicensesResponse</h3>
         <p></p>
 
@@ -5102,6 +5442,37 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#weebi.license.License">weebi.license.License</a></td>
                   <td>repeated</td>
                   <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.RequestReferralPayoutResponse">RequestReferralPayoutResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>statusResponse</td>
+                  <td><a href="#google.retail.common.StatusResponse">google.retail.common.StatusResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>amountCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Amount requested for payout </p></td>
                 </tr>
               
             </tbody>
@@ -5202,6 +5573,13 @@ the server will check they fit the permissions </p></td>
               </tr>
             
               <tr>
+                <td>readBillingProducts</td>
+                <td><a href="#weebi.common.empty.Empty">.weebi.common.empty.Empty</a></td>
+                <td><a href="#weebi.billing.service.ReadBillingProductsResponse">ReadBillingProductsResponse</a></td>
+                <td><p>Read available billing products (license plans). Used by webapp for checkout.</p></td>
+              </tr>
+            
+              <tr>
                 <td>updateLicense</td>
                 <td><a href="#weebi.billing.service.UpdateLicenseRequest">UpdateLicenseRequest</a></td>
                 <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
@@ -5220,6 +5598,35 @@ the server will check they fit the permissions </p></td>
                 <td><a href="#weebi.billing.service.UpdatePaymentCustomerIdRequest">UpdatePaymentCustomerIdRequest</a></td>
                 <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
                 <td><p>Set the customer ID for a payment provider on the firm.</p></td>
+              </tr>
+            
+              <tr>
+                <td>getReferralInfo</td>
+                <td><a href="#weebi.common.empty.Empty">.weebi.common.empty.Empty</a></td>
+                <td><a href="#weebi.billing.service.GetReferralInfoResponse">GetReferralInfoResponse</a></td>
+                <td><p>Get referral code and credit balance for the user&#39;s firm.</p></td>
+              </tr>
+            
+              <tr>
+                <td>requestReferralPayout</td>
+                <td><a href="#weebi.common.empty.Empty">.weebi.common.empty.Empty</a></td>
+                <td><a href="#weebi.billing.service.RequestReferralPayoutResponse">RequestReferralPayoutResponse</a></td>
+                <td><p>Request cash-out of referral credit. Requires balance &gt;= 1500 (€15). Payout to same payment customer.</p></td>
+              </tr>
+            
+              <tr>
+                <td>createCheckoutSession</td>
+                <td><a href="#weebi.billing.service.CreateCheckoutSessionRequest">CreateCheckoutSessionRequest</a></td>
+                <td><a href="#weebi.billing.service.CreateCheckoutSessionResponse">CreateCheckoutSessionResponse</a></td>
+                <td><p>Create a Stripe Checkout Session for a license purchase. Returns URL to redirect the customer.</p></td>
+              </tr>
+            
+              <tr>
+                <td>fulfillLicenseFromStripe</td>
+                <td><a href="#weebi.billing.service.FulfillLicenseFromStripeRequest">FulfillLicenseFromStripeRequest</a></td>
+                <td><a href="#weebi.billing.service.CreateLicenseResponse">CreateLicenseResponse</a></td>
+                <td><p>Internal: fulfill a license after Stripe payment. Called by weebi_express webhook handler.
+/ Requires service account auth.</p></td>
               </tr>
             
           </tbody>
@@ -7342,6 +7749,20 @@ TODO rename this create</p></td>
                   <td><p>Customer IDs per payment provider. Keys: &#34;stripe&#34;, &#34;pawapay&#34;, etc. </p></td>
                 </tr>
               
+                <tr>
+                  <td>referralCode</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Per-firm referral code. Share with others; 20% commission on referred license sales. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>referralCreditBalanceCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Referral credit balance in EUR cents. Auto-applied at checkout or cash-out above €15. </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -7503,6 +7924,20 @@ TODO rename this create</p></td>
                   <td><p>Which provider processed this purchase: &#34;stripe&#34;, &#34;pawapay&#34;, etc. </p></td>
                 </tr>
               
+                <tr>
+                  <td>referredByFirmId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Firm that referred this purchase (referrer). Set when buyer used referrer&#39;s code. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>creditAppliedCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Amount of referral credit (cents) applied to this purchase. Deducted from buyer&#39;s firm. </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -7572,13 +8007,13 @@ TODO rename this create</p></td>
               </tr>
             
               <tr>
-                <td>STARTER</td>
+                <td>SOLO</td>
                 <td>1</td>
                 <td><p>1 user, €14</p></td>
               </tr>
             
               <tr>
-                <td>BOUTIQUE_3X3</td>
+                <td>TRIO</td>
                 <td>2</td>
                 <td><p>3 users, €29</p></td>
               </tr>

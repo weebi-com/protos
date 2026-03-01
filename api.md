@@ -118,10 +118,17 @@
     - [TicketTypePb](#weebi-ticket_type-TicketTypePb)
   
 - [billing_service.proto](#billing_service-proto)
+    - [BillingProduct](#weebi-billing-service-BillingProduct)
+    - [CreateCheckoutSessionRequest](#weebi-billing-service-CreateCheckoutSessionRequest)
+    - [CreateCheckoutSessionResponse](#weebi-billing-service-CreateCheckoutSessionResponse)
     - [CreateLicenseRequest](#weebi-billing-service-CreateLicenseRequest)
     - [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse)
     - [DeleteLicenseRequest](#weebi-billing-service-DeleteLicenseRequest)
+    - [FulfillLicenseFromStripeRequest](#weebi-billing-service-FulfillLicenseFromStripeRequest)
+    - [GetReferralInfoResponse](#weebi-billing-service-GetReferralInfoResponse)
+    - [ReadBillingProductsResponse](#weebi-billing-service-ReadBillingProductsResponse)
     - [ReadLicensesResponse](#weebi-billing-service-ReadLicensesResponse)
+    - [RequestReferralPayoutResponse](#weebi-billing-service-RequestReferralPayoutResponse)
     - [UpdateLicenseRequest](#weebi-billing-service-UpdateLicenseRequest)
     - [UpdatePaymentCustomerIdRequest](#weebi-billing-service-UpdatePaymentCustomerIdRequest)
   
@@ -1933,6 +1940,67 @@ consider adding isDeleted param
 
 
 
+<a name="weebi-billing-service-BillingProduct"></a>
+
+### BillingProduct
+Billing product (license plan). Stored in billing_products collection.
+/ Single source of truth for price mapping; replaces STRIPE_PRICE_* and STRIPE_PRODUCT_* env vars.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| productId | [string](#string) |  | e.g. &#34;solo&#34;, &#34;trio&#34;, &#34;pro&#34; |
+| licensePlan | [weebi.license.LicensePlan](#weebi-license-LicensePlan) |  |  |
+| maxUsers | [int32](#int32) |  |  |
+| amountCents | [int32](#int32) |  |  |
+| currency | [string](#string) |  |  |
+| stripeProductId | [string](#string) |  |  |
+| stripePriceId | [string](#string) |  | Used for checkout and webhook |
+| pawapayProductId | [string](#string) |  | Optional, for future |
+| creationDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updateDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| deletionDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| isDeleted | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-CreateCheckoutSessionRequest"></a>
+
+### CreateCheckoutSessionRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| priceId | [string](#string) |  | Stripe Price ID (from billing_products collection, e.g. readBillingProducts). |
+| successUrl | [string](#string) |  | URL to redirect after successful payment. May include {CHECKOUT_SESSION_ID}. |
+| cancelUrl | [string](#string) |  | URL to redirect if customer cancels. |
+| referralCode | [string](#string) |  | Optional referral code to apply. |
+| creditAppliedCents | [int32](#int32) |  | Optional credit (cents) to apply. Deducted from firm balance. |
+
+
+
+
+
+
+<a name="weebi-billing-service-CreateCheckoutSessionResponse"></a>
+
+### CreateCheckoutSessionResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| checkoutUrl | [string](#string) |  | Redirect customer here |
+
+
+
+
+
+
 <a name="weebi-billing-service-CreateLicenseRequest"></a>
 
 ### CreateLicenseRequest
@@ -1942,6 +2010,8 @@ consider adding isDeleted param
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | license | [weebi.license.License](#weebi-license-License) |  |  |
+| referralCode | [string](#string) |  | Referral code used by the buyer (e.g. from shopkeeper who referred them). |
+| creditAppliedCents | [int32](#int32) |  | Amount of referral credit (cents) to apply. Deducted from buyer&#39;s firm balance. |
 
 
 
@@ -1979,6 +2049,58 @@ consider adding isDeleted param
 
 
 
+<a name="weebi-billing-service-FulfillLicenseFromStripeRequest"></a>
+
+### FulfillLicenseFromStripeRequest
+priceId is the single source of truth; billing_service maps it via billing_products collection.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| firmId | [string](#string) |  |  |
+| licenseId | [string](#string) |  |  |
+| priceId | [string](#string) |  | Stripe price ID; billing_service looks up in billing_products |
+| stripeCustomerId | [string](#string) |  |  |
+| referralCode | [string](#string) |  |  |
+| creditAppliedCents | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-GetReferralInfoResponse"></a>
+
+### GetReferralInfoResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| referralCode | [string](#string) |  |  |
+| creditBalanceCents | [int32](#int32) |  |  |
+| minPayoutCents | [int32](#int32) |  | 1500 = €15 |
+
+
+
+
+
+
+<a name="weebi-billing-service-ReadBillingProductsResponse"></a>
+
+### ReadBillingProductsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| products | [BillingProduct](#weebi-billing-service-BillingProduct) | repeated |  |
+
+
+
+
+
+
 <a name="weebi-billing-service-ReadLicensesResponse"></a>
 
 ### ReadLicensesResponse
@@ -1988,6 +2110,22 @@ consider adding isDeleted param
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | licenses | [weebi.license.License](#weebi-license-License) | repeated |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-RequestReferralPayoutResponse"></a>
+
+### RequestReferralPayoutResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| statusResponse | [google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |  |
+| amountCents | [int32](#int32) |  | Amount requested for payout |
 
 
 
@@ -2042,9 +2180,14 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | ----------- | ------------ | ------------- | ------------|
 | createLicense | [CreateLicenseRequest](#weebi-billing-service-CreateLicenseRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | Create a license and append to firm.licenses. |
 | readLicenses | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [ReadLicensesResponse](#weebi-billing-service-ReadLicensesResponse) | Read all licenses for the user&#39;s firm. |
+| readBillingProducts | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [ReadBillingProductsResponse](#weebi-billing-service-ReadBillingProductsResponse) | Read available billing products (license plans). Used by webapp for checkout. |
 | updateLicense | [UpdateLicenseRequest](#weebi-billing-service-UpdateLicenseRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Update an existing license by licenseId. |
 | deleteLicense | [DeleteLicenseRequest](#weebi-billing-service-DeleteLicenseRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Remove a license from firm.licenses. |
 | updatePaymentCustomerId | [UpdatePaymentCustomerIdRequest](#weebi-billing-service-UpdatePaymentCustomerIdRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Set the customer ID for a payment provider on the firm. |
+| getReferralInfo | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [GetReferralInfoResponse](#weebi-billing-service-GetReferralInfoResponse) | Get referral code and credit balance for the user&#39;s firm. |
+| requestReferralPayout | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [RequestReferralPayoutResponse](#weebi-billing-service-RequestReferralPayoutResponse) | Request cash-out of referral credit. Requires balance &gt;= 1500 (€15). Payout to same payment customer. |
+| createCheckoutSession | [CreateCheckoutSessionRequest](#weebi-billing-service-CreateCheckoutSessionRequest) | [CreateCheckoutSessionResponse](#weebi-billing-service-CreateCheckoutSessionResponse) | Create a Stripe Checkout Session for a license purchase. Returns URL to redirect the customer. |
+| fulfillLicenseFromStripe | [FulfillLicenseFromStripeRequest](#weebi-billing-service-FulfillLicenseFromStripeRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | Internal: fulfill a license after Stripe payment. Called by weebi_express webhook handler. / Requires service account auth. |
 
  
 
@@ -2900,6 +3043,8 @@ boutiques &amp; users
 | stripeCustomerId | [string](#string) |  |  |
 | licenses | [weebi.license.License](#weebi-license-License) | repeated | Active licenses. A firm can have multiple licenses (e.g. add-ons, renewals). |
 | providerCustomerIds | [Firm.ProviderCustomerIdsEntry](#weebi-firm-Firm-ProviderCustomerIdsEntry) | repeated | Customer IDs per payment provider. Keys: &#34;stripe&#34;, &#34;pawapay&#34;, etc. |
+| referralCode | [string](#string) |  | Per-firm referral code. Share with others; 20% commission on referred license sales. |
+| referralCreditBalanceCents | [int32](#int32) |  | Referral credit balance in EUR cents. Auto-applied at checkout or cash-out above €15. |
 
 
 
@@ -2956,6 +3101,8 @@ A license purchase. One purchase can cover multiple users (seats).
 | validUntil | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | Omitted = lifetime license |
 | seats | [LicenseSeat](#weebi-license-LicenseSeat) | repeated |  |
 | paymentProvider | [string](#string) |  | Which provider processed this purchase: &#34;stripe&#34;, &#34;pawapay&#34;, etc. |
+| referredByFirmId | [string](#string) |  | Firm that referred this purchase (referrer). Set when buyer used referrer&#39;s code. |
+| creditAppliedCents | [int32](#int32) |  | Amount of referral credit (cents) applied to this purchase. Deducted from buyer&#39;s firm. |
 
 
 
@@ -2991,8 +3138,8 @@ License plan tiers. Maps to payment provider products.
 | Name | Number | Description |
 | ---- | ------ | ----------- |
 | LICENSE_PLAN_UNKNOWN | 0 |  |
-| STARTER | 1 | 1 user, €14 |
-| BOUTIQUE_3X3 | 2 | 3 users, €29 |
+| SOLO | 1 | 1 user, €14 |
+| TRIO | 2 | 3 users, €29 |
 | PRO | 3 | 10 users, €79 |
 
 
