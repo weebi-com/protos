@@ -4,6 +4,7 @@ package weebi.billing.service;
 
 import "common/empty.proto";
 import "common/g_common.proto";
+import "common/g_timestamp.proto";
 import "license.proto";
 
 /// License CRUD and payment handling. Operates on Firm.licenses (embedded).
@@ -13,16 +14,31 @@ service BillingService {
   rpc createLicense(CreateLicenseRequest) returns (CreateLicenseResponse);
   /// Read all licenses for the user's firm.
   rpc readLicenses(weebi.common.empty.Empty) returns (ReadLicensesResponse);
+  /// Read available billing products (license plans). Used by webapp for checkout.
+  rpc readBillingProducts(weebi.common.empty.Empty) returns (ReadBillingProductsResponse);
   /// Update an existing license by licenseId.
   rpc updateLicense(UpdateLicenseRequest) returns (google.retail.common.StatusResponse);
   /// Remove a license from firm.licenses.
   rpc deleteLicense(DeleteLicenseRequest) returns (google.retail.common.StatusResponse);
   /// Set the customer ID for a payment provider on the firm.
   rpc updatePaymentCustomerId(UpdatePaymentCustomerIdRequest) returns (google.retail.common.StatusResponse);
+  /// Get referral code and credit balance for the user's firm.
+  rpc getReferralInfo(weebi.common.empty.Empty) returns (GetReferralInfoResponse);
+  /// Request cash-out of referral credit. Requires balance >= 1500 (€15). Payout to same payment customer.
+  rpc requestReferralPayout(weebi.common.empty.Empty) returns (RequestReferralPayoutResponse);
+  /// Create a Stripe Checkout Session for a license purchase. Returns URL to redirect the customer.
+  rpc createCheckoutSession(CreateCheckoutSessionRequest) returns (CreateCheckoutSessionResponse);
+  /// Internal: fulfill a license after Stripe payment. Called by weebi_express webhook handler.
+  /// Requires service account auth.
+  rpc fulfillLicenseFromStripe(FulfillLicenseFromStripeRequest) returns (CreateLicenseResponse);
 }
 
 message CreateLicenseRequest {
   weebi.license.License license = 1 [json_name = 'license'];
+  /// Referral code used by the buyer (e.g. from shopkeeper who referred them).
+  string referralCode = 2 [json_name = 'referralCode'];
+  /// Amount of referral credit (cents) to apply. Deducted from buyer's firm balance.
+  int32 creditAppliedCents = 3 [json_name = 'creditAppliedCents'];
 }
 
 message CreateLicenseResponse {
@@ -46,4 +62,63 @@ message DeleteLicenseRequest {
 message UpdatePaymentCustomerIdRequest {
   string provider = 1 [json_name = 'provider'];  // "stripe", "pawapay", etc.
   string paymentCustomerId = 2 [json_name = 'paymentCustomerId'];
+}
+
+message GetReferralInfoResponse {
+  string referralCode = 1 [json_name = 'referralCode'];
+  int32 creditBalanceCents = 2 [json_name = 'creditBalanceCents'];
+  int32 minPayoutCents = 3 [json_name = 'minPayoutCents'];  // 1500 = €15
+}
+
+message RequestReferralPayoutResponse {
+  google.retail.common.StatusResponse statusResponse = 1 [json_name = 'statusResponse'];
+  int32 amountCents = 2 [json_name = 'amountCents'];  // Amount requested for payout
+}
+
+message CreateCheckoutSessionRequest {
+  /// Stripe Price ID (from billing_products collection, e.g. readBillingProducts).
+  string priceId = 1 [json_name = 'priceId'];
+  /// URL to redirect after successful payment. May include {CHECKOUT_SESSION_ID}.
+  string successUrl = 2 [json_name = 'successUrl'];
+  /// URL to redirect if customer cancels.
+  string cancelUrl = 3 [json_name = 'cancelUrl'];
+  /// Optional referral code to apply.
+  string referralCode = 4 [json_name = 'referralCode'];
+  /// Optional credit (cents) to apply. Deducted from firm balance.
+  int32 creditAppliedCents = 5 [json_name = 'creditAppliedCents'];
+}
+
+message CreateCheckoutSessionResponse {
+  string checkoutUrl = 1 [json_name = 'checkoutUrl'];  // Redirect customer here
+}
+
+/// priceId is the single source of truth; billing_service maps it via billing_products collection.
+message FulfillLicenseFromStripeRequest {
+  string firmId = 1 [json_name = 'firmId'];
+  string licenseId = 2 [json_name = 'licenseId'];
+  string priceId = 3 [json_name = 'priceId'];  // Stripe price ID; billing_service looks up in billing_products
+  string stripeCustomerId = 4 [json_name = 'stripeCustomerId'];
+  string referralCode = 5 [json_name = 'referralCode'];
+  int32 creditAppliedCents = 6 [json_name = 'creditAppliedCents'];
+}
+
+/// Billing product (license plan). Stored in billing_products collection.
+/// Single source of truth for price mapping; replaces STRIPE_PRICE_* and STRIPE_PRODUCT_* env vars.
+message BillingProduct {
+  string productId = 1 [json_name = 'productId'];  // e.g. "solo", "trio", "pro"
+  weebi.license.LicensePlan licensePlan = 2 [json_name = 'licensePlan'];
+  int32 maxUsers = 3 [json_name = 'maxUsers'];
+  int32 amountCents = 4 [json_name = 'amountCents'];
+  string currency = 5 [json_name = 'currency'];
+  string stripeProductId = 6 [json_name = 'stripeProductId'];
+  string stripePriceId = 7 [json_name = 'stripePriceId'];  // Used for checkout and webhook
+  string pawapayProductId = 8 [json_name = 'pawapayProductId'];  // Optional, for future
+  google.protobuf.Timestamp creationDateUTC = 9 [json_name = 'creationDateUTC'];
+  google.protobuf.Timestamp updateDateUTC = 10 [json_name = 'updateDateUTC'];
+  google.protobuf.Timestamp deletionDateUTC = 11 [json_name = 'deletionDateUTC'];
+  bool isDeleted = 12 [json_name = 'isDeleted'];
+}
+
+message ReadBillingProductsResponse {
+  repeated BillingProduct products = 1 [json_name = 'products'];
 }

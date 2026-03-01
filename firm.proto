@@ -28,6 +28,10 @@ message Firm {
     repeated weebi.license.License licenses = 14 [json_name = 'licenses'];
     /// Customer IDs per payment provider. Keys: "stripe", "pawapay", etc.
     map<string, string> providerCustomerIds = 15 [json_name = 'providerCustomerIds'];
+    /// Per-firm referral code. Share with others; 20% commission on referred license sales.
+    string referralCode = 16 [json_name = 'referralCode'];
+    /// Referral credit balance in EUR cents. Auto-applied at checkout or cash-out above €15.
+    int32 referralCreditBalanceCents = 17 [json_name = 'referralCreditBalanceCents'];
   }
 
 message CreateFirmRequest {

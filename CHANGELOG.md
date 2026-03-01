@@ -1,4 +1,11 @@
 # changelog
+## 1.1.7
+
+- Referral program: per-firm referral codes, 20% commission as credit, auto-apply at checkout, cash-out ≥ €15
+- License: referredByFirmId, creditAppliedCents
+- Firm: referralCode, referralCreditBalanceCents
+- BillingService: getReferralInfo, requestReferralPayout; CreateLicenseRequest: referralCode, creditAppliedCents
+
 ## 1.1.6
 
 - Create license proto

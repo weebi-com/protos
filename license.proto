@@ -7,8 +7,8 @@ import "common/g_timestamp.proto";
 /// License plan tiers. Maps to payment provider products.
 enum LicensePlan {
   LICENSE_PLAN_UNKNOWN = 0;
-  STARTER = 1;        // 1 user, €14
-  BOUTIQUE_3X3 = 2;  // 3 users, €29
+  SOLO = 1;        // 1 user, €14
+  TRIO = 2;       // 3 users, €29
   PRO = 3;            // 10 users, €79
 }
 
@@ -26,6 +26,10 @@ message License {
   repeated LicenseSeat seats = 8 [json_name = 'seats'];
   /// Which provider processed this purchase: "stripe", "pawapay", etc.
   string paymentProvider = 9 [json_name = 'paymentProvider'];
+  /// Firm that referred this purchase (referrer). Set when buyer used referrer's code.
+  string referredByFirmId = 10 [json_name = 'referredByFirmId'];
+  /// Amount of referral credit (cents) applied to this purchase. Deducted from buyer's firm.
+  int32 creditAppliedCents = 11 [json_name = 'creditAppliedCents'];
 }
 
 /// Per-seat validity. Each user (seat) has its own start/end dates.
