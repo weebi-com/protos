@@ -1,4 +1,9 @@
 # changelog
+
+## 1.1.8
+
+- PaymentProvider in license.proto
+
 ## 1.1.7
 
 - Referral program: per-firm referral codes, 20% commission as credit, auto-apply at checkout, cash-out ≥ €15
