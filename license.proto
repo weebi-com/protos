@@ -8,8 +8,15 @@ import "common/g_timestamp.proto";
 enum LicensePlan {
   LICENSE_PLAN_UNKNOWN = 0;
   SOLO = 1;        // 1 user, €14
-  TRIO = 2;       // 3 users, €29
-  PRO = 3;            // 10 users, €79
+  TRIO = 2;        // 3 users, €29
+  PRO = 3;         // 10 users, €79
+}
+
+/// Payment provider that processed the purchase.
+enum PaymentProvider {
+  PAYMENT_PROVIDER_UNKNOWN = 0;
+  PAYMENT_PROVIDER_STRIPE = 1;
+  PAYMENT_PROVIDER_PAWAPAY = 2;
 }
 
 /// A license purchase. One purchase can cover multiple users (seats).
@@ -24,8 +31,8 @@ message License {
   /// Omitted = lifetime license
   google.protobuf.Timestamp validUntil = 7 [json_name = 'validUntil'];
   repeated LicenseSeat seats = 8 [json_name = 'seats'];
-  /// Which provider processed this purchase: "stripe", "pawapay", etc.
-  string paymentProvider = 9 [json_name = 'paymentProvider'];
+  /// Which provider processed this purchase.
+  PaymentProvider paymentProvider = 9 [json_name = 'paymentProvider'];
   /// Firm that referred this purchase (referrer). Set when buyer used referrer's code.
   string referredByFirmId = 10 [json_name = 'referredByFirmId'];
   /// Amount of referral credit (cents) applied to this purchase. Deducted from buyer's firm.
