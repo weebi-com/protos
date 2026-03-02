@@ -961,6 +961,10 @@
                   <a href="#weebi.license.LicensePlan"><span class="badge">E</span>LicensePlan</a>
                 </li>
               
+                <li>
+                  <a href="#weebi.license.PaymentProvider"><span class="badge">E</span>PaymentProvider</a>
+                </li>
+              
               
               
             </ul>
@@ -7919,9 +7923,9 @@ TODO rename this create</p></td>
               
                 <tr>
                   <td>paymentProvider</td>
-                  <td><a href="#string">string</a></td>
+                  <td><a href="#weebi.license.PaymentProvider">PaymentProvider</a></td>
                   <td></td>
-                  <td><p>Which provider processed this purchase: &#34;stripe&#34;, &#34;pawapay&#34;, etc. </p></td>
+                  <td><p>Which provider processed this purchase. </p></td>
                 </tr>
               
                 <tr>
@@ -8022,6 +8026,35 @@ TODO rename this create</p></td>
                 <td>PRO</td>
                 <td>3</td>
                 <td><p>10 users, €79</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="weebi.license.PaymentProvider">PaymentProvider</h3>
+        <p>Payment provider that processed the purchase.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>PAYMENT_PROVIDER_UNKNOWN</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>PAYMENT_PROVIDER_STRIPE</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>PAYMENT_PROVIDER_PAWAPAY</td>
+                <td>2</td>
+                <td><p></p></td>
               </tr>
             
           </tbody>

@@ -194,6 +194,7 @@
     - [LicenseSeat](#weebi-license-LicenseSeat)
   
     - [LicensePlan](#weebi-license-LicensePlan)
+    - [PaymentProvider](#weebi-license-PaymentProvider)
   
 - [user.proto](#user-proto)
     - [PendingUserRequest](#weebi-user-PendingUserRequest)
@@ -3100,7 +3101,7 @@ A license purchase. One purchase can cover multiple users (seats).
 | validFrom | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | validUntil | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | Omitted = lifetime license |
 | seats | [LicenseSeat](#weebi-license-LicenseSeat) | repeated |  |
-| paymentProvider | [string](#string) |  | Which provider processed this purchase: &#34;stripe&#34;, &#34;pawapay&#34;, etc. |
+| paymentProvider | [PaymentProvider](#weebi-license-PaymentProvider) |  | Which provider processed this purchase. |
 | referredByFirmId | [string](#string) |  | Firm that referred this purchase (referrer). Set when buyer used referrer&#39;s code. |
 | creditAppliedCents | [int32](#int32) |  | Amount of referral credit (cents) applied to this purchase. Deducted from buyer&#39;s firm. |
 
@@ -3141,6 +3142,19 @@ License plan tiers. Maps to payment provider products.
 | SOLO | 1 | 1 user, €14 |
 | TRIO | 2 | 3 users, €29 |
 | PRO | 3 | 10 users, €79 |
+
+
+
+<a name="weebi-license-PaymentProvider"></a>
+
+### PaymentProvider
+Payment provider that processed the purchase.
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| PAYMENT_PROVIDER_UNKNOWN | 0 |  |
+| PAYMENT_PROVIDER_STRIPE | 1 |  |
+| PAYMENT_PROVIDER_PAWAPAY | 2 |  |
 
 
  
