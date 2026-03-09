@@ -31,6 +31,9 @@ service BillingService {
   /// Internal: fulfill a license after Stripe payment. Called by weebi_express webhook handler.
   /// Requires service account auth.
   rpc fulfillLicenseFromStripe(FulfillLicenseFromStripeRequest) returns (CreateLicenseResponse);
+  /// User-facing: ensure license is created from a paid Checkout Session (e.g. after redirect).
+  /// Use when webhook may have failed or not yet run. Idempotent; validates session belongs to user's firm.
+  rpc fulfillFromStripeCheckoutSession(FulfillFromStripeCheckoutSessionRequest) returns (CreateLicenseResponse);
 }
 
 message CreateLicenseRequest {
@@ -100,6 +103,11 @@ message FulfillLicenseFromStripeRequest {
   string stripeCustomerId = 4 [json_name = 'stripeCustomerId'];
   string referralCode = 5 [json_name = 'referralCode'];
   int32 creditAppliedCents = 6 [json_name = 'creditAppliedCents'];
+}
+
+/// Request to fulfill a license from a Stripe Checkout Session (e.g. after success redirect).
+message FulfillFromStripeCheckoutSessionRequest {
+  string checkoutSessionId = 1 [json_name = 'checkoutSessionId'];  // e.g. cs_xxx
 }
 
 /// Billing product (license plan). Stored in billing_products collection.

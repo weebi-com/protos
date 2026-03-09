@@ -1,5 +1,9 @@
 # changelog
 
+## 1.1.9
+
+- New RPC: fulfillFromStripeCheckoutSession
+
 ## 1.1.8
 
 - PaymentProvider in license.proto
