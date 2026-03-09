@@ -124,6 +124,7 @@
     - [CreateLicenseRequest](#weebi-billing-service-CreateLicenseRequest)
     - [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse)
     - [DeleteLicenseRequest](#weebi-billing-service-DeleteLicenseRequest)
+    - [FulfillFromStripeCheckoutSessionRequest](#weebi-billing-service-FulfillFromStripeCheckoutSessionRequest)
     - [FulfillLicenseFromStripeRequest](#weebi-billing-service-FulfillLicenseFromStripeRequest)
     - [GetReferralInfoResponse](#weebi-billing-service-GetReferralInfoResponse)
     - [ReadBillingProductsResponse](#weebi-billing-service-ReadBillingProductsResponse)
@@ -2050,6 +2051,21 @@ Billing product (license plan). Stored in billing_products collection.
 
 
 
+<a name="weebi-billing-service-FulfillFromStripeCheckoutSessionRequest"></a>
+
+### FulfillFromStripeCheckoutSessionRequest
+Request to fulfill a license from a Stripe Checkout Session (e.g. after success redirect).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| checkoutSessionId | [string](#string) |  | e.g. cs_xxx |
+
+
+
+
+
+
 <a name="weebi-billing-service-FulfillLicenseFromStripeRequest"></a>
 
 ### FulfillLicenseFromStripeRequest
@@ -2189,6 +2205,7 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | requestReferralPayout | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [RequestReferralPayoutResponse](#weebi-billing-service-RequestReferralPayoutResponse) | Request cash-out of referral credit. Requires balance &gt;= 1500 (€15). Payout to same payment customer. |
 | createCheckoutSession | [CreateCheckoutSessionRequest](#weebi-billing-service-CreateCheckoutSessionRequest) | [CreateCheckoutSessionResponse](#weebi-billing-service-CreateCheckoutSessionResponse) | Create a Stripe Checkout Session for a license purchase. Returns URL to redirect the customer. |
 | fulfillLicenseFromStripe | [FulfillLicenseFromStripeRequest](#weebi-billing-service-FulfillLicenseFromStripeRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | Internal: fulfill a license after Stripe payment. Called by weebi_express webhook handler. / Requires service account auth. |
+| fulfillFromStripeCheckoutSession | [FulfillFromStripeCheckoutSessionRequest](#weebi-billing-service-FulfillFromStripeCheckoutSessionRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | User-facing: ensure license is created from a paid Checkout Session (e.g. after redirect). / Use when webhook may have failed or not yet run. Idempotent; validates session belongs to user&#39;s firm. |
 
  
 

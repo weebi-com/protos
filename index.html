@@ -675,6 +675,10 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.billing.service.FulfillFromStripeCheckoutSessionRequest"><span class="badge">M</span>FulfillFromStripeCheckoutSessionRequest</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.billing.service.FulfillLicenseFromStripeRequest"><span class="badge">M</span>FulfillLicenseFromStripeRequest</a>
                 </li>
               
@@ -5310,6 +5314,30 @@ the server will check they fit the permissions </p></td>
 
         
       
+        <h3 id="weebi.billing.service.FulfillFromStripeCheckoutSessionRequest">FulfillFromStripeCheckoutSessionRequest</h3>
+        <p>Request to fulfill a license from a Stripe Checkout Session (e.g. after success redirect).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>checkoutSessionId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>e.g. cs_xxx </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.billing.service.FulfillLicenseFromStripeRequest">FulfillLicenseFromStripeRequest</h3>
         <p>priceId is the single source of truth; billing_service maps it via billing_products collection.</p>
 
@@ -5631,6 +5659,14 @@ the server will check they fit the permissions </p></td>
                 <td><a href="#weebi.billing.service.CreateLicenseResponse">CreateLicenseResponse</a></td>
                 <td><p>Internal: fulfill a license after Stripe payment. Called by weebi_express webhook handler.
 / Requires service account auth.</p></td>
+              </tr>
+            
+              <tr>
+                <td>fulfillFromStripeCheckoutSession</td>
+                <td><a href="#weebi.billing.service.FulfillFromStripeCheckoutSessionRequest">FulfillFromStripeCheckoutSessionRequest</a></td>
+                <td><a href="#weebi.billing.service.CreateLicenseResponse">CreateLicenseResponse</a></td>
+                <td><p>User-facing: ensure license is created from a paid Checkout Session (e.g. after redirect).
+/ Use when webhook may have failed or not yet run. Idempotent; validates session belongs to user&#39;s firm.</p></td>
               </tr>
             
           </tbody>
