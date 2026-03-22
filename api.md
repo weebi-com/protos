@@ -1982,6 +1982,7 @@ Billing product (license plan). Stored in billing_products collection.
 | cancelUrl | [string](#string) |  | URL to redirect if customer cancels. |
 | referralCode | [string](#string) |  | Optional referral code to apply. |
 | creditAppliedCents | [int32](#int32) |  | Optional credit (cents) to apply. Deducted from firm balance. |
+| legalTermsVersionDate | [string](#string) |  | CGV / terms version the buyer accepted before checkout (YYYY-MM-DD, one revision per day). |
 
 
 
@@ -3121,6 +3122,7 @@ A license purchase. One purchase can cover multiple users (seats).
 | paymentProvider | [PaymentProvider](#weebi-license-PaymentProvider) |  | Which provider processed this purchase. |
 | referredByFirmId | [string](#string) |  | Firm that referred this purchase (referrer). Set when buyer used referrer&#39;s code. |
 | creditAppliedCents | [int32](#int32) |  | Amount of referral credit (cents) applied to this purchase. Deducted from buyer&#39;s firm. |
+| legalTermsVersionDate | [string](#string) |  | CGV / terms version accepted for this purchase (YYYY-MM-DD). |
 
 
 
