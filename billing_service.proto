@@ -105,11 +105,15 @@ message FulfillLicenseFromStripeRequest {
   string stripeCustomerId = 4 [json_name = 'stripeCustomerId'];
   string referralCode = 5 [json_name = 'referralCode'];
   int32 creditAppliedCents = 6 [json_name = 'creditAppliedCents'];
+  /// CGV / terms version from checkout session metadata (YYYY-MM-DD).
+  string legalTermsVersionDate = 7 [json_name = 'legalTermsVersionDate'];
 }
 
 /// Request to fulfill a license from a Stripe Checkout Session (e.g. after success redirect).
 message FulfillFromStripeCheckoutSessionRequest {
   string checkoutSessionId = 1 [json_name = 'checkoutSessionId'];  // e.g. cs_xxx
+  /// Same value as sent to createCheckoutSession (YYYY-MM-DD). Persisted on the license; not read from Stripe.
+  string legalTermsVersionDate = 2 [json_name = 'legalTermsVersionDate'];
 }
 
 /// Billing product (license plan). Stored in billing_products collection.
