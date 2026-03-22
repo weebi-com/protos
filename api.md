@@ -2061,6 +2061,7 @@ Request to fulfill a license from a Stripe Checkout Session (e.g. after success 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | checkoutSessionId | [string](#string) |  | e.g. cs_xxx |
+| legalTermsVersionDate | [string](#string) |  | Same value as sent to createCheckoutSession (YYYY-MM-DD). Persisted on the license; not read from Stripe. |
 
 
 
@@ -2081,6 +2082,7 @@ priceId is the single source of truth; billing_service maps it via billing_produ
 | stripeCustomerId | [string](#string) |  |  |
 | referralCode | [string](#string) |  |  |
 | creditAppliedCents | [int32](#int32) |  |  |
+| legalTermsVersionDate | [string](#string) |  | CGV / terms version from checkout session metadata (YYYY-MM-DD). |
 
 
 

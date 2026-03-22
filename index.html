@@ -5338,6 +5338,13 @@ the server will check they fit the permissions </p></td>
                   <td><p>e.g. cs_xxx </p></td>
                 </tr>
               
+                <tr>
+                  <td>legalTermsVersionDate</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Same value as sent to createCheckoutSession (YYYY-MM-DD). Persisted on the license; not read from Stripe. </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -5395,6 +5402,13 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
                   <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>legalTermsVersionDate</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>CGV / terms version from checkout session metadata (YYYY-MM-DD). </p></td>
                 </tr>
               
             </tbody>
