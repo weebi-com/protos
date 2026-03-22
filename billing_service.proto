@@ -89,6 +89,8 @@ message CreateCheckoutSessionRequest {
   string referralCode = 4 [json_name = 'referralCode'];
   /// Optional credit (cents) to apply. Deducted from firm balance.
   int32 creditAppliedCents = 5 [json_name = 'creditAppliedCents'];
+  /// CGV / terms version the buyer accepted before checkout (YYYY-MM-DD, one revision per day).
+  string legalTermsVersionDate = 6 [json_name = 'legalTermsVersionDate'];
 }
 
 message CreateCheckoutSessionResponse {

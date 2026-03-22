@@ -1,5 +1,9 @@
 # changelog
 
+## 1.2.0
+
+- add legalTermsVersionDate in license.proto
+
 ## 1.1.9
 
 - New RPC: fulfillFromStripeCheckoutSession

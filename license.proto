@@ -37,6 +37,8 @@ message License {
   string referredByFirmId = 10 [json_name = 'referredByFirmId'];
   /// Amount of referral credit (cents) applied to this purchase. Deducted from buyer's firm.
   int32 creditAppliedCents = 11 [json_name = 'creditAppliedCents'];
+  /// CGV / terms version accepted for this purchase (YYYY-MM-DD).
+  string legalTermsVersionDate = 12 [json_name = 'legalTermsVersionDate'];
 }
 
 /// Per-seat validity. Each user (seat) has its own start/end dates.
