@@ -64,7 +64,11 @@ message TicketPb {
   string contactLastName = 17 [json_name = 'contactLastName'];
   string contactPhone = 18 [json_name = 'contactPhone'];
   string contactMail = 19 [json_name = 'contactMail'];
-  reserved 20 to 98;
+  optional string snapshot_secondary_currency = 20 [json_name = 'snapshotSecondaryCurrency'];
+  optional double snapshot_local_per_secondary = 21 [json_name = 'snapshotLocalPerSecondary'];
+  reserved 22 to 98;
+  /// ISO 4217 secondary currency (e.g. USD) shown at sale time alongside local amounts. Empty = no snapshot.
+  /// Units of local (boutique) currency for one unit of snapshot_secondary_currency (e.g. 2800 means 1 USD = 2800 CDF).
 
 }
 

@@ -35,6 +35,10 @@ message Chain {
   bool isDeleted = 8 [json_name = 'isDeleted'];
   string deletedBy = 9 [json_name = 'deletedBy']; // userId who deleted it
   string restoredBy = 10 [json_name = 'restoredBy']; // userId who restored it (empty if never restored)
+  /// ISO 4217; overrides firm default_currency for boutiques in this chain when boutique.currency is empty.
+  optional string currency = 11 [json_name = 'currency'];
+  optional bool dual_currency_enabled = 12 [json_name = 'dualCurrencyEnabled'];
+  optional string secondary_display_currency = 13 [json_name = 'secondaryDisplayCurrency'];
 }
 
 message Chains {
