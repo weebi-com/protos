@@ -1753,6 +1753,8 @@ ticketNonUniqueId is to be combined with userId
 | contactLastName | [string](#string) |  |  |
 | contactPhone | [string](#string) |  |  |
 | contactMail | [string](#string) |  |  |
+| snapshot_secondary_currency | [string](#string) | optional |  |
+| snapshot_local_per_secondary | [double](#double) | optional |  |
 
 
 
@@ -2288,6 +2290,7 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | deletedBy | [string](#string) |  | userId who deleted it |
 | restoredBy | [string](#string) |  | userId who restored it (empty if never restored) |
 | mail | [string](#string) |  |  |
+| currency | [string](#string) | optional | ISO 4217 billing currency for this boutique. Empty: inherit chain then firm then platform default. |
 | additional_attributes | [BoutiquePb.AdditionalAttributesEntry](#weebi-boutique-BoutiquePb-AdditionalAttributesEntry) | repeated |  |
 
 
@@ -2345,6 +2348,9 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | isDeleted | [bool](#bool) |  |  |
 | deletedBy | [string](#string) |  | userId who deleted it |
 | restoredBy | [string](#string) |  | userId who restored it (empty if never restored) |
+| currency | [string](#string) | optional | ISO 4217; overrides firm default_currency for boutiques in this chain when boutique.currency is empty. |
+| dual_currency_enabled | [bool](#bool) | optional |  |
+| secondary_display_currency | [string](#string) | optional |  |
 
 
 
@@ -3017,6 +3023,7 @@ boutiques &amp; users
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | mandatory |
+| default_currency | [string](#string) | optional | Optional ISO 4217 default stamped on firm and first chain/boutique; server fills platform default if omitted. |
 
 
 
@@ -3066,6 +3073,9 @@ boutiques &amp; users
 | providerCustomerIds | [Firm.ProviderCustomerIdsEntry](#weebi-firm-Firm-ProviderCustomerIdsEntry) | repeated | Customer IDs per payment provider. Keys: &#34;stripe&#34;, &#34;pawapay&#34;, etc. |
 | referralCode | [string](#string) |  | Per-firm referral code. Share with others; 20% commission on referred license sales. |
 | referralCreditBalanceCents | [int32](#int32) |  | Referral credit balance in EUR cents. Auto-applied at checkout or cash-out above €15. |
+| default_currency | [string](#string) | optional | ISO 4217 code (e.g. EUR, XOF). Default for new chains/boutiques; resolved with platform default if empty. |
+| dual_currency_enabled | [bool](#bool) | optional | When true, clients may show amounts in secondary_display_currency using per-ticket FX snapshot. |
+| secondary_display_currency | [string](#string) | optional | ISO 4217 secondary display code (e.g. USD). Meaningful when dual_currency_enabled is true. |
 
 
 

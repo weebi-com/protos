@@ -4641,6 +4641,20 @@ the server will check they fit the permissions </p></td>
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>snapshot_secondary_currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>snapshot_local_per_secondary</td>
+                  <td><a href="#double">double</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -5964,6 +5978,13 @@ the server will check they fit the permissions </p></td>
                 </tr>
               
                 <tr>
+                  <td>currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>ISO 4217 billing currency for this boutique. Empty: inherit chain then firm then platform default. </p></td>
+                </tr>
+              
+                <tr>
                   <td>additional_attributes</td>
                   <td><a href="#weebi.boutique.BoutiquePb.AdditionalAttributesEntry">BoutiquePb.AdditionalAttributesEntry</a></td>
                   <td>repeated</td>
@@ -6126,6 +6147,27 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>userId who restored it (empty if never restored) </p></td>
+                </tr>
+              
+                <tr>
+                  <td>currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>ISO 4217; overrides firm default_currency for boutiques in this chain when boutique.currency is empty. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>dual_currency_enabled</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>secondary_display_currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -7655,6 +7697,13 @@ TODO rename this create</p></td>
                   <td><p>mandatory </p></td>
                 </tr>
               
+                <tr>
+                  <td>default_currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>Optional ISO 4217 default stamped on firm and first chain/boutique; server fills platform default if omitted. </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -7822,6 +7871,27 @@ TODO rename this create</p></td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
                   <td><p>Referral credit balance in EUR cents. Auto-applied at checkout or cash-out above €15. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>default_currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>ISO 4217 code (e.g. EUR, XOF). Default for new chains/boutiques; resolved with platform default if empty. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>dual_currency_enabled</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td>optional</td>
+                  <td><p>When true, clients may show amounts in secondary_display_currency using per-ticket FX snapshot. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>secondary_display_currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>ISO 4217 secondary display code (e.g. USD). Meaningful when dual_currency_enabled is true. </p></td>
                 </tr>
               
             </tbody>
