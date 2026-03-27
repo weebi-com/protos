@@ -1,5 +1,10 @@
 # changelog
 
+## 1.2.4
+
+- add currency
+- add isFirmCreator in user
+
 ## 1.2.0
 
 - add legalTermsVersionDate in license.proto

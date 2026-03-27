@@ -62,7 +62,9 @@ message UserPermissions {
   UserManagementRights userManagementRights =  12 [json_name = 'userManagementRights'];
   BillingRights billingRights = 13 [json_name = 'billingRights'];
   BoolRights boolRights = 14 [json_name = 'boolRights'];
-  reserved 15 to 98;
+  bool is_firm_creator = 15 [json_name = 'isFirmCreator'];
+  reserved 16 to 98;
+  /// True for the user who created the firm (set once at createFirm). Carried in JWT; not a chain/boutique access rule.
 }
 
 /// user CRUD rights on base models 
