@@ -65,8 +65,8 @@ service FenceService {
   rpc readAllChains(weebi.common.empty.Empty) returns (ReadAllChainsResponse);
   // only update fiels not boutiques, not upsert, do nothing if unfound
   rpc updateOneChain(ChainRequest) returns (google.retail.common.StatusResponse);
-  /// hard/complete delete
-  rpc deleteOneChain(ChainRequest) returns (google.retail.common.StatusResponse);
+  /// hard/complete delete (chainId only; see DeleteChainRequest)
+  rpc deleteOneChain(DeleteChainRequest) returns (google.retail.common.StatusResponse);
   
 
   rpc createOneBoutique(BoutiqueRequest) returns (google.retail.common.StatusResponse);
@@ -112,15 +112,24 @@ service FenceService {
 }
 
 
-/// 
+/// Patch-style chain update (not a full Chain). Omitted optional fields are left unchanged in storage.
+/// Currency fields align with weebi.chain.Chain.
 message ChainRequest {
-  string chainId = 1 ;
+  string chainId = 1 [json_name = 'chainId'];
   string name = 2;
+  optional string currency = 3 [json_name = 'currency'];
+  optional bool dual_currency_enabled = 4 [json_name = 'dualCurrencyEnabled'];
+  optional string secondary_display_currency = 5 [json_name = 'secondaryDisplayCurrency'];
 }
 
-/// one boutique creation the server will assign the boutiqueId
+/// Identifies a chain for deleteOneChain only (wire-compatible with ChainRequest carrying field 1 alone).
+message DeleteChainRequest {
+  string chainId = 1 [json_name = 'chainId'];
+}
+
+/// chainId, nested boutique, optional logo. Billing ISO 4217 is [boutique.currency] on BoutiquePb (not a top-level field).
 message BoutiqueRequest {
-  string chainId = 1 ;
+  string chainId = 1 [json_name = 'chainId'];
   weebi.boutique.BoutiquePb boutique = 2;
   bytes logo = 3 ;
   string logoExtension = 4;
