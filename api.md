@@ -159,6 +159,7 @@
     - [CodeForPairingDevice](#weebi-fence-service-CodeForPairingDevice)
     - [CreateDeviceResponse](#weebi-fence-service-CreateDeviceResponse)
     - [Credentials](#weebi-fence-service-Credentials)
+    - [DeleteChainRequest](#weebi-fence-service-DeleteChainRequest)
     - [DeleteDeviceRequest](#weebi-fence-service-DeleteDeviceRequest)
     - [DeviceCredentials](#weebi-fence-service-DeviceCredentials)
     - [HealthCheckWeebiResponse](#weebi-fence-service-HealthCheckWeebiResponse)
@@ -2493,7 +2494,7 @@ come from weebi_app, not set by web
 <a name="weebi-fence-service-BoutiqueRequest"></a>
 
 ### BoutiqueRequest
-one boutique creation the server will assign the boutiqueId
+chainId, nested boutique, optional logo. Billing ISO 4217 is [boutique.currency] on BoutiquePb (not a top-level field).
 
 
 | Field | Type | Label | Description |
@@ -2528,13 +2529,17 @@ one boutique creation the server will assign the boutiqueId
 <a name="weebi-fence-service-ChainRequest"></a>
 
 ### ChainRequest
-
+Patch-style chain update (not a full Chain). Omitted optional fields are left unchanged in storage.
+/ Currency fields align with weebi.chain.Chain.
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | chainId | [string](#string) |  |  |
 | name | [string](#string) |  |  |
+| currency | [string](#string) | optional |  |
+| dual_currency_enabled | [bool](#bool) | optional |  |
+| secondary_display_currency | [string](#string) | optional |  |
 
 
 
@@ -2592,6 +2597,21 @@ deviceId == userId, so front can reuse deviceId to try login in
 | mail | [string](#string) |  |  |
 | password | [string](#string) |  |  |
 | isWebApp | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="weebi-fence-service-DeleteChainRequest"></a>
+
+### DeleteChainRequest
+Identifies a chain for deleteOneChain only (wire-compatible with ChainRequest carrying field 1 alone).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| chainId | [string](#string) |  |  |
 
 
 
@@ -2988,7 +3008,7 @@ boutiques &amp; users
 | createOneChain | [.weebi.chain.Chain](#weebi-chain-Chain) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
 | readAllChains | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [ReadAllChainsResponse](#weebi-fence-service-ReadAllChainsResponse) |  |
 | updateOneChain | [ChainRequest](#weebi-fence-service-ChainRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | only update fiels not boutiques, not upsert, do nothing if unfound |
-| deleteOneChain | [ChainRequest](#weebi-fence-service-ChainRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | hard/complete delete |
+| deleteOneChain | [DeleteChainRequest](#weebi-fence-service-DeleteChainRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | hard/complete delete (chainId only; see DeleteChainRequest) |
 | createOneBoutique | [BoutiqueRequest](#weebi-fence-service-BoutiqueRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
 | readOneBoutique | [BoutiqueRequest](#weebi-fence-service-BoutiqueRequest) | [BoutiqueResponse](#weebi-fence-service-BoutiqueResponse) |  |
 | updateOneBoutique | [BoutiqueRequest](#weebi-fence-service-BoutiqueRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | real update, not upsert, do nothing if unfound |

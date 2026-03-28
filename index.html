@@ -823,6 +823,10 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.fence.service.DeleteChainRequest"><span class="badge">M</span>DeleteChainRequest</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.fence.service.DeleteDeviceRequest"><span class="badge">M</span>DeleteDeviceRequest</a>
                 </li>
               
@@ -6420,7 +6424,7 @@ the server will check they fit the permissions </p></td>
         
       
         <h3 id="weebi.fence.service.BoutiqueRequest">BoutiqueRequest</h3>
-        <p>one boutique creation the server will assign the boutiqueId</p>
+        <p>chainId, nested boutique, optional logo. Billing ISO 4217 is [boutique.currency] on BoutiquePb (not a top-level field).</p>
 
         
           <table class="field-table">
@@ -6503,7 +6507,7 @@ the server will check they fit the permissions </p></td>
         
       
         <h3 id="weebi.fence.service.ChainRequest">ChainRequest</h3>
-        <p></p>
+        <p>Patch-style chain update (not a full Chain). Omitted optional fields are left unchanged in storage.</p><p>/ Currency fields align with weebi.chain.Chain.</p>
 
         
           <table class="field-table">
@@ -6523,6 +6527,27 @@ the server will check they fit the permissions </p></td>
                   <td>name</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>dual_currency_enabled</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>secondary_display_currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
                   <td><p> </p></td>
                 </tr>
               
@@ -6671,6 +6696,30 @@ the server will check they fit the permissions </p></td>
                 <tr>
                   <td>isWebApp</td>
                   <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.fence.service.DeleteChainRequest">DeleteChainRequest</h3>
+        <p>Identifies a chain for deleteOneChain only (wire-compatible with ChainRequest carrying field 1 alone).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>chainId</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -7561,9 +7610,9 @@ Note: chains contain only active boutiques (deleted ones are filtered out) </p><
             
               <tr>
                 <td>deleteOneChain</td>
-                <td><a href="#weebi.fence.service.ChainRequest">ChainRequest</a></td>
+                <td><a href="#weebi.fence.service.DeleteChainRequest">DeleteChainRequest</a></td>
                 <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
-                <td><p>hard/complete delete</p></td>
+                <td><p>hard/complete delete (chainId only; see DeleteChainRequest)</p></td>
               </tr>
             
               <tr>
