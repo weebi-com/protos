@@ -2292,6 +2292,8 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | restoredBy | [string](#string) |  | userId who restored it (empty if never restored) |
 | mail | [string](#string) |  |  |
 | currency | [string](#string) | optional | ISO 4217 billing currency for this boutique. Empty: inherit chain then firm then platform default. |
+| dual_currency_enabled | [bool](#bool) | optional | When true, PoS/web clients may show amounts in secondary_display_currency (display-only; same semantics as chain/firm). |
+| secondary_display_currency | [string](#string) | optional | ISO 4217 secondary display code (e.g. USD). Meaningful when dual_currency_enabled is true. |
 | additional_attributes | [BoutiquePb.AdditionalAttributesEntry](#weebi-boutique-BoutiquePb-AdditionalAttributesEntry) | repeated |  |
 
 

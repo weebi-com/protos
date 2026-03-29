@@ -5989,6 +5989,20 @@ the server will check they fit the permissions </p></td>
                 </tr>
               
                 <tr>
+                  <td>dual_currency_enabled</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td>optional</td>
+                  <td><p>When true, PoS/web clients may show amounts in secondary_display_currency (display-only; same semantics as chain/firm). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>secondary_display_currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>ISO 4217 secondary display code (e.g. USD). Meaningful when dual_currency_enabled is true. </p></td>
+                </tr>
+              
+                <tr>
                   <td>additional_attributes</td>
                   <td><a href="#weebi.boutique.BoutiquePb.AdditionalAttributesEntry">BoutiquePb.AdditionalAttributesEntry</a></td>
                   <td>repeated</td>
