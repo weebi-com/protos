@@ -118,8 +118,8 @@ message ChainRequest {
   string chainId = 1 [json_name = 'chainId'];
   string name = 2;
   optional string currency = 3 [json_name = 'currency'];
-  optional bool dual_currency_enabled = 4 [json_name = 'dualCurrencyEnabled'];
-  optional string secondary_display_currency = 5 [json_name = 'secondaryDisplayCurrency'];
+  optional bool dualCurrencyEnabled = 4 [json_name = 'dualCurrencyEnabled'];
+  optional string secondaryDisplayCurrency = 5 [json_name = 'secondaryDisplayCurrency'];
 }
 
 /// Identifies a chain for deleteOneChain only (wire-compatible with ChainRequest carrying field 1 alone).

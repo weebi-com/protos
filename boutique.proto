@@ -45,10 +45,10 @@ message BoutiquePb {
     string mail = 15 [json_name = 'mail'];
     /// ISO 4217 billing currency for this boutique. Empty: inherit chain then firm then platform default.
     optional string currency = 16 [json_name = 'currency'];
-    /// When true, PoS/web clients may show amounts in secondary_display_currency (display-only; same semantics as chain/firm).
-    optional bool dual_currency_enabled = 17 [json_name = 'dualCurrencyEnabled'];
-    /// ISO 4217 secondary display code (e.g. USD). Meaningful when dual_currency_enabled is true.
-    optional string secondary_display_currency = 18 [json_name = 'secondaryDisplayCurrency'];
+    /// When true, PoS/web clients may show amounts in secondaryDisplayCurrency (display-only; same semantics as chain/firm).
+    optional bool dualCurrencyEnabled = 17 [json_name = 'dualCurrencyEnabled'];
+    /// ISO 4217 secondary display code (e.g. USD). Meaningful when dualCurrencyEnabled is true.
+    optional string secondaryDisplayCurrency = 18 [json_name = 'secondaryDisplayCurrency'];
     reserved 19 to 98;
     map<string, string> additional_attributes = 99  [json_name = 'additional_attributes'];
    }

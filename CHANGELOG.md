@@ -1,6 +1,6 @@
 # changelog
 
-## 1.2.5
+## 1.2.6
 
 - add currency
 - add isFirmCreator in user

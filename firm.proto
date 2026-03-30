@@ -33,18 +33,18 @@ message Firm {
     /// Referral credit balance in EUR cents. Auto-applied at checkout or cash-out above €15.
     int32 referralCreditBalanceCents = 17 [json_name = 'referralCreditBalanceCents'];
     /// ISO 4217 code (e.g. EUR, XOF). Default for new chains/boutiques; resolved with platform default if empty.
-    optional string default_currency = 18 [json_name = 'defaultCurrency'];
-    /// When true, clients may show amounts in secondary_display_currency using per-ticket FX snapshot.
-    optional bool dual_currency_enabled = 19 [json_name = 'dualCurrencyEnabled'];
-    /// ISO 4217 secondary display code (e.g. USD). Meaningful when dual_currency_enabled is true.
-    optional string secondary_display_currency = 20 [json_name = 'secondaryDisplayCurrency'];
+    optional string currency = 18 [json_name = 'currency'];
+    /// When true, clients may show amounts in secondaryDisplayCurrency using per-ticket FX snapshot.
+    optional bool dualCurrencyEnabled = 19 [json_name = 'dualCurrencyEnabled'];
+    /// ISO 4217 secondary display code (e.g. USD). Meaningful when dualCurrencyEnabled is true.
+    optional string secondaryDisplayCurrency = 20 [json_name = 'secondaryDisplayCurrency'];
   }
 
 message CreateFirmRequest {
   /// mandatory
   string name = 1 [json_name = 'name'];
   /// Optional ISO 4217 default stamped on firm and first chain/boutique; server fills platform default if omitted.
-  optional string default_currency = 2 [json_name = 'defaultCurrency'];
+  optional string currency = 2 [json_name = 'currency'];
 }
 
 message CreateFirmResponse {
