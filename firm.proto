@@ -35,7 +35,7 @@ message Firm {
     /// ISO 4217 code (e.g. EUR, XOF). Default for new chains/boutiques; resolved with platform default if empty.
     optional string currency = 18 [json_name = 'currency'];
     /// When true, clients may show amounts in secondaryDisplayCurrency using per-ticket FX snapshot.
-    optional bool dualCurrencyEnabled = 19 [json_name = 'dualCurrencyEnabled'];
+    optional bool isDualCurrencyEnabled = 19 [json_name = 'isDualCurrencyEnabled'];
     /// ISO 4217 secondary display code (e.g. USD). Meaningful when dualCurrencyEnabled is true.
     optional string secondaryDisplayCurrency = 20 [json_name = 'secondaryDisplayCurrency'];
   }

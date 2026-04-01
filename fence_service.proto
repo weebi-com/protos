@@ -118,7 +118,7 @@ message ChainRequest {
   string chainId = 1 [json_name = 'chainId'];
   string name = 2;
   optional string currency = 3 [json_name = 'currency'];
-  optional bool dualCurrencyEnabled = 4 [json_name = 'dualCurrencyEnabled'];
+  optional bool isDualCurrencyEnabled = 4 [json_name = 'isDualCurrencyEnabled'];
   optional string secondaryDisplayCurrency = 5 [json_name = 'secondaryDisplayCurrency'];
 }
 
