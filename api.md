@@ -1754,6 +1754,7 @@ ticketNonUniqueId is to be combined with userId
 | contactLastName | [string](#string) |  |  |
 | contactPhone | [string](#string) |  |  |
 | contactMail | [string](#string) |  |  |
+| currency | [string](#string) | optional |  |
 | snapshot_secondary_currency | [string](#string) | optional |  |
 | snapshot_local_per_secondary | [double](#double) | optional |  |
 
