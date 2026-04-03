@@ -1,8 +1,8 @@
 # changelog
 
-## 1.2.8
+## 1.2.9
 
-- add currency and 2nd currency
+- add currency and 2nd currency on firm, chain, boutique and ticket
 - add isFirmCreator in user
 
 ## 1.2.0
