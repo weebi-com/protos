@@ -65,11 +65,11 @@ message TicketPb {
   string contactPhone = 18 [json_name = 'contactPhone'];
   string contactMail = 19 [json_name = 'contactMail'];
   optional string currency = 20 [json_name = 'currency'];
+  /// ISO 4217 secondary currency (e.g. USD) shown at sale time alongside local amounts. Empty = no snapshot.
   optional string snapshot_secondary_currency = 21 [json_name = 'snapshotSecondaryCurrency'];
+  /// Units of local (boutique) currency for one unit of snapshot_secondary_currency (e.g. 2800 means 1 USD = 2800 CDF).
   optional double snapshot_local_per_secondary = 22 [json_name = 'snapshotLocalPerSecondary'];
   reserved 23 to 98;
-  /// ISO 4217 secondary currency (e.g. USD) shown at sale time alongside local amounts. Empty = no snapshot.
-  /// Units of local (boutique) currency for one unit of snapshot_secondary_currency (e.g. 2800 means 1 USD = 2800 CDF).
 
 }
 
