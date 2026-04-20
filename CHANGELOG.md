@@ -1,5 +1,9 @@
 # changelog
 
+## 1.3.0
+
+- add getSessionInternal in fence_service
+
 ## 1.2.9
 
 - add currency and 2nd currency on firm, chain, boutique and ticket
