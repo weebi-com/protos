@@ -895,6 +895,10 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.fence.service.SessionRequest"><span class="badge">M</span>SessionRequest</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.fence.service.Tokens"><span class="badge">M</span>Tokens</a>
                 </li>
               
@@ -4656,14 +4660,14 @@ the server will check they fit the permissions </p></td>
                   <td>snapshot_secondary_currency</td>
                   <td><a href="#string">string</a></td>
                   <td>optional</td>
-                  <td><p> </p></td>
+                  <td><p>ISO 4217 secondary currency (e.g. USD) shown at sale time alongside local amounts. Empty = no snapshot. </p></td>
                 </tr>
               
                 <tr>
                   <td>snapshot_local_per_secondary</td>
                   <td><a href="#double">double</a></td>
                   <td>optional</td>
-                  <td><p> </p></td>
+                  <td><p>Units of local (boutique) currency for one unit of snapshot_secondary_currency (e.g. 2800 means 1 USD = 2800 CDF). </p></td>
                 </tr>
               
             </tbody>
@@ -7308,6 +7312,30 @@ Note: chains contain only active boutiques (deleted ones are filtered out) </p><
 
         
       
+        <h3 id="weebi.fence.service.SessionRequest">SessionRequest</h3>
+        <p>Request for internal getSessionInternal RPC (used by Envoy)</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>sessionId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.fence.service.Tokens">Tokens</h3>
         <p></p>
 
@@ -7517,6 +7545,15 @@ Note: chains contain only active boutiques (deleted ones are filtered out) </p><
                 <td><a href="#weebi.common.empty.Empty">.weebi.common.empty.Empty</a></td>
                 <td><a href="#weebi.common.empty.Empty">.weebi.common.empty.Empty</a></td>
                 <td><p>Web session logout - invalidates session server-side. Envoy clears the cookie on success.</p></td>
+              </tr>
+            
+              <tr>
+                <td>getSessionInternal</td>
+                <td><a href="#weebi.fence.service.SessionRequest">SessionRequest</a></td>
+                <td><a href="#weebi.fence.service.Tokens">Tokens</a></td>
+                <td><p>Internal RPC used by Envoy to retrieve session data
+/ Called when browser presents a session cookie
+/ Path: /weebi.fence.service.FenceService/getSessionInternal</p></td>
               </tr>
             
               <tr>

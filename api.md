@@ -177,6 +177,7 @@
     - [ReadOneUserResponse](#weebi-fence-service-ReadOneUserResponse)
     - [RefreshToken](#weebi-fence-service-RefreshToken)
     - [ServiceVersions](#weebi-fence-service-ServiceVersions)
+    - [SessionRequest](#weebi-fence-service-SessionRequest)
     - [Tokens](#weebi-fence-service-Tokens)
     - [UpdateDevicePasswordRequest](#weebi-fence-service-UpdateDevicePasswordRequest)
     - [UpdateSubscriberIdRequest](#weebi-fence-service-UpdateSubscriberIdRequest)
@@ -1755,8 +1756,8 @@ ticketNonUniqueId is to be combined with userId
 | contactPhone | [string](#string) |  |  |
 | contactMail | [string](#string) |  |  |
 | currency | [string](#string) | optional |  |
-| snapshot_secondary_currency | [string](#string) | optional |  |
-| snapshot_local_per_secondary | [double](#double) | optional |  |
+| snapshot_secondary_currency | [string](#string) | optional | ISO 4217 secondary currency (e.g. USD) shown at sale time alongside local amounts. Empty = no snapshot. |
+| snapshot_local_per_secondary | [double](#double) | optional | Units of local (boutique) currency for one unit of snapshot_secondary_currency (e.g. 2800 means 1 USD = 2800 CDF). |
 
 
 
@@ -2897,6 +2898,21 @@ Health check response with service versions
 
 
 
+<a name="weebi-fence-service-SessionRequest"></a>
+
+### SessionRequest
+Request for internal getSessionInternal RPC (used by Envoy)
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sessionId | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="weebi-fence-service-Tokens"></a>
 
 ### Tokens
@@ -2996,6 +3012,7 @@ boutiques &amp; users
 | authenticateWithCredentials | [Credentials](#weebi-fence-service-Credentials) | [Tokens](#weebi-fence-service-Tokens) |  |
 | authenticateWithRefreshToken | [RefreshToken](#weebi-fence-service-RefreshToken) | [Tokens](#weebi-fence-service-Tokens) |  |
 | logout | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | Web session logout - invalidates session server-side. Envoy clears the cookie on success. |
+| getSessionInternal | [SessionRequest](#weebi-fence-service-SessionRequest) | [Tokens](#weebi-fence-service-Tokens) | Internal RPC used by Envoy to retrieve session data / Called when browser presents a session cookie / Path: /weebi.fence.service.FenceService/getSessionInternal |
 | requestPasswordReset | [PasswordResetRequest](#weebi-fence-service-PasswordResetRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Password reset functionality |
 | confirmPasswordReset | [PasswordResetConfirmRequest](#weebi-fence-service-PasswordResetConfirmRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
 | createFirm | [.weebi.firm.CreateFirmRequest](#weebi-firm-CreateFirmRequest) | [.weebi.firm.CreateFirmResponse](#weebi-firm-CreateFirmResponse) | only one firm per &#39;company&#39; / 1. user signup and get a userId &amp; create firm permission / 2. A. user create a firm / Chain and Boutique will be created by default and will use the same firmId / Since createFirm also updates user permission, clientApp needs to reauthent using refresh right after / 2. B. user joins a firm is a different use case detailed in createPendingUser rpc |
