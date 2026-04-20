@@ -2874,6 +2874,7 @@ Health check response with service versions
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | refreshToken | [string](#string) |  |  |
+| isWebApp | [bool](#bool) |  | If true, session is stored server-side (BFF mode); if false, tokens returned directly |
 
 
 
