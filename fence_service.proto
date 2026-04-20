@@ -225,6 +225,7 @@ message DeviceCredentials {
 
 message RefreshToken {
   string refreshToken = 1;
+  bool isWebApp = 2;  // If true, session is stored server-side (BFF mode); if false, tokens returned directly
 }
 
 /// Request for internal getSessionInternal RPC (used by Envoy)

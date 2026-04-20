@@ -1,8 +1,9 @@
 # changelog
 
-## 1.3.0
+## 1.3.1
 
 - add getSessionInternal in fence_service
+- and isWebApp in refresh and logout rpcs
 
 ## 1.2.9
 
