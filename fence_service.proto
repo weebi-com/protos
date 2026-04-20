@@ -26,6 +26,11 @@ service FenceService {
   /// Web session logout - invalidates session server-side. Envoy clears the cookie on success.
   rpc logout(weebi.common.empty.Empty) returns (weebi.common.empty.Empty);
   
+  /// Internal RPC used by Envoy to retrieve session data
+  /// Called when browser presents a session cookie
+  /// Path: /weebi.fence.service.FenceService/getSessionInternal
+  rpc getSessionInternal(SessionRequest) returns (Tokens);
+  
   // Password reset functionality
   rpc requestPasswordReset(PasswordResetRequest) returns (google.retail.common.StatusResponse);
   rpc confirmPasswordReset(PasswordResetConfirmRequest) returns (google.retail.common.StatusResponse);
@@ -220,6 +225,11 @@ message DeviceCredentials {
 
 message RefreshToken {
   string refreshToken = 1;
+}
+
+/// Request for internal getSessionInternal RPC (used by Envoy)
+message SessionRequest {
+  string sessionId = 1 [json_name = 'sessionId'];
 }
 
 message Tokens {
