@@ -2538,7 +2538,7 @@ one boutique creation the server will assign the boutiqueId
 
 ### ChainRequest
 Patch-style chain update (not a full Chain). Omitted optional fields are left unchanged in storage.
-/ Currency fields align with weebi.chain.Chain.
+/ Currency and business rule fields align with weebi.chain.Chain.
 
 
 | Field | Type | Label | Description |
@@ -2548,6 +2548,7 @@ Patch-style chain update (not a full Chain). Omitted optional fields are left un
 | currency | [string](#string) | optional |  |
 | isDualCurrencyEnabled | [bool](#bool) | optional |  |
 | secondaryDisplayCurrency | [string](#string) | optional |  |
+| businessRules | [weebi.boutique.BusinessRules](#weebi-boutique-BusinessRules) | optional |  |
 
 
 
