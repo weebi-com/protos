@@ -6,6 +6,7 @@ import "common/phone.proto";
 import "common/address.proto";
 import "device.proto";
 import "common/g_timestamp.proto";
+import "btq_chain.proto";
 
 message BoutiqueMongo {
     BoutiquePb boutique = 1 [json_name = 'boutique']; 
@@ -49,7 +50,9 @@ message BoutiquePb {
     optional bool isDualCurrencyEnabled = 17 [json_name = 'dualCurrencyEnabled'];
     /// ISO 4217 secondary display code (e.g. USD). Meaningful when isDualCurrencyEnabled is true.
     optional string secondaryDisplayCurrency = 18 [json_name = 'secondaryDisplayCurrency'];
-    reserved 19 to 98;
-    map<string, string> additional_attributes = 99  [json_name = 'additional_attributes'];
+    optional weebi.btq_chain.BusinessRules businessRules = 19 [json_name = 'businessRules'];
+    reserved 20 to 100;
+// below was misleading, if an attribute is needed, open an issue/a PR to add it
+// map<string, string> additional_attributes = 100  [json_name = 'additional_attributes'];
    }
    

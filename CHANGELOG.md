@@ -1,5 +1,9 @@
 # changelog
 
+## 1.3.2
+
+- add BusinessRules in Chain and Boutique
+
 ## 1.3.1
 
 - add getSessionInternal in fence_service
