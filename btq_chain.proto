@@ -25,16 +25,6 @@ import "common/g_timestamp.proto";
 /// boutique C : cosmetics - chain 2
 
 
-// since a firm may contain different chains with different business realities. 
-// we prefer to put business rules at the chain level
-message BusinessRules {
-  // guard against negative stocks in the chain when true
-  bool isNegativeStockGuardEnabled = 1 [json_name = 'isNegativeStockGuardEnabled'];
-  
-  // allow recent ticket edit in the chain when true
-  bool isRecentTicketEditEnabled = 2 [json_name = 'isRecentTicketEditEnabled'];
-  int32 recentTicketEditWindowMinutes = 3 [json_name = 'recentTicketEditWindowMinutes']; // e.g. 5 minutes
-}
 
 message Chain {
   string chainId = 1 [json_name = 'chainId'];
@@ -51,7 +41,7 @@ message Chain {
   optional string currency = 11 [json_name = 'currency'];
   optional bool isDualCurrencyEnabled = 12 [json_name = 'isDualCurrencyEnabled'];
   optional string secondaryDisplayCurrency = 13 [json_name = 'secondaryDisplayCurrency'];
-  optional BusinessRules businessRules = 14 [json_name = 'businessRules'];
+  optional weebi.boutique.BusinessRules businessRules = 14 [json_name = 'businessRules'];
   reserved 15 to 100;
 }
 

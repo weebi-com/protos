@@ -6,7 +6,7 @@ import "common/phone.proto";
 import "common/address.proto";
 import "device.proto";
 import "common/g_timestamp.proto";
-import "btq_chain.proto";
+
 
 message BoutiqueMongo {
     BoutiquePb boutique = 1 [json_name = 'boutique']; 
@@ -50,9 +50,22 @@ message BoutiquePb {
     optional bool isDualCurrencyEnabled = 17 [json_name = 'dualCurrencyEnabled'];
     /// ISO 4217 secondary display code (e.g. USD). Meaningful when isDualCurrencyEnabled is true.
     optional string secondaryDisplayCurrency = 18 [json_name = 'secondaryDisplayCurrency'];
-    optional weebi.chain.BusinessRules businessRules = 19 [json_name = 'businessRules'];
+    optional BusinessRules businessRules = 19 [json_name = 'businessRules'];
     reserved 20 to 100;
 // below was misleading, if an attribute is needed, open an issue/a PR to add it
 // map<string, string> additional_attributes = 100  [json_name = 'additional_attributes'];
    }
    
+   
+// since a firm may contain different chains with different business realities. 
+// we prefer to put business rules at the chain level
+// declared here to avoid circular dependency with boutique.proto
+message BusinessRules {
+    // guard against negative stocks in the chain when true
+    bool isNegativeStockGuardEnabled = 1 [json_name = 'isNegativeStockGuardEnabled'];
+    
+    // allow recent ticket edit in the chain when true
+    bool isRecentTicketEditEnabled = 2 [json_name = 'isRecentTicketEditEnabled'];
+    int32 recentTicketEditWindowMinutes = 3 [json_name = 'recentTicketEditWindowMinutes']; // e.g. 5 minutes
+  }
+  
