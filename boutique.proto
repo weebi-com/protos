@@ -50,7 +50,7 @@ message BoutiquePb {
     optional bool isDualCurrencyEnabled = 17 [json_name = 'dualCurrencyEnabled'];
     /// ISO 4217 secondary display code (e.g. USD). Meaningful when isDualCurrencyEnabled is true.
     optional string secondaryDisplayCurrency = 18 [json_name = 'secondaryDisplayCurrency'];
-    optional weebi.btq_chain.BusinessRules businessRules = 19 [json_name = 'businessRules'];
+    optional weebi.chain.BusinessRules businessRules = 19 [json_name = 'businessRules'];
     reserved 20 to 100;
 // below was misleading, if an attribute is needed, open an issue/a PR to add it
 // map<string, string> additional_attributes = 100  [json_name = 'additional_attributes'];
