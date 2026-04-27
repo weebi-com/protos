@@ -139,7 +139,7 @@
     - [BoutiqueMongo](#weebi-boutique-BoutiqueMongo)
     - [BoutiqueMongo.AdditionalAttributesEntry](#weebi-boutique-BoutiqueMongo-AdditionalAttributesEntry)
     - [BoutiquePb](#weebi-boutique-BoutiquePb)
-    - [BoutiquePb.AdditionalAttributesEntry](#weebi-boutique-BoutiquePb-AdditionalAttributesEntry)
+    - [BusinessRules](#weebi-boutique-BusinessRules)
   
 - [btq_chain.proto](#btq_chain-proto)
     - [Chain](#weebi-chain-Chain)
@@ -2296,23 +2296,26 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | currency | [string](#string) | optional | ISO 4217 billing currency for this boutique. Empty: inherit chain then firm then platform default. |
 | isDualCurrencyEnabled | [bool](#bool) | optional | When true, PoS/web clients may show amounts in secondaryDisplayCurrency (display-only; same semantics as chain/firm). |
 | secondaryDisplayCurrency | [string](#string) | optional | ISO 4217 secondary display code (e.g. USD). Meaningful when isDualCurrencyEnabled is true. |
-| additional_attributes | [BoutiquePb.AdditionalAttributesEntry](#weebi-boutique-BoutiquePb-AdditionalAttributesEntry) | repeated |  |
+| businessRules | [BusinessRules](#weebi-boutique-BusinessRules) | optional |  |
 
 
 
 
 
 
-<a name="weebi-boutique-BoutiquePb-AdditionalAttributesEntry"></a>
+<a name="weebi-boutique-BusinessRules"></a>
 
-### BoutiquePb.AdditionalAttributesEntry
-
+### BusinessRules
+since a firm may contain different chains with different business realities. 
+we prefer to put business rules at the chain level
+declared here to avoid circular dependency with boutique.proto
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
+| isNegativeStockGuardEnabled | [bool](#bool) |  | guard against negative stocks in the chain when true |
+| isRecentTicketEditEnabled | [bool](#bool) |  | allow recent ticket edit in the chain when true |
+| recentTicketEditWindowMinutes | [int32](#int32) |  | e.g. 5 minutes |
 
 
 
@@ -2356,6 +2359,7 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | currency | [string](#string) | optional | ISO 4217; overrides firm default_currency for boutiques in this chain when boutique.currency is empty. |
 | isDualCurrencyEnabled | [bool](#bool) | optional |  |
 | secondaryDisplayCurrency | [string](#string) | optional |  |
+| businessRules | [weebi.boutique.BusinessRules](#weebi-boutique-BusinessRules) | optional |  |
 
 
 

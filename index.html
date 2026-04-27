@@ -734,7 +734,7 @@
                 </li>
               
                 <li>
-                  <a href="#weebi.boutique.BoutiquePb.AdditionalAttributesEntry"><span class="badge">M</span>BoutiquePb.AdditionalAttributesEntry</a>
+                  <a href="#weebi.boutique.BusinessRules"><span class="badge">M</span>BusinessRules</a>
                 </li>
               
               
@@ -6014,9 +6014,9 @@ the server will check they fit the permissions </p></td>
                 </tr>
               
                 <tr>
-                  <td>additional_attributes</td>
-                  <td><a href="#weebi.boutique.BoutiquePb.AdditionalAttributesEntry">BoutiquePb.AdditionalAttributesEntry</a></td>
-                  <td>repeated</td>
+                  <td>businessRules</td>
+                  <td><a href="#weebi.boutique.BusinessRules">BusinessRules</a></td>
+                  <td>optional</td>
                   <td><p> </p></td>
                 </tr>
               
@@ -6053,8 +6053,8 @@ the server will check they fit the permissions </p></td>
 
         
       
-        <h3 id="weebi.boutique.BoutiquePb.AdditionalAttributesEntry">BoutiquePb.AdditionalAttributesEntry</h3>
-        <p></p>
+        <h3 id="weebi.boutique.BusinessRules">BusinessRules</h3>
+        <p>since a firm may contain different chains with different business realities. </p><p>we prefer to put business rules at the chain level</p><p>declared here to avoid circular dependency with boutique.proto</p>
 
         
           <table class="field-table">
@@ -6064,17 +6064,24 @@ the server will check they fit the permissions </p></td>
             <tbody>
               
                 <tr>
-                  <td>key</td>
-                  <td><a href="#string">string</a></td>
+                  <td>isNegativeStockGuardEnabled</td>
+                  <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>guard against negative stocks in the chain when true </p></td>
                 </tr>
               
                 <tr>
-                  <td>value</td>
-                  <td><a href="#string">string</a></td>
+                  <td>isRecentTicketEditEnabled</td>
+                  <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>allow recent ticket edit in the chain when true </p></td>
+                </tr>
+              
+                <tr>
+                  <td>recentTicketEditWindowMinutes</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>e.g. 5 minutes </p></td>
                 </tr>
               
             </tbody>
@@ -6195,6 +6202,13 @@ the server will check they fit the permissions </p></td>
                 <tr>
                   <td>secondaryDisplayCurrency</td>
                   <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>businessRules</td>
+                  <td><a href="#weebi.boutique.BusinessRules">weebi.boutique.BusinessRules</a></td>
                   <td>optional</td>
                   <td><p> </p></td>
                 </tr>
