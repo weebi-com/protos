@@ -118,13 +118,14 @@ service FenceService {
 
 
 /// Patch-style chain update (not a full Chain). Omitted optional fields are left unchanged in storage.
-/// Currency fields align with weebi.chain.Chain.
+/// Currency and business rule fields align with weebi.chain.Chain.
 message ChainRequest {
   string chainId = 1 [json_name = 'chainId'];
   string name = 2;
   optional string currency = 3 [json_name = 'currency'];
   optional bool isDualCurrencyEnabled = 4 [json_name = 'isDualCurrencyEnabled'];
   optional string secondaryDisplayCurrency = 5 [json_name = 'secondaryDisplayCurrency'];
+  optional weebi.boutique.BusinessRules businessRules = 6 [json_name = 'businessRules'];
 }
 
 /// Identifies a chain for deleteOneChain only (wire-compatible with ChainRequest carrying field 1 alone).

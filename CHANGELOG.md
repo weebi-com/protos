@@ -3,6 +3,7 @@
 ## 1.3.2
 
 - add BusinessRules in Chain and Boutique
+- add BusinessRules in ChainRequest for chain updates
 
 ## 1.3.1
 
