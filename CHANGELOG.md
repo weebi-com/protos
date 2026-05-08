@@ -1,5 +1,10 @@
 # changelog
 
+## 1.3.3 - may 2026
+
+- add retail total logic in ticket.proto
+- add options.proto 
+
 ## 1.3.2
 
 - add BusinessRules in Chain and Boutique

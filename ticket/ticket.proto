@@ -5,9 +5,10 @@ package weebi.ticket;
 import "article/article.proto";
 import "ticket/ticket_type.proto";
 import "common/g_timestamp.proto";
+import "common/options.proto";
 
 /// ticketNonUniqueId is to be combined with userId
-/// local ids can lead to duplicates as each sellers from its own device can create contact 
+/// local ids can lead to duplicates as each sellers from its own device can create contact
 message TicketMongo {
     weebi.ticket.TicketPb ticket = 1 [json_name = 'ticket'];
     int32 nonUniqueId = 2 [json_name = 'nonUniqueId'];
@@ -27,6 +28,105 @@ message TicketMongo {
 // google.protobuf.Timestamp dateUploadUTC = 5 [json_name = 'dateUploadUTC'];
 // string lastTouchedByuserId = 6 [json_name = 'lastTouchedByuserId'];
 // string lastTouchedByUsername = 7 [json_name = 'lastTouchedByUsername'];
+
+// ---------------------------------------------------------------------------
+// Totals sub-messages — referenced by the oneof totals in TicketPb.
+//
+// All formula annotations reference sibling fields within this message PLUS
+// parent-scope fields from TicketPb (promo, discountAmount, taxe, received,
+// items, ticketType) supplied at evaluation time.
+//
+// Computation chain (same structure for sell and spend; differs only in
+// whether items_only sums total_price or total_cost):
+//
+//   items_only
+//     → promo_val                     = round4(items_only × promo / 100)
+//     → markdowns_val                 = promo_val + discountAmount
+//     → markdowns_included_tax_excluded = items_only − markdowns_val
+//     → taxes_value                   = round4(markdowns_included_tax_excluded × taxe.percentage / 100)
+//     → markdowns_and_tax_included    = markdowns_included_tax_excluded + taxes_value
+//     → change                        = received − markdowns_and_tax_included  (0 when deferred)
+// ---------------------------------------------------------------------------
+
+// Sell totals — set when ticketType is sell or sellDeferred.
+message TicketSellTotalsPb {
+  double items_only = 1 [
+    (weebi.options.formula) = "items.sum(i, i.total_price)",
+    json_name = "itemsOnly"
+  ];
+  double promo_val = 2 [
+    (weebi.options.formula) = "round4(items_only * promo / 100)",
+    json_name = "promoVal"
+  ];
+  // promo_val + discountAmount
+  double markdowns_val = 3 [
+    (weebi.options.formula) = "promo_val + discountAmount",
+    json_name = "markdownsVal"
+  ];
+  // items_only minus all markdowns, before taxes
+  double markdowns_included_tax_excluded = 4 [
+    (weebi.options.formula) = "items_only - markdowns_val",
+    json_name = "markdownsIncludedTaxExcluded"
+  ];
+  double taxes_value = 5 [
+    (weebi.options.formula) = "taxe.percentage > 0.0 ? round4(markdowns_included_tax_excluded * (taxe.percentage / 100)) : 0.0",
+    json_name = "taxesValue"
+  ];
+  double markdowns_and_tax_included = 6 [
+    (weebi.options.formula) = "markdowns_included_tax_excluded + taxes_value",
+    json_name = "markdownsAndTaxIncluded"
+  ];
+  // received − markdowns_and_tax_included; 0 when sellDeferred
+  double change = 7 [
+    (weebi.options.formula) = "ticketType == 'sell' ? received - markdowns_and_tax_included : 0.0",
+    json_name = "change"
+  ];
+}
+
+// Spend totals — set when ticketType is spend or spendDeferred.
+// Same computation chain as TicketSellTotalsPb but items_only sums total_cost.
+message TicketSpendTotalsPb {
+  double items_only = 1 [
+    (weebi.options.formula) = "items.sum(i, i.total_cost)",
+    json_name = "itemsOnly"
+  ];
+  double promo_val = 2 [
+    (weebi.options.formula) = "round4(items_only * promo / 100)",
+    json_name = "promoVal"
+  ];
+  double markdowns_val = 3 [
+    (weebi.options.formula) = "promo_val + discountAmount",
+    json_name = "markdownsVal"
+  ];
+  double markdowns_included_tax_excluded = 4 [
+    (weebi.options.formula) = "items_only - markdowns_val",
+    json_name = "markdownsIncludedTaxExcluded"
+  ];
+  double taxes_value = 5 [
+    (weebi.options.formula) = "taxe.percentage > 0.0 ? round4(markdowns_included_tax_excluded * (taxe.percentage / 100)) : 0.0",
+    json_name = "taxesValue"
+  ];
+  double markdowns_and_tax_included = 6 [
+    (weebi.options.formula) = "markdowns_included_tax_excluded + taxes_value",
+    json_name = "markdownsAndTaxIncluded"
+  ];
+  // received − markdowns_and_tax_included; 0 when spendDeferred
+  double change = 7 [
+    (weebi.options.formula) = "ticketType == 'spend' ? received - markdowns_and_tax_included : 0.0",
+    json_name = "change"
+  ];
+}
+
+// Cover totals — set when ticketType is sellCovered, spendCovered, or wage.
+// No item computation: total equals the received amount.
+message TicketCoverTotalPb {
+  double total = 1 [
+    (weebi.options.formula) = "received",
+    json_name = "total"
+  ];
+}
+
+// ---------------------------------------------------------------------------
 
 message TicketPb {
   int32 nonUniqueId = 1 [json_name = 'id'];
@@ -69,10 +169,20 @@ message TicketPb {
   optional string snapshot_secondary_currency = 21 [json_name = 'snapshotSecondaryCurrency'];
   /// Units of local (boutique) currency for one unit of snapshot_secondary_currency (e.g. 2800 means 1 USD = 2800 CDF).
   optional double snapshot_local_per_secondary = 22 [json_name = 'snapshotLocalPerSecondary'];
-  reserved 23 to 98;
 
+  // client_computed 
+  // one case is set based on ticketType:
+  //   sell / sellDeferred   → sell_totals
+  //   spend / spendDeferred → spend_totals
+  //   sellCovered / spendCovered / wage → cover_totals
+  //   stock types           → (unset)
+  oneof totals {
+    TicketSellTotalsPb  sell_totals  = 23;
+    TicketSpendTotalsPb spend_totals = 24;
+    TicketCoverTotalPb  cover_totals = 25;
+  }
+  reserved 26 to 98;
 }
-
 
 message Counterfoil {
   string firmId = 1;
@@ -103,7 +213,7 @@ message ProxyArticleWorthPb {
   int32 proxyArticleId = 6 [json_name = 'proxyArticleId'];
   double minimumUnitPerBasket = 7 [json_name = 'minimumUnitPerBasket'];
   double articleWeight = 8 [json_name = 'articleWeight'];
-  double price = 9  [json_name = 'price'];
+  double price = 9 [json_name = 'price'];
   double cost = 10 [json_name = 'cost'];
 }
 
@@ -114,6 +224,24 @@ message ItemCartPb {
   double quantity = 4;
   repeated ProxyArticleWorthPb proxies_worth = 5;
   double inventoryAbsoluteQt = 6;
+  // client_computed 
+  // quantity × articlePrice, where articlePrice resolves as:
+  //   retail      → articleRetail.price
+  //   uncountable → articleUncountable.price  (quantity is always 1)
+  //   basket      → sum(round(p.price × p.minimumUnitPerBasket) for p in proxies_worth)
+  //                 − articleBasket.discountAmount + articleBasket.markupAmount
+  double total_price = 7 [
+    (weebi.options.formula) = "quantity * articlePrice",
+    json_name = "totalPrice"
+  ];
+  // client_computed 
+  // quantity × articleCost, where articleCost resolves as:
+  //   retail      → articleRetail.cost
+  //   uncountable → articleUncountable.cost   (quantity is always 1)
+  //   basket      → sum(round(p.cost × p.minimumUnitPerBasket) for p in proxies_worth)
+  //                 (no discount or markup on the cost side — purchase)
+  double total_cost = 8 [
+    (weebi.options.formula) = "quantity * articleCost",
+    json_name = "totalCost"
+  ];
 }
-
-

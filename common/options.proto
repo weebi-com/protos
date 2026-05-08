@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package weebi.options;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FieldOptions {
+  // CEL expression that describes how to derive this field.
+  // Sibling fields within the same message are referenced by name.
+  // For sub-messages (e.g. TicketSellTotalsPb), parent-scope fields
+  // (promo, discountAmount, taxe, received, items, ticketType) are
+  // supplied by the TicketPb context at evaluation time.
+  string formula = 50001;
+}
