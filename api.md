@@ -28,6 +28,9 @@
 - [common/g_timestamp.proto](#common_g_timestamp-proto)
     - [Timestamp](#google-protobuf-Timestamp)
   
+- [common/options.proto](#common_options-proto)
+    - [File-level Extensions](#common_options-proto-extensions)
+  
 - [common/phone.proto](#common_phone-proto)
     - [Phone](#weebi-common-phone-Phone)
   
@@ -99,9 +102,12 @@
     - [ItemCartPb](#weebi-ticket-ItemCartPb)
     - [ProxyArticleWorthPb](#weebi-ticket-ProxyArticleWorthPb)
     - [TaxPb](#weebi-ticket-TaxPb)
+    - [TicketCoverTotalPb](#weebi-ticket-TicketCoverTotalPb)
     - [TicketMongo](#weebi-ticket-TicketMongo)
     - [TicketMongo.AdditionalAttributesEntry](#weebi-ticket-TicketMongo-AdditionalAttributesEntry)
     - [TicketPb](#weebi-ticket-TicketPb)
+    - [TicketSellTotalsPb](#weebi-ticket-TicketSellTotalsPb)
+    - [TicketSpendTotalsPb](#weebi-ticket-TicketSpendTotalsPb)
   
     - [TicketPb.PaymentTypePb](#weebi-ticket-TicketPb-PaymentTypePb)
   
@@ -595,6 +601,30 @@ http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.
  
 
  
+
+ 
+
+ 
+
+
+
+<a name="common_options-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## common/options.proto
+
+
+ 
+
+ 
+
+
+<a name="common_options-proto-extensions"></a>
+
+### File-level Extensions
+| Extension | Type | Base | Number | Description |
+| --------- | ---- | ---- | ------ | ----------- |
+| formula | string | .google.protobuf.FieldOptions | 50001 | CEL expression that describes how to derive this field. Sibling fields within the same message are referenced by name. For sub-messages (e.g. TicketSellTotalsPb), parent-scope fields (promo, discountAmount, taxe, received, items, ticketType) are supplied by the TicketPb context at evaluation time. |
 
  
 
@@ -1639,6 +1669,8 @@ will add contact created by userId someday until them below is confusing string 
 | quantity | [double](#double) |  |  |
 | proxies_worth | [ProxyArticleWorthPb](#weebi-ticket-ProxyArticleWorthPb) | repeated |  |
 | inventoryAbsoluteQt | [double](#double) |  |  |
+| total_price | [double](#double) |  | client_computed quantity × articlePrice, where articlePrice resolves as: retail → articleRetail.price uncountable → articleUncountable.price (quantity is always 1) basket → sum(round(p.price × p.minimumUnitPerBasket) for p in proxies_worth) − articleBasket.discountAmount &#43; articleBasket.markupAmount |
+| total_cost | [double](#double) |  | client_computed quantity × articleCost, where articleCost resolves as: retail → articleRetail.cost uncountable → articleUncountable.cost (quantity is always 1) basket → sum(round(p.cost × p.minimumUnitPerBasket) for p in proxies_worth) (no discount or markup on the cost side — purchase) |
 
 
 
@@ -1680,6 +1712,22 @@ will add contact created by userId someday until them below is confusing string 
 | id | [string](#string) |  |  |
 | name | [string](#string) |  |  |
 | percentage | [double](#double) |  |  |
+
+
+
+
+
+
+<a name="weebi-ticket-TicketCoverTotalPb"></a>
+
+### TicketCoverTotalPb
+Cover totals — set when ticketType is sellCovered, spendCovered, or wage.
+No item computation: total equals the received amount.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| total | [double](#double) |  |  |
 
 
 
@@ -1758,6 +1806,52 @@ ticketNonUniqueId is to be combined with userId
 | currency | [string](#string) | optional |  |
 | snapshot_secondary_currency | [string](#string) | optional | ISO 4217 secondary currency (e.g. USD) shown at sale time alongside local amounts. Empty = no snapshot. |
 | snapshot_local_per_secondary | [double](#double) | optional | Units of local (boutique) currency for one unit of snapshot_secondary_currency (e.g. 2800 means 1 USD = 2800 CDF). |
+| sell_totals | [TicketSellTotalsPb](#weebi-ticket-TicketSellTotalsPb) |  |  |
+| spend_totals | [TicketSpendTotalsPb](#weebi-ticket-TicketSpendTotalsPb) |  |  |
+| cover_totals | [TicketCoverTotalPb](#weebi-ticket-TicketCoverTotalPb) |  |  |
+
+
+
+
+
+
+<a name="weebi-ticket-TicketSellTotalsPb"></a>
+
+### TicketSellTotalsPb
+Sell totals — set when ticketType is sell or sellDeferred.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| items_only | [double](#double) |  |  |
+| promo_val | [double](#double) |  |  |
+| markdowns_val | [double](#double) |  | promo_val &#43; discountAmount |
+| markdowns_included_tax_excluded | [double](#double) |  | items_only minus all markdowns, before taxes |
+| taxes_value | [double](#double) |  |  |
+| markdowns_and_tax_included | [double](#double) |  |  |
+| change | [double](#double) |  | received − markdowns_and_tax_included; 0 when sellDeferred |
+
+
+
+
+
+
+<a name="weebi-ticket-TicketSpendTotalsPb"></a>
+
+### TicketSpendTotalsPb
+Spend totals — set when ticketType is spend or spendDeferred.
+Same computation chain as TicketSellTotalsPb but items_only sums total_cost.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| items_only | [double](#double) |  |  |
+| promo_val | [double](#double) |  |  |
+| markdowns_val | [double](#double) |  |  |
+| markdowns_included_tax_excluded | [double](#double) |  |  |
+| taxes_value | [double](#double) |  |  |
+| markdowns_and_tax_included | [double](#double) |  |  |
+| change | [double](#double) |  | received − markdowns_and_tax_included; 0 when spendDeferred |
 
 
 

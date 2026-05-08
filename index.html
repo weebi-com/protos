@@ -285,6 +285,21 @@
         
           
           <li>
+            <a href="#common%2foptions.proto">common/options.proto</a>
+            <ul>
+              
+              
+              
+                <li>
+                  <a href="#common%2foptions.proto-extensions"><span class="badge">X</span>File-level Extensions</a>
+                </li>
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
             <a href="#common%2fphone.proto">common/phone.proto</a>
             <ul>
               
@@ -574,6 +589,10 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.ticket.TicketCoverTotalPb"><span class="badge">M</span>TicketCoverTotalPb</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.ticket.TicketMongo"><span class="badge">M</span>TicketMongo</a>
                 </li>
               
@@ -583,6 +602,14 @@
               
                 <li>
                   <a href="#weebi.ticket.TicketPb"><span class="badge">M</span>TicketPb</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.ticket.TicketSellTotalsPb"><span class="badge">M</span>TicketSellTotalsPb</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.ticket.TicketSpendTotalsPb"><span class="badge">M</span>TicketSpendTotalsPb</a>
                 </li>
               
               
@@ -1575,6 +1602,42 @@ inclusive. </p></td>
 
       
 
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="common/options.proto">common/options.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+
+      
+
+      
+        <h3 id="common/options.proto-extensions">File-level Extensions</h3>
+        <table class="extension-table">
+          <thead>
+            <tr><td>Extension</td><td>Type</td><td>Base</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>formula</td>
+                <td><a href="#string">string</a></td>
+                <td><a href="#google.protobuf.FieldOptions">.google.protobuf.FieldOptions</a></td>
+                <td>50001</td>
+                <td><p>CEL expression that describes how to derive this field.
+Sibling fields within the same message are referenced by name.
+For sub-messages (e.g. TicketSellTotalsPb), parent-scope fields
+(promo, discountAmount, taxe, received, items, ticketType) are
+supplied by the TicketPb context at evaluation time.</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
       
 
       
@@ -4247,6 +4310,30 @@ until them below is confusing
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>total_price</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p>client_computed 
+quantity × articlePrice, where articlePrice resolves as:
+  retail      → articleRetail.price
+  uncountable → articleUncountable.price  (quantity is always 1)
+  basket      → sum(round(p.price × p.minimumUnitPerBasket) for p in proxies_worth)
+                − articleBasket.discountAmount &#43; articleBasket.markupAmount </p></td>
+                </tr>
+              
+                <tr>
+                  <td>total_cost</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p>client_computed 
+quantity × articleCost, where articleCost resolves as:
+  retail      → articleRetail.cost
+  uncountable → articleUncountable.cost   (quantity is always 1)
+  basket      → sum(round(p.cost × p.minimumUnitPerBasket) for p in proxies_worth)
+                (no discount or markup on the cost side — purchase) </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -4367,6 +4454,30 @@ until them below is confusing
               
                 <tr>
                   <td>percentage</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.ticket.TicketCoverTotalPb">TicketCoverTotalPb</h3>
+        <p>Cover totals — set when ticketType is sellCovered, spendCovered, or wage.</p><p>No item computation: total equals the received amount.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>total</td>
                   <td><a href="#double">double</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -4668,6 +4779,159 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#double">double</a></td>
                   <td>optional</td>
                   <td><p>Units of local (boutique) currency for one unit of snapshot_secondary_currency (e.g. 2800 means 1 USD = 2800 CDF). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>sell_totals</td>
+                  <td><a href="#weebi.ticket.TicketSellTotalsPb">TicketSellTotalsPb</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>spend_totals</td>
+                  <td><a href="#weebi.ticket.TicketSpendTotalsPb">TicketSpendTotalsPb</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>cover_totals</td>
+                  <td><a href="#weebi.ticket.TicketCoverTotalPb">TicketCoverTotalPb</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.ticket.TicketSellTotalsPb">TicketSellTotalsPb</h3>
+        <p>Sell totals — set when ticketType is sell or sellDeferred.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>items_only</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>promo_val</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>markdowns_val</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p>promo_val &#43; discountAmount </p></td>
+                </tr>
+              
+                <tr>
+                  <td>markdowns_included_tax_excluded</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p>items_only minus all markdowns, before taxes </p></td>
+                </tr>
+              
+                <tr>
+                  <td>taxes_value</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>markdowns_and_tax_included</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>change</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p>received − markdowns_and_tax_included; 0 when sellDeferred </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.ticket.TicketSpendTotalsPb">TicketSpendTotalsPb</h3>
+        <p>Spend totals — set when ticketType is spend or spendDeferred.</p><p>Same computation chain as TicketSellTotalsPb but items_only sums total_cost.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>items_only</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>promo_val</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>markdowns_val</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>markdowns_included_tax_excluded</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>taxes_value</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>markdowns_and_tax_included</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>change</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p>received − markdowns_and_tax_included; 0 when spendDeferred </p></td>
                 </tr>
               
             </tbody>
