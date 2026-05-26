@@ -119,7 +119,7 @@ message FulfillFromStripeCheckoutSessionRequest {
 /// Billing product (license plan). Stored in billing_products collection.
 /// Single source of truth for price mapping; replaces STRIPE_PRICE_* and STRIPE_PRODUCT_* env vars.
 message BillingProduct {
-  string productId = 1 [json_name = 'productId'];  // e.g. "solo", "trio", "pro"
+  string productId = 1 [json_name = 'productId'];  // e.g. "entreprise", "premium"
   weebi.license.LicensePlan licensePlan = 2 [json_name = 'licensePlan'];
   int32 maxUsers = 3 [json_name = 'maxUsers'];
   int32 amountCents = 4 [json_name = 'amountCents'];

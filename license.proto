@@ -4,12 +4,11 @@ package weebi.license;
 
 import "common/g_timestamp.proto";
 
-/// License plan tiers. Maps to payment provider products.
+/// License plan tiers. Maps to payment provider products (billing_products).
 enum LicensePlan {
   LICENSE_PLAN_UNKNOWN = 0;
-  SOLO = 1;        // 1 user, €14
-  TRIO = 2;        // 3 users, €29
-  PRO = 3;         // 10 users, €79
+  ENTERPRISE = 1;
+  PREMIUM = 2;
 }
 
 /// Payment provider that processed the purchase.

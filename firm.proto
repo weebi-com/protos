@@ -9,10 +9,10 @@ import "license.proto";
 message Firm {
     string firmId = 1 [json_name = 'firmId'];
     string name = 2 [json_name = 'name'];
-    /// @deprecated Use licenses instead.
+    /// @deprecated Use licenses[].licensePlan instead.
     string subscriptionPlan = 3 [json_name = 'subscriptionPlan', deprecated = true];
-    /// @deprecated Use licenses[].maxUsers instead.
-    int32 subscriptionSeats =  4 [json_name = 'subscriptionSeats', deprecated = true]; //  1 seat == 1 user/device
+    /// @deprecated Use licenses[].maxUsers instead (per purchased seat).
+    int32 subscriptionSeats =  4 [json_name = 'subscriptionSeats', deprecated = true]; // 1 seat == 1 user/device
     /// @deprecated Use licenses[].validFrom instead.
     google.protobuf.Timestamp subscriptionStartTimestampUTC =  5 [json_name = 'subscriptionStartTimestampUTC', deprecated = true];
     /// @deprecated Use licenses[].validUntil and LicenseSeat.validUntil instead.
@@ -24,7 +24,7 @@ message Firm {
     bool isMailVerified =  11 [json_name = 'isMailVerified'];
     google.protobuf.Timestamp creationDateUTC = 12 [json_name = 'creationDateUTC'];
     string stripeCustomerId = 13 [json_name = 'stripeCustomerId'];
-    /// Active licenses. A firm can have multiple licenses (e.g. add-ons, renewals).
+    /// Active licenses. A firm can have multiple licenses (e.g. seat packs, renewals).
     repeated weebi.license.License licenses = 14 [json_name = 'licenses'];
     /// Customer IDs per payment provider. Keys: "stripe", "pawapay", etc.
     map<string, string> providerCustomerIds = 15 [json_name = 'providerCustomerIds'];
