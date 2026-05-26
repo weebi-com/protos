@@ -1,5 +1,9 @@
 # changelog
 
+## 1.3.4 - may 2026
+
+- update the offers to reflect simplify with entreprise and premium licenses 
+
 ## 1.3.3 - may 2026
 
 - add retail total logic in ticket.proto
