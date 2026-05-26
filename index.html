@@ -5351,7 +5351,7 @@ the server will check they fit the permissions </p></td>
                   <td>productId</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>e.g. &#34;solo&#34;, &#34;trio&#34;, &#34;pro&#34; </p></td>
+                  <td><p>e.g. &#34;entreprise&#34;, &#34;premium&#34; </p></td>
                 </tr>
               
                 <tr>
@@ -8169,14 +8169,14 @@ TODO rename this create</p></td>
                   <td>subscriptionPlan</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p><strong>Deprecated.</strong> @deprecated Use licenses instead. </p></td>
+                  <td><p><strong>Deprecated.</strong> @deprecated Use licenses[].licensePlan instead. </p></td>
                 </tr>
               
                 <tr>
                   <td>subscriptionSeats</td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
-                  <td><p><strong>Deprecated.</strong> @deprecated Use licenses[].maxUsers instead.
+                  <td><p><strong>Deprecated.</strong> @deprecated Use licenses[].maxUsers instead (per purchased seat).
 
 1 seat == 1 user/device </p></td>
                 </tr>
@@ -8248,7 +8248,7 @@ TODO rename this create</p></td>
                   <td>licenses</td>
                   <td><a href="#weebi.license.License">weebi.license.License</a></td>
                   <td>repeated</td>
-                  <td><p>Active licenses. A firm can have multiple licenses (e.g. add-ons, renewals). </p></td>
+                  <td><p>Active licenses. A firm can have multiple licenses (e.g. seat packs, renewals). </p></td>
                 </tr>
               
                 <tr>
@@ -8530,7 +8530,7 @@ TODO rename this create</p></td>
 
       
         <h3 id="weebi.license.LicensePlan">LicensePlan</h3>
-        <p>License plan tiers. Maps to payment provider products.</p>
+        <p>License plan tiers. Maps to payment provider products (billing_products).</p>
         <table class="enum-table">
           <thead>
             <tr><td>Name</td><td>Number</td><td>Description</td></tr>
@@ -8544,21 +8544,15 @@ TODO rename this create</p></td>
               </tr>
             
               <tr>
-                <td>SOLO</td>
+                <td>ENTERPRISE</td>
                 <td>1</td>
-                <td><p>1 user, €14</p></td>
+                <td><p></p></td>
               </tr>
             
               <tr>
-                <td>TRIO</td>
+                <td>PREMIUM</td>
                 <td>2</td>
-                <td><p>3 users, €29</p></td>
-              </tr>
-            
-              <tr>
-                <td>PRO</td>
-                <td>3</td>
-                <td><p>10 users, €79</p></td>
+                <td><p></p></td>
               </tr>
             
           </tbody>

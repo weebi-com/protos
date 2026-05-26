@@ -2050,7 +2050,7 @@ Billing product (license plan). Stored in billing_products collection.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| productId | [string](#string) |  | e.g. &#34;solo&#34;, &#34;trio&#34;, &#34;pro&#34; |
+| productId | [string](#string) |  | e.g. &#34;entreprise&#34;, &#34;premium&#34; |
 | licensePlan | [weebi.license.LicensePlan](#weebi-license-LicensePlan) |  |  |
 | maxUsers | [int32](#int32) |  |  |
 | amountCents | [int32](#int32) |  |  |
@@ -3196,8 +3196,8 @@ boutiques &amp; users
 | ----- | ---- | ----- | ----------- |
 | firmId | [string](#string) |  |  |
 | name | [string](#string) |  |  |
-| subscriptionPlan | [string](#string) |  | **Deprecated.** @deprecated Use licenses instead. |
-| subscriptionSeats | [int32](#int32) |  | **Deprecated.** @deprecated Use licenses[].maxUsers instead.
+| subscriptionPlan | [string](#string) |  | **Deprecated.** @deprecated Use licenses[].licensePlan instead. |
+| subscriptionSeats | [int32](#int32) |  | **Deprecated.** @deprecated Use licenses[].maxUsers instead (per purchased seat).
 
 1 seat == 1 user/device |
 | subscriptionStartTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | **Deprecated.** @deprecated Use licenses[].validFrom instead. |
@@ -3209,7 +3209,7 @@ boutiques &amp; users
 | isMailVerified | [bool](#bool) |  |  |
 | creationDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | stripeCustomerId | [string](#string) |  |  |
-| licenses | [weebi.license.License](#weebi-license-License) | repeated | Active licenses. A firm can have multiple licenses (e.g. add-ons, renewals). |
+| licenses | [weebi.license.License](#weebi-license-License) | repeated | Active licenses. A firm can have multiple licenses (e.g. seat packs, renewals). |
 | providerCustomerIds | [Firm.ProviderCustomerIdsEntry](#weebi-firm-Firm-ProviderCustomerIdsEntry) | repeated | Customer IDs per payment provider. Keys: &#34;stripe&#34;, &#34;pawapay&#34;, etc. |
 | referralCode | [string](#string) |  | Per-firm referral code. Share with others; 20% commission on referred license sales. |
 | referralCreditBalanceCents | [int32](#int32) |  | Referral credit balance in EUR cents. Auto-applied at checkout or cash-out above €15. |
@@ -3305,14 +3305,13 @@ Per-seat validity. Each user (seat) has its own start/end dates.
 <a name="weebi-license-LicensePlan"></a>
 
 ### LicensePlan
-License plan tiers. Maps to payment provider products.
+License plan tiers. Maps to payment provider products (billing_products).
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
 | LICENSE_PLAN_UNKNOWN | 0 |  |
-| SOLO | 1 | 1 user, €14 |
-| TRIO | 2 | 3 users, €29 |
-| PRO | 3 | 10 users, €79 |
+| ENTERPRISE | 1 |  |
+| PREMIUM | 2 |  |
 
 
 
