@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package weebi.stats.service;
+
+import "common/g_timestamp.proto";
+
+service StatsService {
+  rpc getFinancialChart(FinancialChartRequest) returns (FinancialChartResponse);
+}
+
+message FinancialChartRequest {
+  string firmId = 1 [json_name = 'firmId'];
+  repeated string boutiqueIds = 2 [json_name = 'boutiqueIds'];
+  google.protobuf.Timestamp start = 3 [json_name = 'start'];
+  google.protobuf.Timestamp end = 4 [json_name = 'end'];
+  ChartTimePeriod timePeriod = 5 [json_name = 'timePeriod'];
+  FinancialChartMetric metric = 6 [json_name = 'metric'];
+  bool stackedByBoutique = 7 [json_name = 'stackedByBoutique'];
+}
+
+message FinancialChartResponse {
+  string svgContent = 1 [json_name = 'svgContent'];
+}
+
+enum ChartTimePeriod {
+  DAY = 0;
+  WEEK = 1;
+  MONTH = 2;
+}
+
+enum FinancialChartMetric {
+  CASHFLOW_INCOME = 0;
+  CASHFLOW_SPENDING = 1;
+  ALL_INCOME = 2;
+  ALL_SPENDING = 3;
+}
