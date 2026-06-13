@@ -205,6 +205,15 @@
     - [LicensePlan](#weebi-license-LicensePlan)
     - [PaymentProvider](#weebi-license-PaymentProvider)
   
+- [stats_service.proto](#stats_service-proto)
+    - [FinancialChartRequest](#weebi-stats-service-FinancialChartRequest)
+    - [FinancialChartResponse](#weebi-stats-service-FinancialChartResponse)
+  
+    - [ChartTimePeriod](#weebi-stats-service-ChartTimePeriod)
+    - [FinancialChartMetric](#weebi-stats-service-FinancialChartMetric)
+  
+    - [StatsService](#weebi-stats-service-StatsService)
+  
 - [user.proto](#user-proto)
     - [PendingUserRequest](#weebi-user-PendingUserRequest)
     - [PendingUserRequest.OthersAttributesEntry](#weebi-user-PendingUserRequest-OthersAttributesEntry)
@@ -3330,6 +3339,95 @@ Payment provider that processed the purchase.
  
 
  
+
+ 
+
+
+
+<a name="stats_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## stats_service.proto
+
+
+
+<a name="weebi-stats-service-FinancialChartRequest"></a>
+
+### FinancialChartRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| firmId | [string](#string) |  |  |
+| boutiqueIds | [string](#string) | repeated |  |
+| start | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| end | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| timePeriod | [ChartTimePeriod](#weebi-stats-service-ChartTimePeriod) |  |  |
+| metric | [FinancialChartMetric](#weebi-stats-service-FinancialChartMetric) |  |  |
+| stackedByBoutique | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="weebi-stats-service-FinancialChartResponse"></a>
+
+### FinancialChartResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| svgContent | [string](#string) |  |  |
+
+
+
+
+
+ 
+
+
+<a name="weebi-stats-service-ChartTimePeriod"></a>
+
+### ChartTimePeriod
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| DAY | 0 |  |
+| WEEK | 1 |  |
+| MONTH | 2 |  |
+
+
+
+<a name="weebi-stats-service-FinancialChartMetric"></a>
+
+### FinancialChartMetric
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| CASHFLOW_INCOME | 0 |  |
+| CASHFLOW_SPENDING | 1 |  |
+| ALL_INCOME | 2 |  |
+| ALL_SPENDING | 3 |  |
+
+
+ 
+
+ 
+
+
+<a name="weebi-stats-service-StatsService"></a>
+
+### StatsService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| getFinancialChart | [FinancialChartRequest](#weebi-stats-service-FinancialChartRequest) | [FinancialChartResponse](#weebi-stats-service-FinancialChartResponse) |  |
 
  
 

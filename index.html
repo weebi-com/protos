@@ -1011,6 +1011,37 @@
         
           
           <li>
+            <a href="#stats_service.proto">stats_service.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#weebi.stats.service.FinancialChartRequest"><span class="badge">M</span>FinancialChartRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.stats.service.FinancialChartResponse"><span class="badge">M</span>FinancialChartResponse</a>
+                </li>
+              
+              
+                <li>
+                  <a href="#weebi.stats.service.ChartTimePeriod"><span class="badge">E</span>ChartTimePeriod</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.stats.service.FinancialChartMetric"><span class="badge">E</span>FinancialChartMetric</a>
+                </li>
+              
+              
+              
+                <li>
+                  <a href="#weebi.stats.service.StatsService"><span class="badge">S</span>StatsService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+          
+          <li>
             <a href="#user.proto">user.proto</a>
             <ul>
               
@@ -8591,6 +8622,193 @@ TODO rename this create</p></td>
       
 
       
+    
+      
+      <div class="file-heading">
+        <h2 id="stats_service.proto">stats_service.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="weebi.stats.service.FinancialChartRequest">FinancialChartRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>firmId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>boutiqueIds</td>
+                  <td><a href="#string">string</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>start</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>end</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>timePeriod</td>
+                  <td><a href="#weebi.stats.service.ChartTimePeriod">ChartTimePeriod</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>metric</td>
+                  <td><a href="#weebi.stats.service.FinancialChartMetric">FinancialChartMetric</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>stackedByBoutique</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.stats.service.FinancialChartResponse">FinancialChartResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>svgContent</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+        <h3 id="weebi.stats.service.ChartTimePeriod">ChartTimePeriod</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>DAY</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>WEEK</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>MONTH</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="weebi.stats.service.FinancialChartMetric">FinancialChartMetric</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>CASHFLOW_INCOME</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>CASHFLOW_SPENDING</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>ALL_INCOME</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>ALL_SPENDING</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+
+      
+
+      
+        <h3 id="weebi.stats.service.StatsService">StatsService</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>getFinancialChart</td>
+                <td><a href="#weebi.stats.service.FinancialChartRequest">FinancialChartRequest</a></td>
+                <td><a href="#weebi.stats.service.FinancialChartResponse">FinancialChartResponse</a></td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
     
       
       <div class="file-heading">
