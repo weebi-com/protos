@@ -1818,6 +1818,7 @@ ticketNonUniqueId is to be combined with userId
 | sell_totals | [TicketSellTotalsPb](#weebi-ticket-TicketSellTotalsPb) |  |  |
 | spend_totals | [TicketSpendTotalsPb](#weebi-ticket-TicketSpendTotalsPb) |  |  |
 | cover_totals | [TicketCoverTotalPb](#weebi-ticket-TicketCoverTotalPb) |  |  |
+| replaced_ticket_id | [string](#string) | optional |  |
 
 
 
