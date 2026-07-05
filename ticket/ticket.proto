@@ -181,7 +181,10 @@ message TicketPb {
     TicketSpendTotalsPb spend_totals = 24;
     TicketCoverTotalPb  cover_totals = 25;
   }
-  reserved 26 to 98;
+
+  optional string replaced_ticket_id = 26 [json_name = 'replacedTicketId'];
+
+  reserved 27 to 98;
 }
 
 message Counterfoil {
