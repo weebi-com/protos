@@ -44,7 +44,15 @@ message Chain {
   optional weebi.boutique.BusinessRules businessRules = 14 [json_name = 'businessRules'];
   /// Soft-closed calendar years for SMT (waterfall with firm + boutique).
   repeated weebi.boutique.ClosedYearPb closed_years = 15 [json_name = 'closedYears'];
-  reserved 16 to 100;
+  /// RCCM / registre de commerce (optional; required at SMT year close).
+  optional string commercial_register_number = 16 [json_name = 'commercialRegisterNumber'];
+  /// SMT regime A/B/C; unknown defaults to négoce ceiling.
+  optional weebi.boutique.CommerceTypePb commerce_type = 17 [json_name = 'commerceType'];
+  /// ISIC code from the chosen classification (string; may keep leading zeros).
+  optional string isic_code = 18 [json_name = 'isicCode'];
+  /// Weebi refinement when several activities share the same ISIC.
+  optional string isic_sub_code = 19 [json_name = 'isicSubCode'];
+  reserved 20 to 100;
 }
 
 message Chains {

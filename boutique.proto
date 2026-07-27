@@ -7,6 +7,30 @@ import "common/address.proto";
 import "device.proto";
 import "common/g_timestamp.proto";
 
+/// SYSCOHADA SMT regime (A/B/C) — drives annual cash-turnover ceiling.
+/// UI shows BusinessClassification rows, not these labels.
+/// A = negoce (≤60M CFA), B = artisanat (≤40M), C = services (≤30M).
+enum CommerceTypePb {
+    unknown = 0;
+    negoce = 1;      // A
+    artisanat = 2;   // B
+    services = 3;    // C
+}
+
+/// One self-declared business classification (ISIC-oriented).
+/// Not an enum: the authoritative list lives in protos_weebi data.
+/// Composite unique key: ([isic_code], [sub_code]). [isic_code] may repeat;
+/// [sub_code] distinguishes Weebi refinements (empty when ISIC alone is enough).
+message BusinessClassification {
+    string isic_code = 1 [json_name = 'isicCode']; // e.g. "1071", "014", "0322" (string keeps leading zeros)
+    string sub_code = 2 [json_name = 'subCode']; // e.g. salon_de_coiffure; empty if sole row for that ISIC
+    string emoji = 3 [json_name = 'emoji'];
+    string label_fr = 4 [json_name = 'labelFr']; // short activity label
+    string isic_label_fr = 5 [json_name = 'isicLabelFr'];
+    string isic_label_en = 6 [json_name = 'isicLabelEn'];
+    string isic_label_es = 7 [json_name = 'isicLabelEs'];
+    CommerceTypePb smt_regime = 8 [json_name = 'smtRegime']; // A/B/C
+}
 
 message BoutiqueMongo {
     BoutiquePb boutique = 1 [json_name = 'boutique']; 
@@ -54,7 +78,15 @@ message BoutiquePb {
     /// Soft-closed calendar years for SYSCOHADA SMT (client writes; server may
     /// ignore until fence supports it). Carries résultat + treasury for ranking.
     repeated ClosedYearPb closed_years = 20 [json_name = 'closedYears'];
-    reserved 21 to 100;
+    /// RCCM / registre de commerce (optional; required at SMT year close).
+    optional string commercial_register_number = 21 [json_name = 'commercialRegisterNumber'];
+    /// SMT regime A/B/C; unknown defaults to négoce ceiling.
+    optional CommerceTypePb commerce_type = 22 [json_name = 'commerceType'];
+    /// ISIC code from the chosen classification (string; may keep leading zeros).
+    optional string isic_code = 23 [json_name = 'isicCode'];
+    /// Weebi refinement when several activities share the same ISIC (e.g. coiffure).
+    optional string isic_sub_code = 24 [json_name = 'isicSubCode'];
+    reserved 25 to 100;
 // below was misleading, if an attribute is needed, open an issue/a PR to add it
 // map<string, string> additional_attributes = 100  [json_name = 'additional_attributes'];
    }
@@ -68,6 +100,11 @@ message ClosedYearPb {
     double treasury_total = 3 [json_name = 'treasuryTotal'];
     /// ISO-8601 when the year was closed (optional; client fill).
     string closed_at = 4 [json_name = 'closedAt'];
+    /// Snapshot at close time (appears on SMT PDF/Excel).
+    string commercial_register_number = 5 [json_name = 'commercialRegisterNumber'];
+    CommerceTypePb commerce_type = 6 [json_name = 'commerceType'];
+    string isic_code = 7 [json_name = 'isicCode'];
+    string isic_sub_code = 8 [json_name = 'isicSubCode'];
 }
    
    

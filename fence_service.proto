@@ -132,6 +132,10 @@ message ChainRequest {
   optional bool isDualCurrencyEnabled = 4 [json_name = 'isDualCurrencyEnabled'];
   optional string secondaryDisplayCurrency = 5 [json_name = 'secondaryDisplayCurrency'];
   optional weebi.boutique.BusinessRules businessRules = 6 [json_name = 'businessRules'];
+  optional string commercial_register_number = 7 [json_name = 'commercialRegisterNumber'];
+  optional weebi.boutique.CommerceTypePb commerce_type = 8 [json_name = 'commerceType'];
+  optional string isic_code = 9 [json_name = 'isicCode'];
+  optional string isic_sub_code = 10 [json_name = 'isicSubCode'];
 }
 
 /// Identifies a chain for deleteOneChain only (wire-compatible with ChainRequest carrying field 1 alone).

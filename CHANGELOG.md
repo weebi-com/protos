@@ -1,5 +1,19 @@
 # changelog
 
+## 1.3.10 - july 2026
+
+- `BusinessClassification` message: composite key `isicCode` (string) + `subCode`
+- `isicCode` + `isicSubCode` on Boutique, Chain, ChainRequest, ClosedYearPb
+- `CommerceTypePb` documented as SYSCOHADA regimes A/B/C
+- Authoritative list in protos_weebi `BusinessClassifications.all` (not an enum)
+
+## 1.3.9 - july 2026
+
+- `CommerceTypePb` (négoce / artisanat / services) on Chain + Boutique
+- `commercialRegisterNumber` on Chain + Boutique; optional on `CreateFirmRequest` (cascade to first chain/boutique only)
+- `ClosedYearPb` snapshot: `commercialRegisterNumber` + `commerceType` for SMT PDF/Excel
+- `ChainRequest` patch fields for register + commerce type
+
 ## 1.3.8 - july 2026
 
 - PawaPay billing base: `createPawapayCheckout`, `fulfillLicenseFromPawapay`, `fulfillFromPawapayCheckout`

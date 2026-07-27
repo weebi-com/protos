@@ -48,6 +48,8 @@ message CreateFirmRequest {
   string name = 1 [json_name = 'name'];
   /// Optional ISO 4217 default stamped on firm and first chain/boutique; server fills platform default if omitted.
   optional string currency = 2 [json_name = 'currency'];
+  /// Optional RCCM; copied to first chain + boutique only (not stored on Firm).
+  optional string commercial_register_number = 3 [json_name = 'commercialRegisterNumber'];
 }
 
 message CreateFirmResponse {
