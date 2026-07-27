@@ -785,6 +785,10 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.boutique.BusinessClassification"><span class="badge">M</span>BusinessClassification</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.boutique.BusinessRules"><span class="badge">M</span>BusinessRules</a>
                 </li>
               
@@ -792,6 +796,10 @@
                   <a href="#weebi.boutique.ClosedYearPb"><span class="badge">M</span>ClosedYearPb</a>
                 </li>
               
+              
+                <li>
+                  <a href="#weebi.boutique.CommerceTypePb"><span class="badge">E</span>CommerceTypePb</a>
+                </li>
               
               
               
@@ -6732,6 +6740,34 @@ the server will check they fit the permissions </p></td>
 / ignore until fence supports it). Carries résultat &#43; treasury for ranking. </p></td>
                 </tr>
               
+                <tr>
+                  <td>commercial_register_number</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>RCCM / registre de commerce (optional; required at SMT year close). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>commerce_type</td>
+                  <td><a href="#weebi.boutique.CommerceTypePb">CommerceTypePb</a></td>
+                  <td>optional</td>
+                  <td><p>SMT regime A/B/C; unknown defaults to négoce ceiling. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>ISIC code from the chosen classification (string; may keep leading zeros). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_sub_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>Weebi refinement when several activities share the same ISIC (e.g. coiffure). </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -6761,6 +6797,79 @@ the server will check they fit the permissions </p></td>
               </tbody>
             </table>
             
+          
+
+        
+      
+        <h3 id="weebi.boutique.BusinessClassification">BusinessClassification</h3>
+        <p>One self-declared business classification (ISIC-oriented).</p><p>/ Not an enum: the authoritative list lives in protos_weebi data.</p><p>/ Composite unique key: ([isic_code], [sub_code]). [isic_code] may repeat;</p><p>/ [sub_code] distinguishes Weebi refinements (empty when ISIC alone is enough).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>isic_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>e.g. &#34;1071&#34;, &#34;014&#34;, &#34;0322&#34; (string keeps leading zeros) </p></td>
+                </tr>
+              
+                <tr>
+                  <td>sub_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>e.g. salon_de_coiffure; empty if sole row for that ISIC </p></td>
+                </tr>
+              
+                <tr>
+                  <td>emoji</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>label_fr</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>short activity label </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_label_fr</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_label_en</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_label_es</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>smt_regime</td>
+                  <td><a href="#weebi.boutique.CommerceTypePb">CommerceTypePb</a></td>
+                  <td></td>
+                  <td><p>A/B/C </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
           
 
         
@@ -6848,6 +6957,34 @@ the server will check they fit the permissions </p></td>
                   <td><p>ISO-8601 when the year was closed (optional; client fill). </p></td>
                 </tr>
               
+                <tr>
+                  <td>commercial_register_number</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Snapshot at close time (appears on SMT PDF/Excel). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>commerce_type</td>
+                  <td><a href="#weebi.boutique.CommerceTypePb">CommerceTypePb</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_sub_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -6856,6 +6993,41 @@ the server will check they fit the permissions </p></td>
         
       
 
+      
+        <h3 id="weebi.boutique.CommerceTypePb">CommerceTypePb</h3>
+        <p>SYSCOHADA SMT regime (A/B/C) — drives annual cash-turnover ceiling.</p><p>/ UI shows BusinessClassification rows, not these labels.</p><p>/ A = negoce (≤60M CFA), B = artisanat (≤40M), C = services (≤30M).</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>unknown</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>negoce</td>
+                <td>1</td>
+                <td><p>A</p></td>
+              </tr>
+            
+              <tr>
+                <td>artisanat</td>
+                <td>2</td>
+                <td><p>B</p></td>
+              </tr>
+            
+              <tr>
+                <td>services</td>
+                <td>3</td>
+                <td><p>C</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
       
 
       
@@ -6982,6 +7154,34 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#weebi.boutique.ClosedYearPb">weebi.boutique.ClosedYearPb</a></td>
                   <td>repeated</td>
                   <td><p>Soft-closed calendar years for SMT (waterfall with firm &#43; boutique). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>commercial_register_number</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>RCCM / registre de commerce (optional; required at SMT year close). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>commerce_type</td>
+                  <td><a href="#weebi.boutique.CommerceTypePb">weebi.boutique.CommerceTypePb</a></td>
+                  <td>optional</td>
+                  <td><p>SMT regime A/B/C; unknown defaults to négoce ceiling. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>ISIC code from the chosen classification (string; may keep leading zeros). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_sub_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>Weebi refinement when several activities share the same ISIC. </p></td>
                 </tr>
               
             </tbody>
@@ -7364,6 +7564,34 @@ the server will check they fit the permissions </p></td>
                 <tr>
                   <td>businessRules</td>
                   <td><a href="#weebi.boutique.BusinessRules">weebi.boutique.BusinessRules</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>commercial_register_number</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>commerce_type</td>
+                  <td><a href="#weebi.boutique.CommerceTypePb">weebi.boutique.CommerceTypePb</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isic_sub_code</td>
+                  <td><a href="#string">string</a></td>
                   <td>optional</td>
                   <td><p> </p></td>
                 </tr>
@@ -8723,6 +8951,13 @@ TODO rename this create</p></td>
                   <td><a href="#string">string</a></td>
                   <td>optional</td>
                   <td><p>Optional ISO 4217 default stamped on firm and first chain/boutique; server fills platform default if omitted. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>commercial_register_number</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>Optional RCCM; copied to first chain &#43; boutique only (not stored on Firm). </p></td>
                 </tr>
               
             </tbody>

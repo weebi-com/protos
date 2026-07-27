@@ -151,8 +151,11 @@
     - [BoutiqueMongo](#weebi-boutique-BoutiqueMongo)
     - [BoutiqueMongo.AdditionalAttributesEntry](#weebi-boutique-BoutiqueMongo-AdditionalAttributesEntry)
     - [BoutiquePb](#weebi-boutique-BoutiquePb)
+    - [BusinessClassification](#weebi-boutique-BusinessClassification)
     - [BusinessRules](#weebi-boutique-BusinessRules)
     - [ClosedYearPb](#weebi-boutique-ClosedYearPb)
+  
+    - [CommerceTypePb](#weebi-boutique-CommerceTypePb)
   
 - [btq_chain.proto](#btq_chain-proto)
     - [Chain](#weebi-chain-Chain)
@@ -2533,6 +2536,35 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | secondaryDisplayCurrency | [string](#string) | optional | ISO 4217 secondary display code (e.g. USD). Meaningful when isDualCurrencyEnabled is true. |
 | businessRules | [BusinessRules](#weebi-boutique-BusinessRules) | optional |  |
 | closed_years | [ClosedYearPb](#weebi-boutique-ClosedYearPb) | repeated | Soft-closed calendar years for SYSCOHADA SMT (client writes; server may / ignore until fence supports it). Carries résultat &#43; treasury for ranking. |
+| commercial_register_number | [string](#string) | optional | RCCM / registre de commerce (optional; required at SMT year close). |
+| commerce_type | [CommerceTypePb](#weebi-boutique-CommerceTypePb) | optional | SMT regime A/B/C; unknown defaults to négoce ceiling. |
+| isic_code | [string](#string) | optional | ISIC code from the chosen classification (string; may keep leading zeros). |
+| isic_sub_code | [string](#string) | optional | Weebi refinement when several activities share the same ISIC (e.g. coiffure). |
+
+
+
+
+
+
+<a name="weebi-boutique-BusinessClassification"></a>
+
+### BusinessClassification
+One self-declared business classification (ISIC-oriented).
+/ Not an enum: the authoritative list lives in protos_weebi data.
+/ Composite unique key: ([isic_code], [sub_code]). [isic_code] may repeat;
+/ [sub_code] distinguishes Weebi refinements (empty when ISIC alone is enough).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| isic_code | [string](#string) |  | e.g. &#34;1071&#34;, &#34;014&#34;, &#34;0322&#34; (string keeps leading zeros) |
+| sub_code | [string](#string) |  | e.g. salon_de_coiffure; empty if sole row for that ISIC |
+| emoji | [string](#string) |  |  |
+| label_fr | [string](#string) |  | short activity label |
+| isic_label_fr | [string](#string) |  |  |
+| isic_label_en | [string](#string) |  |  |
+| isic_label_es | [string](#string) |  |  |
+| smt_regime | [CommerceTypePb](#weebi-boutique-CommerceTypePb) |  | A/B/C |
 
 
 
@@ -2571,12 +2603,32 @@ One soft-closed calendar year &#43; minimal SMT snapshot (loan-potential hook).
 | resultat | [double](#double) |  | Cash-basis SMT résultat (recettes − dépenses) for the closed year. |
 | treasury_total | [double](#double) |  | Sum of treasury closing balances (571&#43;521&#43;554) at 31/12. |
 | closed_at | [string](#string) |  | ISO-8601 when the year was closed (optional; client fill). |
+| commercial_register_number | [string](#string) |  | Snapshot at close time (appears on SMT PDF/Excel). |
+| commerce_type | [CommerceTypePb](#weebi-boutique-CommerceTypePb) |  |  |
+| isic_code | [string](#string) |  |  |
+| isic_sub_code | [string](#string) |  |  |
 
 
 
 
 
  
+
+
+<a name="weebi-boutique-CommerceTypePb"></a>
+
+### CommerceTypePb
+SYSCOHADA SMT regime (A/B/C) — drives annual cash-turnover ceiling.
+/ UI shows BusinessClassification rows, not these labels.
+/ A = negoce (≤60M CFA), B = artisanat (≤40M), C = services (≤30M).
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| unknown | 0 |  |
+| negoce | 1 | A |
+| artisanat | 2 | B |
+| services | 3 | C |
+
 
  
 
@@ -2616,6 +2668,10 @@ One soft-closed calendar year &#43; minimal SMT snapshot (loan-potential hook).
 | secondaryDisplayCurrency | [string](#string) | optional |  |
 | businessRules | [weebi.boutique.BusinessRules](#weebi-boutique-BusinessRules) | optional |  |
 | closed_years | [weebi.boutique.ClosedYearPb](#weebi-boutique-ClosedYearPb) | repeated | Soft-closed calendar years for SMT (waterfall with firm &#43; boutique). |
+| commercial_register_number | [string](#string) | optional | RCCM / registre de commerce (optional; required at SMT year close). |
+| commerce_type | [weebi.boutique.CommerceTypePb](#weebi-boutique-CommerceTypePb) | optional | SMT regime A/B/C; unknown defaults to négoce ceiling. |
+| isic_code | [string](#string) | optional | ISIC code from the chosen classification (string; may keep leading zeros). |
+| isic_sub_code | [string](#string) | optional | Weebi refinement when several activities share the same ISIC. |
 
 
 
@@ -2805,6 +2861,10 @@ Patch-style chain update (not a full Chain). Omitted optional fields are left un
 | isDualCurrencyEnabled | [bool](#bool) | optional |  |
 | secondaryDisplayCurrency | [string](#string) | optional |  |
 | businessRules | [weebi.boutique.BusinessRules](#weebi-boutique-BusinessRules) | optional |  |
+| commercial_register_number | [string](#string) | optional |  |
+| commerce_type | [weebi.boutique.CommerceTypePb](#weebi-boutique-CommerceTypePb) | optional |  |
+| isic_code | [string](#string) | optional |  |
+| isic_sub_code | [string](#string) | optional |  |
 
 
 
@@ -3377,6 +3437,7 @@ boutiques &amp; users
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | mandatory |
 | currency | [string](#string) | optional | Optional ISO 4217 default stamped on firm and first chain/boutique; server fills platform default if omitted. |
+| commercial_register_number | [string](#string) | optional | Optional RCCM; copied to first chain &#43; boutique only (not stored on Firm). |
 
 
 
