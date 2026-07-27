@@ -678,6 +678,10 @@
             <ul>
               
                 <li>
+                  <a href="#weebi.billing.service.AccountingYearPurchase"><span class="badge">M</span>AccountingYearPurchase</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.billing.service.BillingProduct"><span class="badge">M</span>BillingProduct</a>
                 </li>
               
@@ -698,11 +702,27 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.billing.service.CreatePawapayCheckoutRequest"><span class="badge">M</span>CreatePawapayCheckoutRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.CreatePawapayCheckoutResponse"><span class="badge">M</span>CreatePawapayCheckoutResponse</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.billing.service.DeleteLicenseRequest"><span class="badge">M</span>DeleteLicenseRequest</a>
                 </li>
               
                 <li>
+                  <a href="#weebi.billing.service.FulfillFromPawapayCheckoutRequest"><span class="badge">M</span>FulfillFromPawapayCheckoutRequest</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.billing.service.FulfillFromStripeCheckoutSessionRequest"><span class="badge">M</span>FulfillFromStripeCheckoutSessionRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.FulfillLicenseFromPawapayRequest"><span class="badge">M</span>FulfillLicenseFromPawapayRequest</a>
                 </li>
               
                 <li>
@@ -711,6 +731,10 @@
               
                 <li>
                   <a href="#weebi.billing.service.GetReferralInfoResponse"><span class="badge">M</span>GetReferralInfoResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.billing.service.ReadAccountingYearPurchasesResponse"><span class="badge">M</span>ReadAccountingYearPurchasesResponse</a>
                 </li>
               
                 <li>
@@ -762,6 +786,10 @@
               
                 <li>
                   <a href="#weebi.boutique.BusinessRules"><span class="badge">M</span>BusinessRules</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.boutique.ClosedYearPb"><span class="badge">M</span>ClosedYearPb</a>
                 </li>
               
               
@@ -846,6 +874,14 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.fence.service.CreateWebBridgeLinkRequest"><span class="badge">M</span>CreateWebBridgeLinkRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.fence.service.CreateWebBridgeLinkResponse"><span class="badge">M</span>CreateWebBridgeLinkResponse</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.fence.service.Credentials"><span class="badge">M</span>Credentials</a>
                 </li>
               
@@ -859,6 +895,10 @@
               
                 <li>
                   <a href="#weebi.fence.service.DeviceCredentials"><span class="badge">M</span>DeviceCredentials</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.fence.service.ExchangeWebBridgeTokenRequest"><span class="badge">M</span>ExchangeWebBridgeTokenRequest</a>
                 </li>
               
                 <li>
@@ -4498,7 +4538,7 @@ quantity × articleCost, where articleCost resolves as:
         
       
         <h3 id="weebi.ticket.TicketCoverTotalPb">TicketCoverTotalPb</h3>
-        <p>Cover totals — set when ticketType is sellCovered, spendCovered, or wage.</p><p>No item computation: total equals the received amount.</p>
+        <p>Cover totals — set when ticketType is sellCovered, spendCovered, or rebalance.</p><p>No item computation: total equals the received amount.</p>
 
         
           <table class="field-table">
@@ -4838,6 +4878,27 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#string">string</a></td>
                   <td>optional</td>
                   <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ohada_account_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>SYSCOHADA account code for hors-catalogue sell/spend (owner-classified). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>treasury_from</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>SMT treasury pocket leaving (571 / 521 / 554) for ticketType rebalance. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>treasury_to</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>SMT treasury pocket receiving (571 / 521 / 554) for ticketType rebalance. </p></td>
                 </tr>
               
             </tbody>
@@ -5355,8 +5416,14 @@ the server will check they fit the permissions </p></td>
               </tr>
             
               <tr>
-                <td>wage</td>
+                <td>rebalance</td>
                 <td>10</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>inventoryClosingValue</td>
+                <td>11</td>
                 <td><p></p></td>
               </tr>
             
@@ -5374,6 +5441,79 @@ the server will check they fit the permissions </p></td>
       </div>
       <p></p>
 
+      
+        <h3 id="weebi.billing.service.AccountingYearPurchase">AccountingYearPurchase</h3>
+        <p>One punctual SYSCOHADA fiscal-year purchase (not a subscription).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>year</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>stripeCheckoutSessionId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>stripePriceId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>paidAtUTC</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>amountCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>pawapayCheckoutId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Set when paid via PawaPay (mutually exclusive with stripeCheckoutSessionId in practice). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>paymentProvider</td>
+                  <td><a href="#weebi.license.PaymentProvider">weebi.license.PaymentProvider</a></td>
+                  <td></td>
+                  <td><p>Which provider processed this purchase. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
       
         <h3 id="weebi.billing.service.BillingProduct">BillingProduct</h3>
         <p>Billing product (license plan). Stored in billing_products collection.</p><p>/ Single source of truth for price mapping; replaces STRIPE_PRICE_* and STRIPE_PRODUCT_* env vars.</p>
@@ -5438,7 +5578,7 @@ the server will check they fit the permissions </p></td>
                   <td>pawapayProductId</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Optional, for future </p></td>
+                  <td><p>Optional internal SKU / label for PawaPay; amounts are sent explicitly (no Stripe-like Price IDs). </p></td>
                 </tr>
               
                 <tr>
@@ -5526,6 +5666,13 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>CGV / terms version the buyer accepted before checkout (YYYY-MM-DD, one revision per day). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fiscalYear</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Fiscal/calendar year for punctual SYSCOHADA purchases (required when price is syscohada). </p></td>
                 </tr>
               
             </tbody>
@@ -5628,6 +5775,96 @@ the server will check they fit the permissions </p></td>
 
         
       
+        <h3 id="weebi.billing.service.CreatePawapayCheckoutRequest">CreatePawapayCheckoutRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>productId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Weebi product id from billing_products (e.g. &#34;premium&#34;, &#34;syscohada&#34;). Not a Stripe priceId. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>returnUrl</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>URL the customer is returned to after the hosted payment page (PawaPay returnUrl). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>referralCode</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Optional referral code to apply. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>creditAppliedCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Optional credit (cents) to apply. Deducted from firm balance. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>legalTermsVersionDate</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>CGV / terms version the buyer accepted before checkout (YYYY-MM-DD). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fiscalYear</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Fiscal/calendar year for punctual SYSCOHADA purchases (required when productId is syscohada). </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.CreatePawapayCheckoutResponse">CreatePawapayCheckoutResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>checkoutId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>UUIDv4 checkout id (also used as licenseId suffix: lic_pawapay_{checkoutId}). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>redirectUrl</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Hosted payment page URL — redirect the customer here. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.billing.service.DeleteLicenseRequest">DeleteLicenseRequest</h3>
         <p></p>
 
@@ -5643,6 +5880,37 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.FulfillFromPawapayCheckoutRequest">FulfillFromPawapayCheckoutRequest</h3>
+        <p>Request to fulfill a license from a completed PawaPay checkout (e.g. after returnUrl).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>checkoutId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>legalTermsVersionDate</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Same value as sent to createPawapayCheckout (YYYY-MM-DD). Persisted on the license. </p></td>
                 </tr>
               
             </tbody>
@@ -5674,6 +5942,79 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Same value as sent to createCheckoutSession (YYYY-MM-DD). Persisted on the license; not read from Stripe. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.FulfillLicenseFromPawapayRequest">FulfillLicenseFromPawapayRequest</h3>
+        <p>productId is the source of truth; billing_service maps it via billing_products.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>firmId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>licenseId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Deterministic license id, e.g. lic_pawapay_{checkoutId}. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>checkoutId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>PawaPay checkout UUID (idempotency / reconciliation key). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>productId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Weebi product id (e.g. &#34;premium&#34;, &#34;syscohada&#34;). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>referralCode</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>creditAppliedCents</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>legalTermsVersionDate</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>CGV / terms version from checkout metadata (YYYY-MM-DD). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fiscalYear</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Fiscal year for punctual SYSCOHADA fulfill. </p></td>
                 </tr>
               
             </tbody>
@@ -5742,6 +6083,13 @@ the server will check they fit the permissions </p></td>
                   <td><p>CGV / terms version from checkout session metadata (YYYY-MM-DD). </p></td>
                 </tr>
               
+                <tr>
+                  <td>fiscalYear</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Fiscal year for punctual SYSCOHADA fulfill (from Checkout Session metadata). </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -5778,6 +6126,30 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
                   <td><p>1500 = €15 </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.ReadAccountingYearPurchasesResponse">ReadAccountingYearPurchasesResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>purchases</td>
+                  <td><a href="#weebi.billing.service.AccountingYearPurchase">AccountingYearPurchase</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -6019,6 +6391,36 @@ the server will check they fit the permissions </p></td>
                 <td><a href="#weebi.billing.service.CreateLicenseResponse">CreateLicenseResponse</a></td>
                 <td><p>User-facing: ensure license is created from a paid Checkout Session (e.g. after redirect).
 / Use when webhook may have failed or not yet run. Idempotent; validates session belongs to user&#39;s firm.</p></td>
+              </tr>
+            
+              <tr>
+                <td>createPawapayCheckout</td>
+                <td><a href="#weebi.billing.service.CreatePawapayCheckoutRequest">CreatePawapayCheckoutRequest</a></td>
+                <td><a href="#weebi.billing.service.CreatePawapayCheckoutResponse">CreatePawapayCheckoutResponse</a></td>
+                <td><p>Create a PawaPay Checkout for a license / SYSCOHADA purchase. Returns hosted-page redirectUrl.</p></td>
+              </tr>
+            
+              <tr>
+                <td>fulfillLicenseFromPawapay</td>
+                <td><a href="#weebi.billing.service.FulfillLicenseFromPawapayRequest">FulfillLicenseFromPawapayRequest</a></td>
+                <td><a href="#weebi.billing.service.CreateLicenseResponse">CreateLicenseResponse</a></td>
+                <td><p>Internal: fulfill a license after PawaPay checkout COMPLETED. Called by weebi_express webhook handler.
+/ Requires service account auth.</p></td>
+              </tr>
+            
+              <tr>
+                <td>fulfillFromPawapayCheckout</td>
+                <td><a href="#weebi.billing.service.FulfillFromPawapayCheckoutRequest">FulfillFromPawapayCheckoutRequest</a></td>
+                <td><a href="#weebi.billing.service.CreateLicenseResponse">CreateLicenseResponse</a></td>
+                <td><p>User-facing: ensure license is created from a completed PawaPay checkout (e.g. after returnUrl).
+/ Use when webhook may have failed or not yet run. Idempotent; validates checkout belongs to user&#39;s firm.</p></td>
+              </tr>
+            
+              <tr>
+                <td>readAccountingYearPurchases</td>
+                <td><a href="#weebi.common.empty.Empty">.weebi.common.empty.Empty</a></td>
+                <td><a href="#weebi.billing.service.ReadAccountingYearPurchasesResponse">ReadAccountingYearPurchasesResponse</a></td>
+                <td><p>Read punctual SYSCOHADA fiscal-year purchases for the user&#39;s firm (not a subscription).</p></td>
               </tr>
             
           </tbody>
@@ -6322,6 +6724,14 @@ the server will check they fit the permissions </p></td>
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>closed_years</td>
+                  <td><a href="#weebi.boutique.ClosedYearPb">ClosedYearPb</a></td>
+                  <td>repeated</td>
+                  <td><p>Soft-closed calendar years for SYSCOHADA SMT (client writes; server may
+/ ignore until fence supports it). Carries résultat &#43; treasury for ranking. </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -6384,6 +6794,58 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
                   <td><p>e.g. 5 minutes </p></td>
+                </tr>
+              
+                <tr>
+                  <td>isVatSelectionEnabled</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>OHADA: when true, show VAT selection on tickets (hidden by default for OHADA countries) </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.boutique.ClosedYearPb">ClosedYearPb</h3>
+        <p>One soft-closed calendar year + minimal SMT snapshot (loan-potential hook).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>year</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>resultat</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p>Cash-basis SMT résultat (recettes − dépenses) for the closed year. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>treasury_total</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p>Sum of treasury closing balances (571&#43;521&#43;554) at 31/12. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>closed_at</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>ISO-8601 when the year was closed (optional; client fill). </p></td>
                 </tr>
               
             </tbody>
@@ -6513,6 +6975,13 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#weebi.boutique.BusinessRules">weebi.boutique.BusinessRules</a></td>
                   <td>optional</td>
                   <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>closed_years</td>
+                  <td><a href="#weebi.boutique.ClosedYearPb">weebi.boutique.ClosedYearPb</a></td>
+                  <td>repeated</td>
+                  <td><p>Soft-closed calendar years for SMT (waterfall with firm &#43; boutique). </p></td>
                 </tr>
               
             </tbody>
@@ -7017,6 +7486,82 @@ the server will check they fit the permissions </p></td>
 
         
       
+        <h3 id="weebi.fence.service.CreateWebBridgeLinkRequest">CreateWebBridgeLinkRequest</h3>
+        <p>Mint a short-lived App->Web bridge URL (authenticated).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>productId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Catalog product: &#34;premium&#34; or &#34;syscohada&#34;. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fiscalYear</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Required when productId is &#34;syscohada&#34;; ignored for &#34;premium&#34;. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>returnDeepLink</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Optional future deep link for return-to-app after payment (stored, unused in v1 web). </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.fence.service.CreateWebBridgeLinkResponse">CreateWebBridgeLinkResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Full webapp URL including one-time token query params. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>token</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>expiresAtUnix</td>
+                  <td><a href="#int64">int64</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.fence.service.Credentials">Credentials</h3>
         <p></p>
 
@@ -7150,6 +7695,30 @@ the server will check they fit the permissions </p></td>
               
                 <tr>
                   <td>password</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.fence.service.ExchangeWebBridgeTokenRequest">ExchangeWebBridgeTokenRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>token</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -7901,6 +8470,21 @@ Note: chains contain only active boutiques (deleted ones are filtered out) </p><
               </tr>
             
               <tr>
+                <td>createWebBridgeLink</td>
+                <td><a href="#weebi.fence.service.CreateWebBridgeLinkRequest">CreateWebBridgeLinkRequest</a></td>
+                <td><a href="#weebi.fence.service.CreateWebBridgeLinkResponse">CreateWebBridgeLinkResponse</a></td>
+                <td><p>App -&gt; Web magic link: authenticated mobile client mints a short-lived one-time URL.
+/ Supported product_id values: &#34;premium&#34;, &#34;syscohada&#34; (fiscal_year required for syscohada).</p></td>
+              </tr>
+            
+              <tr>
+                <td>exchangeWebBridgeToken</td>
+                <td><a href="#weebi.fence.service.ExchangeWebBridgeTokenRequest">ExchangeWebBridgeTokenRequest</a></td>
+                <td><a href="#weebi.fence.service.Tokens">Tokens</a></td>
+                <td><p>Public: browser exchanges the one-time token for a web BFF session (Tokens.sessionId only).</p></td>
+              </tr>
+            
+              <tr>
                 <td>createFirm</td>
                 <td><a href="#weebi.firm.CreateFirmRequest">.weebi.firm.CreateFirmRequest</a></td>
                 <td><a href="#weebi.firm.CreateFirmResponse">.weebi.firm.CreateFirmResponse</a></td>
@@ -8329,6 +8913,13 @@ TODO rename this create</p></td>
                   <td><a href="#string">string</a></td>
                   <td>optional</td>
                   <td><p>ISO 4217 secondary display code (e.g. USD). Meaningful when dualCurrencyEnabled is true. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>closed_years</td>
+                  <td><a href="#weebi.boutique.ClosedYearPb">weebi.boutique.ClosedYearPb</a></td>
+                  <td>repeated</td>
+                  <td><p>Soft-closed calendar years for SMT (waterfall with chain &#43; boutique). </p></td>
                 </tr>
               
             </tbody>

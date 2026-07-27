@@ -124,15 +124,21 @@
     - [TicketTypePb](#weebi-ticket_type-TicketTypePb)
   
 - [billing_service.proto](#billing_service-proto)
+    - [AccountingYearPurchase](#weebi-billing-service-AccountingYearPurchase)
     - [BillingProduct](#weebi-billing-service-BillingProduct)
     - [CreateCheckoutSessionRequest](#weebi-billing-service-CreateCheckoutSessionRequest)
     - [CreateCheckoutSessionResponse](#weebi-billing-service-CreateCheckoutSessionResponse)
     - [CreateLicenseRequest](#weebi-billing-service-CreateLicenseRequest)
     - [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse)
+    - [CreatePawapayCheckoutRequest](#weebi-billing-service-CreatePawapayCheckoutRequest)
+    - [CreatePawapayCheckoutResponse](#weebi-billing-service-CreatePawapayCheckoutResponse)
     - [DeleteLicenseRequest](#weebi-billing-service-DeleteLicenseRequest)
+    - [FulfillFromPawapayCheckoutRequest](#weebi-billing-service-FulfillFromPawapayCheckoutRequest)
     - [FulfillFromStripeCheckoutSessionRequest](#weebi-billing-service-FulfillFromStripeCheckoutSessionRequest)
+    - [FulfillLicenseFromPawapayRequest](#weebi-billing-service-FulfillLicenseFromPawapayRequest)
     - [FulfillLicenseFromStripeRequest](#weebi-billing-service-FulfillLicenseFromStripeRequest)
     - [GetReferralInfoResponse](#weebi-billing-service-GetReferralInfoResponse)
+    - [ReadAccountingYearPurchasesResponse](#weebi-billing-service-ReadAccountingYearPurchasesResponse)
     - [ReadBillingProductsResponse](#weebi-billing-service-ReadBillingProductsResponse)
     - [ReadLicensesResponse](#weebi-billing-service-ReadLicensesResponse)
     - [RequestReferralPayoutResponse](#weebi-billing-service-RequestReferralPayoutResponse)
@@ -146,6 +152,7 @@
     - [BoutiqueMongo.AdditionalAttributesEntry](#weebi-boutique-BoutiqueMongo-AdditionalAttributesEntry)
     - [BoutiquePb](#weebi-boutique-BoutiquePb)
     - [BusinessRules](#weebi-boutique-BusinessRules)
+    - [ClosedYearPb](#weebi-boutique-ClosedYearPb)
   
 - [btq_chain.proto](#btq_chain-proto)
     - [Chain](#weebi-chain-Chain)
@@ -164,10 +171,13 @@
     - [ChainRequest](#weebi-fence-service-ChainRequest)
     - [CodeForPairingDevice](#weebi-fence-service-CodeForPairingDevice)
     - [CreateDeviceResponse](#weebi-fence-service-CreateDeviceResponse)
+    - [CreateWebBridgeLinkRequest](#weebi-fence-service-CreateWebBridgeLinkRequest)
+    - [CreateWebBridgeLinkResponse](#weebi-fence-service-CreateWebBridgeLinkResponse)
     - [Credentials](#weebi-fence-service-Credentials)
     - [DeleteChainRequest](#weebi-fence-service-DeleteChainRequest)
     - [DeleteDeviceRequest](#weebi-fence-service-DeleteDeviceRequest)
     - [DeviceCredentials](#weebi-fence-service-DeviceCredentials)
+    - [ExchangeWebBridgeTokenRequest](#weebi-fence-service-ExchangeWebBridgeTokenRequest)
     - [HealthCheckWeebiResponse](#weebi-fence-service-HealthCheckWeebiResponse)
     - [IsADeviceInChainResponse](#weebi-fence-service-IsADeviceInChainResponse)
     - [MailAndEncyptedPassword](#weebi-fence-service-MailAndEncyptedPassword)
@@ -1730,7 +1740,7 @@ will add contact created by userId someday until them below is confusing string 
 <a name="weebi-ticket-TicketCoverTotalPb"></a>
 
 ### TicketCoverTotalPb
-Cover totals — set when ticketType is sellCovered, spendCovered, or wage.
+Cover totals — set when ticketType is sellCovered, spendCovered, or rebalance.
 No item computation: total equals the received amount.
 
 
@@ -1819,6 +1829,9 @@ ticketNonUniqueId is to be combined with userId
 | spend_totals | [TicketSpendTotalsPb](#weebi-ticket-TicketSpendTotalsPb) |  |  |
 | cover_totals | [TicketCoverTotalPb](#weebi-ticket-TicketCoverTotalPb) |  |  |
 | replaced_ticket_id | [string](#string) | optional |  |
+| ohada_account_code | [string](#string) | optional | SYSCOHADA account code for hors-catalogue sell/spend (owner-classified). |
+| treasury_from | [string](#string) | optional | SMT treasury pocket leaving (571 / 521 / 554) for ticketType rebalance. |
+| treasury_to | [string](#string) | optional | SMT treasury pocket receiving (571 / 521 / 554) for ticketType rebalance. |
 
 
 
@@ -2033,7 +2046,8 @@ consider adding isDeleted param
 | stockIn | 7 |  |
 | stockOut | 8 |  |
 | inventory | 9 |  |
-| wage | 10 |  |
+| rebalance | 10 |  |
+| inventoryClosingValue | 11 |  |
 
 
  
@@ -2048,6 +2062,28 @@ consider adding isDeleted param
 <p align="right"><a href="#top">Top</a></p>
 
 ## billing_service.proto
+
+
+
+<a name="weebi-billing-service-AccountingYearPurchase"></a>
+
+### AccountingYearPurchase
+One punctual SYSCOHADA fiscal-year purchase (not a subscription).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| year | [int32](#int32) |  |  |
+| stripeCheckoutSessionId | [string](#string) |  |  |
+| stripePriceId | [string](#string) |  |  |
+| paidAtUTC | [string](#string) |  |  |
+| amountCents | [int32](#int32) |  |  |
+| currency | [string](#string) |  |  |
+| pawapayCheckoutId | [string](#string) |  | Set when paid via PawaPay (mutually exclusive with stripeCheckoutSessionId in practice). |
+| paymentProvider | [weebi.license.PaymentProvider](#weebi-license-PaymentProvider) |  | Which provider processed this purchase. |
+
+
+
 
 
 
@@ -2067,7 +2103,7 @@ Billing product (license plan). Stored in billing_products collection.
 | currency | [string](#string) |  |  |
 | stripeProductId | [string](#string) |  |  |
 | stripePriceId | [string](#string) |  | Used for checkout and webhook |
-| pawapayProductId | [string](#string) |  | Optional, for future |
+| pawapayProductId | [string](#string) |  | Optional internal SKU / label for PawaPay; amounts are sent explicitly (no Stripe-like Price IDs). |
 | creationDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updateDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | deletionDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
@@ -2092,6 +2128,7 @@ Billing product (license plan). Stored in billing_products collection.
 | referralCode | [string](#string) |  | Optional referral code to apply. |
 | creditAppliedCents | [int32](#int32) |  | Optional credit (cents) to apply. Deducted from firm balance. |
 | legalTermsVersionDate | [string](#string) |  | CGV / terms version the buyer accepted before checkout (YYYY-MM-DD, one revision per day). |
+| fiscalYear | [int32](#int32) |  | Fiscal/calendar year for punctual SYSCOHADA purchases (required when price is syscohada). |
 
 
 
@@ -2146,6 +2183,42 @@ Billing product (license plan). Stored in billing_products collection.
 
 
 
+<a name="weebi-billing-service-CreatePawapayCheckoutRequest"></a>
+
+### CreatePawapayCheckoutRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| productId | [string](#string) |  | Weebi product id from billing_products (e.g. &#34;premium&#34;, &#34;syscohada&#34;). Not a Stripe priceId. |
+| returnUrl | [string](#string) |  | URL the customer is returned to after the hosted payment page (PawaPay returnUrl). |
+| referralCode | [string](#string) |  | Optional referral code to apply. |
+| creditAppliedCents | [int32](#int32) |  | Optional credit (cents) to apply. Deducted from firm balance. |
+| legalTermsVersionDate | [string](#string) |  | CGV / terms version the buyer accepted before checkout (YYYY-MM-DD). |
+| fiscalYear | [int32](#int32) |  | Fiscal/calendar year for punctual SYSCOHADA purchases (required when productId is syscohada). |
+
+
+
+
+
+
+<a name="weebi-billing-service-CreatePawapayCheckoutResponse"></a>
+
+### CreatePawapayCheckoutResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| checkoutId | [string](#string) |  | UUIDv4 checkout id (also used as licenseId suffix: lic_pawapay_{checkoutId}). |
+| redirectUrl | [string](#string) |  | Hosted payment page URL — redirect the customer here. |
+
+
+
+
+
+
 <a name="weebi-billing-service-DeleteLicenseRequest"></a>
 
 ### DeleteLicenseRequest
@@ -2155,6 +2228,22 @@ Billing product (license plan). Stored in billing_products collection.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | licenseId | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="weebi-billing-service-FulfillFromPawapayCheckoutRequest"></a>
+
+### FulfillFromPawapayCheckoutRequest
+Request to fulfill a license from a completed PawaPay checkout (e.g. after returnUrl).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| checkoutId | [string](#string) |  |  |
+| legalTermsVersionDate | [string](#string) |  | Same value as sent to createPawapayCheckout (YYYY-MM-DD). Persisted on the license. |
 
 
 
@@ -2177,6 +2266,28 @@ Request to fulfill a license from a Stripe Checkout Session (e.g. after success 
 
 
 
+<a name="weebi-billing-service-FulfillLicenseFromPawapayRequest"></a>
+
+### FulfillLicenseFromPawapayRequest
+productId is the source of truth; billing_service maps it via billing_products.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| firmId | [string](#string) |  |  |
+| licenseId | [string](#string) |  | Deterministic license id, e.g. lic_pawapay_{checkoutId}. |
+| checkoutId | [string](#string) |  | PawaPay checkout UUID (idempotency / reconciliation key). |
+| productId | [string](#string) |  | Weebi product id (e.g. &#34;premium&#34;, &#34;syscohada&#34;). |
+| referralCode | [string](#string) |  |  |
+| creditAppliedCents | [int32](#int32) |  |  |
+| legalTermsVersionDate | [string](#string) |  | CGV / terms version from checkout metadata (YYYY-MM-DD). |
+| fiscalYear | [int32](#int32) |  | Fiscal year for punctual SYSCOHADA fulfill. |
+
+
+
+
+
+
 <a name="weebi-billing-service-FulfillLicenseFromStripeRequest"></a>
 
 ### FulfillLicenseFromStripeRequest
@@ -2192,6 +2303,7 @@ priceId is the single source of truth; billing_service maps it via billing_produ
 | referralCode | [string](#string) |  |  |
 | creditAppliedCents | [int32](#int32) |  |  |
 | legalTermsVersionDate | [string](#string) |  | CGV / terms version from checkout session metadata (YYYY-MM-DD). |
+| fiscalYear | [int32](#int32) |  | Fiscal year for punctual SYSCOHADA fulfill (from Checkout Session metadata). |
 
 
 
@@ -2209,6 +2321,21 @@ priceId is the single source of truth; billing_service maps it via billing_produ
 | referralCode | [string](#string) |  |  |
 | creditBalanceCents | [int32](#int32) |  |  |
 | minPayoutCents | [int32](#int32) |  | 1500 = €15 |
+
+
+
+
+
+
+<a name="weebi-billing-service-ReadAccountingYearPurchasesResponse"></a>
+
+### ReadAccountingYearPurchasesResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| purchases | [AccountingYearPurchase](#weebi-billing-service-AccountingYearPurchase) | repeated |  |
 
 
 
@@ -2318,6 +2445,10 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | createCheckoutSession | [CreateCheckoutSessionRequest](#weebi-billing-service-CreateCheckoutSessionRequest) | [CreateCheckoutSessionResponse](#weebi-billing-service-CreateCheckoutSessionResponse) | Create a Stripe Checkout Session for a license purchase. Returns URL to redirect the customer. |
 | fulfillLicenseFromStripe | [FulfillLicenseFromStripeRequest](#weebi-billing-service-FulfillLicenseFromStripeRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | Internal: fulfill a license after Stripe payment. Called by weebi_express webhook handler. / Requires service account auth. |
 | fulfillFromStripeCheckoutSession | [FulfillFromStripeCheckoutSessionRequest](#weebi-billing-service-FulfillFromStripeCheckoutSessionRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | User-facing: ensure license is created from a paid Checkout Session (e.g. after redirect). / Use when webhook may have failed or not yet run. Idempotent; validates session belongs to user&#39;s firm. |
+| createPawapayCheckout | [CreatePawapayCheckoutRequest](#weebi-billing-service-CreatePawapayCheckoutRequest) | [CreatePawapayCheckoutResponse](#weebi-billing-service-CreatePawapayCheckoutResponse) | Create a PawaPay Checkout for a license / SYSCOHADA purchase. Returns hosted-page redirectUrl. |
+| fulfillLicenseFromPawapay | [FulfillLicenseFromPawapayRequest](#weebi-billing-service-FulfillLicenseFromPawapayRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | Internal: fulfill a license after PawaPay checkout COMPLETED. Called by weebi_express webhook handler. / Requires service account auth. |
+| fulfillFromPawapayCheckout | [FulfillFromPawapayCheckoutRequest](#weebi-billing-service-FulfillFromPawapayCheckoutRequest) | [CreateLicenseResponse](#weebi-billing-service-CreateLicenseResponse) | User-facing: ensure license is created from a completed PawaPay checkout (e.g. after returnUrl). / Use when webhook may have failed or not yet run. Idempotent; validates checkout belongs to user&#39;s firm. |
+| readAccountingYearPurchases | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [ReadAccountingYearPurchasesResponse](#weebi-billing-service-ReadAccountingYearPurchasesResponse) | Read punctual SYSCOHADA fiscal-year purchases for the user&#39;s firm (not a subscription). |
 
  
 
@@ -2401,6 +2532,7 @@ License CRUD and payment handling. Operates on Firm.licenses (embedded).
 | isDualCurrencyEnabled | [bool](#bool) | optional | When true, PoS/web clients may show amounts in secondaryDisplayCurrency (display-only; same semantics as chain/firm). |
 | secondaryDisplayCurrency | [string](#string) | optional | ISO 4217 secondary display code (e.g. USD). Meaningful when isDualCurrencyEnabled is true. |
 | businessRules | [BusinessRules](#weebi-boutique-BusinessRules) | optional |  |
+| closed_years | [ClosedYearPb](#weebi-boutique-ClosedYearPb) | repeated | Soft-closed calendar years for SYSCOHADA SMT (client writes; server may / ignore until fence supports it). Carries résultat &#43; treasury for ranking. |
 
 
 
@@ -2420,6 +2552,25 @@ declared here to avoid circular dependency with boutique.proto
 | isNegativeStockGuardEnabled | [bool](#bool) |  | guard against negative stocks in the chain when true |
 | isRecentTicketEditEnabled | [bool](#bool) |  | allow recent ticket edit in the chain when true |
 | recentTicketEditWindowMinutes | [int32](#int32) |  | e.g. 5 minutes |
+| isVatSelectionEnabled | [bool](#bool) |  | OHADA: when true, show VAT selection on tickets (hidden by default for OHADA countries) |
+
+
+
+
+
+
+<a name="weebi-boutique-ClosedYearPb"></a>
+
+### ClosedYearPb
+One soft-closed calendar year &#43; minimal SMT snapshot (loan-potential hook).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| year | [int32](#int32) |  |  |
+| resultat | [double](#double) |  | Cash-basis SMT résultat (recettes − dépenses) for the closed year. |
+| treasury_total | [double](#double) |  | Sum of treasury closing balances (571&#43;521&#43;554) at 31/12. |
+| closed_at | [string](#string) |  | ISO-8601 when the year was closed (optional; client fill). |
 
 
 
@@ -2464,6 +2615,7 @@ declared here to avoid circular dependency with boutique.proto
 | isDualCurrencyEnabled | [bool](#bool) | optional |  |
 | secondaryDisplayCurrency | [string](#string) | optional |  |
 | businessRules | [weebi.boutique.BusinessRules](#weebi-boutique-BusinessRules) | optional |  |
+| closed_years | [weebi.boutique.ClosedYearPb](#weebi-boutique-ClosedYearPb) | repeated | Soft-closed calendar years for SMT (waterfall with firm &#43; boutique). |
 
 
 
@@ -2699,6 +2851,40 @@ deviceId == userId, so front can reuse deviceId to try login in
 
 
 
+<a name="weebi-fence-service-CreateWebBridgeLinkRequest"></a>
+
+### CreateWebBridgeLinkRequest
+Mint a short-lived App-&gt;Web bridge URL (authenticated).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| productId | [string](#string) |  | Catalog product: &#34;premium&#34; or &#34;syscohada&#34;. |
+| fiscalYear | [int32](#int32) |  | Required when productId is &#34;syscohada&#34;; ignored for &#34;premium&#34;. |
+| returnDeepLink | [string](#string) |  | Optional future deep link for return-to-app after payment (stored, unused in v1 web). |
+
+
+
+
+
+
+<a name="weebi-fence-service-CreateWebBridgeLinkResponse"></a>
+
+### CreateWebBridgeLinkResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| url | [string](#string) |  | Full webapp URL including one-time token query params. |
+| token | [string](#string) |  |  |
+| expiresAtUnix | [int64](#int64) |  |  |
+
+
+
+
+
+
 <a name="weebi-fence-service-Credentials"></a>
 
 ### Credentials
@@ -2760,6 +2946,21 @@ Identifies a chain for deleteOneChain only (wire-compatible with ChainRequest ca
 | boutiqueId | [string](#string) |  |  |
 | deviceId | [string](#string) |  |  |
 | password | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="weebi-fence-service-ExchangeWebBridgeTokenRequest"></a>
+
+### ExchangeWebBridgeTokenRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| token | [string](#string) |  |  |
 
 
 
@@ -3125,6 +3326,8 @@ boutiques &amp; users
 | getSessionInternal | [SessionRequest](#weebi-fence-service-SessionRequest) | [Tokens](#weebi-fence-service-Tokens) | Internal RPC used by Envoy to retrieve session data / Called when browser presents a session cookie / Path: /weebi.fence.service.FenceService/getSessionInternal |
 | requestPasswordReset | [PasswordResetRequest](#weebi-fence-service-PasswordResetRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | Password reset functionality |
 | confirmPasswordReset | [PasswordResetConfirmRequest](#weebi-fence-service-PasswordResetConfirmRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
+| createWebBridgeLink | [CreateWebBridgeLinkRequest](#weebi-fence-service-CreateWebBridgeLinkRequest) | [CreateWebBridgeLinkResponse](#weebi-fence-service-CreateWebBridgeLinkResponse) | App -&gt; Web magic link: authenticated mobile client mints a short-lived one-time URL. / Supported product_id values: &#34;premium&#34;, &#34;syscohada&#34; (fiscal_year required for syscohada). |
+| exchangeWebBridgeToken | [ExchangeWebBridgeTokenRequest](#weebi-fence-service-ExchangeWebBridgeTokenRequest) | [Tokens](#weebi-fence-service-Tokens) | Public: browser exchanges the one-time token for a web BFF session (Tokens.sessionId only). |
 | createFirm | [.weebi.firm.CreateFirmRequest](#weebi-firm-CreateFirmRequest) | [.weebi.firm.CreateFirmResponse](#weebi-firm-CreateFirmResponse) | only one firm per &#39;company&#39; / 1. user signup and get a userId &amp; create firm permission / 2. A. user create a firm / Chain and Boutique will be created by default and will use the same firmId / Since createFirm also updates user permission, clientApp needs to reauthent using refresh right after / 2. B. user joins a firm is a different use case detailed in createPendingUser rpc |
 | readOneFirm | [.weebi.common.empty.Empty](#weebi-common-empty-Empty) | [.weebi.firm.Firm](#weebi-firm-Firm) | TODO add updateFirm but with specific update fields, not the whole firm |
 | createPendingUser | [.weebi.user.PendingUserRequest](#weebi-user-PendingUserRequest) | [.weebi.user.PendingUserResponse](#weebi-user-PendingUserResponse) |  |
@@ -3226,6 +3429,7 @@ boutiques &amp; users
 | currency | [string](#string) | optional | ISO 4217 code (e.g. EUR, XOF). Default for new chains/boutiques; resolved with platform default if empty. |
 | isDualCurrencyEnabled | [bool](#bool) | optional | When true, clients may show amounts in secondaryDisplayCurrency using per-ticket FX snapshot. |
 | secondaryDisplayCurrency | [string](#string) | optional | ISO 4217 secondary display code (e.g. USD). Meaningful when dualCurrencyEnabled is true. |
+| closed_years | [weebi.boutique.ClosedYearPb](#weebi-boutique-ClosedYearPb) | repeated | Soft-closed calendar years for SMT (waterfall with chain &#43; boutique). |
 
 
 
