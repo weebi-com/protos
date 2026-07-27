@@ -34,6 +34,16 @@ service BillingService {
   /// User-facing: ensure license is created from a paid Checkout Session (e.g. after redirect).
   /// Use when webhook may have failed or not yet run. Idempotent; validates session belongs to user's firm.
   rpc fulfillFromStripeCheckoutSession(FulfillFromStripeCheckoutSessionRequest) returns (CreateLicenseResponse);
+  /// Create a PawaPay Checkout for a license / SYSCOHADA purchase. Returns hosted-page redirectUrl.
+  rpc createPawapayCheckout(CreatePawapayCheckoutRequest) returns (CreatePawapayCheckoutResponse);
+  /// Internal: fulfill a license after PawaPay checkout COMPLETED. Called by weebi_express webhook handler.
+  /// Requires service account auth.
+  rpc fulfillLicenseFromPawapay(FulfillLicenseFromPawapayRequest) returns (CreateLicenseResponse);
+  /// User-facing: ensure license is created from a completed PawaPay checkout (e.g. after returnUrl).
+  /// Use when webhook may have failed or not yet run. Idempotent; validates checkout belongs to user's firm.
+  rpc fulfillFromPawapayCheckout(FulfillFromPawapayCheckoutRequest) returns (CreateLicenseResponse);
+  /// Read punctual SYSCOHADA fiscal-year purchases for the user's firm (not a subscription).
+  rpc readAccountingYearPurchases(weebi.common.empty.Empty) returns (ReadAccountingYearPurchasesResponse);
 }
 
 message CreateLicenseRequest {
@@ -91,6 +101,8 @@ message CreateCheckoutSessionRequest {
   int32 creditAppliedCents = 5 [json_name = 'creditAppliedCents'];
   /// CGV / terms version the buyer accepted before checkout (YYYY-MM-DD, one revision per day).
   string legalTermsVersionDate = 6 [json_name = 'legalTermsVersionDate'];
+  /// Fiscal/calendar year for punctual SYSCOHADA purchases (required when price is syscohada).
+  int32 fiscalYear = 7 [json_name = 'fiscalYear'];
 }
 
 message CreateCheckoutSessionResponse {
@@ -107,12 +119,60 @@ message FulfillLicenseFromStripeRequest {
   int32 creditAppliedCents = 6 [json_name = 'creditAppliedCents'];
   /// CGV / terms version from checkout session metadata (YYYY-MM-DD).
   string legalTermsVersionDate = 7 [json_name = 'legalTermsVersionDate'];
+  /// Fiscal year for punctual SYSCOHADA fulfill (from Checkout Session metadata).
+  int32 fiscalYear = 8 [json_name = 'fiscalYear'];
 }
 
 /// Request to fulfill a license from a Stripe Checkout Session (e.g. after success redirect).
 message FulfillFromStripeCheckoutSessionRequest {
   string checkoutSessionId = 1 [json_name = 'checkoutSessionId'];  // e.g. cs_xxx
   /// Same value as sent to createCheckoutSession (YYYY-MM-DD). Persisted on the license; not read from Stripe.
+  string legalTermsVersionDate = 2 [json_name = 'legalTermsVersionDate'];
+}
+
+message CreatePawapayCheckoutRequest {
+  /// Weebi product id from billing_products (e.g. "premium", "syscohada"). Not a Stripe priceId.
+  string productId = 1 [json_name = 'productId'];
+  /// URL the customer is returned to after the hosted payment page (PawaPay returnUrl).
+  string returnUrl = 2 [json_name = 'returnUrl'];
+  /// Optional referral code to apply.
+  string referralCode = 3 [json_name = 'referralCode'];
+  /// Optional credit (cents) to apply. Deducted from firm balance.
+  int32 creditAppliedCents = 4 [json_name = 'creditAppliedCents'];
+  /// CGV / terms version the buyer accepted before checkout (YYYY-MM-DD).
+  string legalTermsVersionDate = 5 [json_name = 'legalTermsVersionDate'];
+  /// Fiscal/calendar year for punctual SYSCOHADA purchases (required when productId is syscohada).
+  int32 fiscalYear = 6 [json_name = 'fiscalYear'];
+}
+
+message CreatePawapayCheckoutResponse {
+  /// UUIDv4 checkout id (also used as licenseId suffix: lic_pawapay_{checkoutId}).
+  string checkoutId = 1 [json_name = 'checkoutId'];
+  /// Hosted payment page URL — redirect the customer here.
+  string redirectUrl = 2 [json_name = 'redirectUrl'];
+}
+
+/// productId is the source of truth; billing_service maps it via billing_products.
+message FulfillLicenseFromPawapayRequest {
+  string firmId = 1 [json_name = 'firmId'];
+  /// Deterministic license id, e.g. lic_pawapay_{checkoutId}.
+  string licenseId = 2 [json_name = 'licenseId'];
+  /// PawaPay checkout UUID (idempotency / reconciliation key).
+  string checkoutId = 3 [json_name = 'checkoutId'];
+  /// Weebi product id (e.g. "premium", "syscohada").
+  string productId = 4 [json_name = 'productId'];
+  string referralCode = 5 [json_name = 'referralCode'];
+  int32 creditAppliedCents = 6 [json_name = 'creditAppliedCents'];
+  /// CGV / terms version from checkout metadata (YYYY-MM-DD).
+  string legalTermsVersionDate = 7 [json_name = 'legalTermsVersionDate'];
+  /// Fiscal year for punctual SYSCOHADA fulfill.
+  int32 fiscalYear = 8 [json_name = 'fiscalYear'];
+}
+
+/// Request to fulfill a license from a completed PawaPay checkout (e.g. after returnUrl).
+message FulfillFromPawapayCheckoutRequest {
+  string checkoutId = 1 [json_name = 'checkoutId'];
+  /// Same value as sent to createPawapayCheckout (YYYY-MM-DD). Persisted on the license.
   string legalTermsVersionDate = 2 [json_name = 'legalTermsVersionDate'];
 }
 
@@ -126,7 +186,8 @@ message BillingProduct {
   string currency = 5 [json_name = 'currency'];
   string stripeProductId = 6 [json_name = 'stripeProductId'];
   string stripePriceId = 7 [json_name = 'stripePriceId'];  // Used for checkout and webhook
-  string pawapayProductId = 8 [json_name = 'pawapayProductId'];  // Optional, for future
+  /// Optional internal SKU / label for PawaPay; amounts are sent explicitly (no Stripe-like Price IDs).
+  string pawapayProductId = 8 [json_name = 'pawapayProductId'];
   google.protobuf.Timestamp creationDateUTC = 9 [json_name = 'creationDateUTC'];
   google.protobuf.Timestamp updateDateUTC = 10 [json_name = 'updateDateUTC'];
   google.protobuf.Timestamp deletionDateUTC = 11 [json_name = 'deletionDateUTC'];
@@ -135,4 +196,22 @@ message BillingProduct {
 
 message ReadBillingProductsResponse {
   repeated BillingProduct products = 1 [json_name = 'products'];
+}
+
+/// One punctual SYSCOHADA fiscal-year purchase (not a subscription).
+message AccountingYearPurchase {
+  int32 year = 1 [json_name = 'year'];
+  string stripeCheckoutSessionId = 2 [json_name = 'stripeCheckoutSessionId'];
+  string stripePriceId = 3 [json_name = 'stripePriceId'];
+  string paidAtUTC = 4 [json_name = 'paidAtUTC'];
+  int32 amountCents = 5 [json_name = 'amountCents'];
+  string currency = 6 [json_name = 'currency'];
+  /// Set when paid via PawaPay (mutually exclusive with stripeCheckoutSessionId in practice).
+  string pawapayCheckoutId = 7 [json_name = 'pawapayCheckoutId'];
+  /// Which provider processed this purchase.
+  weebi.license.PaymentProvider paymentProvider = 8 [json_name = 'paymentProvider'];
+}
+
+message ReadAccountingYearPurchasesResponse {
+  repeated AccountingYearPurchase purchases = 1 [json_name = 'purchases'];
 }

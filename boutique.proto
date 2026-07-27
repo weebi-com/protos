@@ -51,10 +51,24 @@ message BoutiquePb {
     /// ISO 4217 secondary display code (e.g. USD). Meaningful when isDualCurrencyEnabled is true.
     optional string secondaryDisplayCurrency = 18 [json_name = 'secondaryDisplayCurrency'];
     optional BusinessRules businessRules = 19 [json_name = 'businessRules'];
-    reserved 20 to 100;
+    /// Soft-closed calendar years for SYSCOHADA SMT (client writes; server may
+    /// ignore until fence supports it). Carries résultat + treasury for ranking.
+    repeated ClosedYearPb closed_years = 20 [json_name = 'closedYears'];
+    reserved 21 to 100;
 // below was misleading, if an attribute is needed, open an issue/a PR to add it
 // map<string, string> additional_attributes = 100  [json_name = 'additional_attributes'];
    }
+
+/// One soft-closed calendar year + minimal SMT snapshot (loan-potential hook).
+message ClosedYearPb {
+    int32 year = 1 [json_name = 'year'];
+    /// Cash-basis SMT résultat (recettes − dépenses) for the closed year.
+    double resultat = 2 [json_name = 'resultat'];
+    /// Sum of treasury closing balances (571+521+554) at 31/12.
+    double treasury_total = 3 [json_name = 'treasuryTotal'];
+    /// ISO-8601 when the year was closed (optional; client fill).
+    string closed_at = 4 [json_name = 'closedAt'];
+}
    
    
 // since a firm may contain different chains with different business realities. 
@@ -67,5 +81,8 @@ message BusinessRules {
     // allow recent ticket edit in the chain when true
     bool isRecentTicketEditEnabled = 2 [json_name = 'isRecentTicketEditEnabled'];
     int32 recentTicketEditWindowMinutes = 3 [json_name = 'recentTicketEditWindowMinutes']; // e.g. 5 minutes
+
+    // OHADA: when true, show VAT selection on tickets (hidden by default for OHADA countries)
+    bool isVatSelectionEnabled = 4 [json_name = 'isVatSelectionEnabled'];
   }
   

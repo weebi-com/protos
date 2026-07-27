@@ -1,5 +1,16 @@
 # changelog
 
+## 1.3.8 - july 2026
+
+- PawaPay billing base: `createPawapayCheckout`, `fulfillLicenseFromPawapay`, `fulfillFromPawapayCheckout`
+- `AccountingYearPurchase.pawapayCheckoutId` + `paymentProvider`
+- App→Web magic link: `createWebBridgeLink`, `exchangeWebBridgeToken`
+- Ticket types: `rebalance`, `inventoryClosingValue` (replaces unused `wage` slot)
+
+## 1.3.7 - july 2026
+
+- SYSCOHADA: `readAccountingYearPurchases`, `fiscalYear` on Stripe checkout/fulfill
+
 ## 1.3.6 - july 2026
 
 - replaced_ticket_id to track if a ticket is a fix of a previous one (for transparency towards customers and managers)

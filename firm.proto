@@ -5,6 +5,7 @@ package weebi.firm;
 import "common/g_timestamp.proto";
 import "common/g_common.proto";
 import "license.proto";
+import "boutique.proto";
 
 message Firm {
     string firmId = 1 [json_name = 'firmId'];
@@ -38,6 +39,8 @@ message Firm {
     optional bool isDualCurrencyEnabled = 19 [json_name = 'isDualCurrencyEnabled'];
     /// ISO 4217 secondary display code (e.g. USD). Meaningful when dualCurrencyEnabled is true.
     optional string secondaryDisplayCurrency = 20 [json_name = 'secondaryDisplayCurrency'];
+    /// Soft-closed calendar years for SMT (waterfall with chain + boutique).
+    repeated weebi.boutique.ClosedYearPb closed_years = 21 [json_name = 'closedYears'];
   }
 
 message CreateFirmRequest {

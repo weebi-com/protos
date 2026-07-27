@@ -35,6 +35,12 @@ service FenceService {
   rpc requestPasswordReset(PasswordResetRequest) returns (google.retail.common.StatusResponse);
   rpc confirmPasswordReset(PasswordResetConfirmRequest) returns (google.retail.common.StatusResponse);
 
+  /// App -> Web magic link: authenticated mobile client mints a short-lived one-time URL.
+  /// Supported product_id values: "premium", "syscohada" (fiscal_year required for syscohada).
+  rpc createWebBridgeLink(CreateWebBridgeLinkRequest) returns (CreateWebBridgeLinkResponse);
+  /// Public: browser exchanges the one-time token for a web BFF session (Tokens.sessionId only).
+  rpc exchangeWebBridgeToken(ExchangeWebBridgeTokenRequest) returns (Tokens);
+
   /// only one firm per 'company'
   /// 1. user signup and get a userId & create firm permission
   /// 2. A. user create a firm
@@ -232,6 +238,27 @@ message RefreshToken {
 /// Request for internal getSessionInternal RPC (used by Envoy)
 message SessionRequest {
   string sessionId = 1 [json_name = 'sessionId'];
+}
+
+/// Mint a short-lived App->Web bridge URL (authenticated).
+message CreateWebBridgeLinkRequest {
+  /// Catalog product: "premium" or "syscohada".
+  string productId = 1 [json_name = 'productId'];
+  /// Required when productId is "syscohada"; ignored for "premium".
+  int32 fiscalYear = 2 [json_name = 'fiscalYear'];
+  /// Optional future deep link for return-to-app after payment (stored, unused in v1 web).
+  string returnDeepLink = 3 [json_name = 'returnDeepLink'];
+}
+
+message CreateWebBridgeLinkResponse {
+  /// Full webapp URL including one-time token query params.
+  string url = 1;
+  string token = 2;
+  int64 expiresAtUnix = 3 [json_name = 'expiresAtUnix'];
+}
+
+message ExchangeWebBridgeTokenRequest {
+  string token = 1;
 }
 
 message Tokens {

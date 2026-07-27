@@ -32,6 +32,10 @@ const (
 	BillingService_CreateCheckoutSession_FullMethodName            = "/weebi.billing.service.BillingService/createCheckoutSession"
 	BillingService_FulfillLicenseFromStripe_FullMethodName         = "/weebi.billing.service.BillingService/fulfillLicenseFromStripe"
 	BillingService_FulfillFromStripeCheckoutSession_FullMethodName = "/weebi.billing.service.BillingService/fulfillFromStripeCheckoutSession"
+	BillingService_CreatePawapayCheckout_FullMethodName            = "/weebi.billing.service.BillingService/createPawapayCheckout"
+	BillingService_FulfillLicenseFromPawapay_FullMethodName        = "/weebi.billing.service.BillingService/fulfillLicenseFromPawapay"
+	BillingService_FulfillFromPawapayCheckout_FullMethodName       = "/weebi.billing.service.BillingService/fulfillFromPawapayCheckout"
+	BillingService_ReadAccountingYearPurchases_FullMethodName      = "/weebi.billing.service.BillingService/readAccountingYearPurchases"
 )
 
 // BillingServiceClient is the client API for BillingService service.
@@ -65,6 +69,16 @@ type BillingServiceClient interface {
 	// / User-facing: ensure license is created from a paid Checkout Session (e.g. after redirect).
 	// / Use when webhook may have failed or not yet run. Idempotent; validates session belongs to user's firm.
 	FulfillFromStripeCheckoutSession(ctx context.Context, in *FulfillFromStripeCheckoutSessionRequest, opts ...grpc.CallOption) (*CreateLicenseResponse, error)
+	// / Create a PawaPay Checkout for a license / SYSCOHADA purchase. Returns hosted-page redirectUrl.
+	CreatePawapayCheckout(ctx context.Context, in *CreatePawapayCheckoutRequest, opts ...grpc.CallOption) (*CreatePawapayCheckoutResponse, error)
+	// / Internal: fulfill a license after PawaPay checkout COMPLETED. Called by weebi_express webhook handler.
+	// / Requires service account auth.
+	FulfillLicenseFromPawapay(ctx context.Context, in *FulfillLicenseFromPawapayRequest, opts ...grpc.CallOption) (*CreateLicenseResponse, error)
+	// / User-facing: ensure license is created from a completed PawaPay checkout (e.g. after returnUrl).
+	// / Use when webhook may have failed or not yet run. Idempotent; validates checkout belongs to user's firm.
+	FulfillFromPawapayCheckout(ctx context.Context, in *FulfillFromPawapayCheckoutRequest, opts ...grpc.CallOption) (*CreateLicenseResponse, error)
+	// / Read punctual SYSCOHADA fiscal-year purchases for the user's firm (not a subscription).
+	ReadAccountingYearPurchases(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*ReadAccountingYearPurchasesResponse, error)
 }
 
 type billingServiceClient struct {
@@ -185,6 +199,46 @@ func (c *billingServiceClient) FulfillFromStripeCheckoutSession(ctx context.Cont
 	return out, nil
 }
 
+func (c *billingServiceClient) CreatePawapayCheckout(ctx context.Context, in *CreatePawapayCheckoutRequest, opts ...grpc.CallOption) (*CreatePawapayCheckoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreatePawapayCheckoutResponse)
+	err := c.cc.Invoke(ctx, BillingService_CreatePawapayCheckout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *billingServiceClient) FulfillLicenseFromPawapay(ctx context.Context, in *FulfillLicenseFromPawapayRequest, opts ...grpc.CallOption) (*CreateLicenseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateLicenseResponse)
+	err := c.cc.Invoke(ctx, BillingService_FulfillLicenseFromPawapay_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *billingServiceClient) FulfillFromPawapayCheckout(ctx context.Context, in *FulfillFromPawapayCheckoutRequest, opts ...grpc.CallOption) (*CreateLicenseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateLicenseResponse)
+	err := c.cc.Invoke(ctx, BillingService_FulfillFromPawapayCheckout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *billingServiceClient) ReadAccountingYearPurchases(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*ReadAccountingYearPurchasesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReadAccountingYearPurchasesResponse)
+	err := c.cc.Invoke(ctx, BillingService_ReadAccountingYearPurchases_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BillingServiceServer is the server API for BillingService service.
 // All implementations must embed UnimplementedBillingServiceServer
 // for forward compatibility.
@@ -216,6 +270,16 @@ type BillingServiceServer interface {
 	// / User-facing: ensure license is created from a paid Checkout Session (e.g. after redirect).
 	// / Use when webhook may have failed or not yet run. Idempotent; validates session belongs to user's firm.
 	FulfillFromStripeCheckoutSession(context.Context, *FulfillFromStripeCheckoutSessionRequest) (*CreateLicenseResponse, error)
+	// / Create a PawaPay Checkout for a license / SYSCOHADA purchase. Returns hosted-page redirectUrl.
+	CreatePawapayCheckout(context.Context, *CreatePawapayCheckoutRequest) (*CreatePawapayCheckoutResponse, error)
+	// / Internal: fulfill a license after PawaPay checkout COMPLETED. Called by weebi_express webhook handler.
+	// / Requires service account auth.
+	FulfillLicenseFromPawapay(context.Context, *FulfillLicenseFromPawapayRequest) (*CreateLicenseResponse, error)
+	// / User-facing: ensure license is created from a completed PawaPay checkout (e.g. after returnUrl).
+	// / Use when webhook may have failed or not yet run. Idempotent; validates checkout belongs to user's firm.
+	FulfillFromPawapayCheckout(context.Context, *FulfillFromPawapayCheckoutRequest) (*CreateLicenseResponse, error)
+	// / Read punctual SYSCOHADA fiscal-year purchases for the user's firm (not a subscription).
+	ReadAccountingYearPurchases(context.Context, *empty.Empty) (*ReadAccountingYearPurchasesResponse, error)
 	mustEmbedUnimplementedBillingServiceServer()
 }
 
@@ -258,6 +322,18 @@ func (UnimplementedBillingServiceServer) FulfillLicenseFromStripe(context.Contex
 }
 func (UnimplementedBillingServiceServer) FulfillFromStripeCheckoutSession(context.Context, *FulfillFromStripeCheckoutSessionRequest) (*CreateLicenseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FulfillFromStripeCheckoutSession not implemented")
+}
+func (UnimplementedBillingServiceServer) CreatePawapayCheckout(context.Context, *CreatePawapayCheckoutRequest) (*CreatePawapayCheckoutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePawapayCheckout not implemented")
+}
+func (UnimplementedBillingServiceServer) FulfillLicenseFromPawapay(context.Context, *FulfillLicenseFromPawapayRequest) (*CreateLicenseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FulfillLicenseFromPawapay not implemented")
+}
+func (UnimplementedBillingServiceServer) FulfillFromPawapayCheckout(context.Context, *FulfillFromPawapayCheckoutRequest) (*CreateLicenseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FulfillFromPawapayCheckout not implemented")
+}
+func (UnimplementedBillingServiceServer) ReadAccountingYearPurchases(context.Context, *empty.Empty) (*ReadAccountingYearPurchasesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReadAccountingYearPurchases not implemented")
 }
 func (UnimplementedBillingServiceServer) mustEmbedUnimplementedBillingServiceServer() {}
 func (UnimplementedBillingServiceServer) testEmbeddedByValue()                        {}
@@ -478,6 +554,78 @@ func _BillingService_FulfillFromStripeCheckoutSession_Handler(srv interface{}, c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BillingService_CreatePawapayCheckout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePawapayCheckoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BillingServiceServer).CreatePawapayCheckout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BillingService_CreatePawapayCheckout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BillingServiceServer).CreatePawapayCheckout(ctx, req.(*CreatePawapayCheckoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BillingService_FulfillLicenseFromPawapay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FulfillLicenseFromPawapayRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BillingServiceServer).FulfillLicenseFromPawapay(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BillingService_FulfillLicenseFromPawapay_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BillingServiceServer).FulfillLicenseFromPawapay(ctx, req.(*FulfillLicenseFromPawapayRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BillingService_FulfillFromPawapayCheckout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FulfillFromPawapayCheckoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BillingServiceServer).FulfillFromPawapayCheckout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BillingService_FulfillFromPawapayCheckout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BillingServiceServer).FulfillFromPawapayCheckout(ctx, req.(*FulfillFromPawapayCheckoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BillingService_ReadAccountingYearPurchases_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(empty.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BillingServiceServer).ReadAccountingYearPurchases(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BillingService_ReadAccountingYearPurchases_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BillingServiceServer).ReadAccountingYearPurchases(ctx, req.(*empty.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BillingService_ServiceDesc is the grpc.ServiceDesc for BillingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -528,6 +676,22 @@ var BillingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "fulfillFromStripeCheckoutSession",
 			Handler:    _BillingService_FulfillFromStripeCheckoutSession_Handler,
+		},
+		{
+			MethodName: "createPawapayCheckout",
+			Handler:    _BillingService_CreatePawapayCheckout_Handler,
+		},
+		{
+			MethodName: "fulfillLicenseFromPawapay",
+			Handler:    _BillingService_FulfillLicenseFromPawapay_Handler,
+		},
+		{
+			MethodName: "fulfillFromPawapayCheckout",
+			Handler:    _BillingService_FulfillFromPawapayCheckout_Handler,
+		},
+		{
+			MethodName: "readAccountingYearPurchases",
+			Handler:    _BillingService_ReadAccountingYearPurchases_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

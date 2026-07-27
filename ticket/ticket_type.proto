@@ -13,5 +13,6 @@ enum TicketTypePb {
   stockIn =7;
   stockOut =8;
   inventory =9;
-  wage =10;
+  rebalance =10;
+  inventoryClosingValue =11;
 }

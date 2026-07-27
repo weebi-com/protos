@@ -9,10 +9,10 @@ package service
 import (
 	empty "github.com/weebi-com/protos/common/empty"
 	g_common "github.com/weebi-com/protos/common/g_common"
-	g_timestamp "github.com/weebi-com/protos/common/g_timestamp"
 	license "github.com/weebi-com/protos/license"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -457,8 +457,10 @@ type CreateCheckoutSessionRequest struct {
 	CreditAppliedCents int32 `protobuf:"varint,5,opt,name=creditAppliedCents,proto3" json:"creditAppliedCents,omitempty"`
 	// / CGV / terms version the buyer accepted before checkout (YYYY-MM-DD, one revision per day).
 	LegalTermsVersionDate string `protobuf:"bytes,6,opt,name=legalTermsVersionDate,proto3" json:"legalTermsVersionDate,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// / Fiscal/calendar year for punctual SYSCOHADA purchases (required when price is syscohada).
+	FiscalYear    int32 `protobuf:"varint,7,opt,name=fiscalYear,proto3" json:"fiscalYear,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateCheckoutSessionRequest) Reset() {
@@ -533,6 +535,13 @@ func (x *CreateCheckoutSessionRequest) GetLegalTermsVersionDate() string {
 	return ""
 }
 
+func (x *CreateCheckoutSessionRequest) GetFiscalYear() int32 {
+	if x != nil {
+		return x.FiscalYear
+	}
+	return 0
+}
+
 type CreateCheckoutSessionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CheckoutUrl   string                 `protobuf:"bytes,1,opt,name=checkoutUrl,proto3" json:"checkoutUrl,omitempty"` // Redirect customer here
@@ -588,8 +597,10 @@ type FulfillLicenseFromStripeRequest struct {
 	CreditAppliedCents int32                  `protobuf:"varint,6,opt,name=creditAppliedCents,proto3" json:"creditAppliedCents,omitempty"`
 	// / CGV / terms version from checkout session metadata (YYYY-MM-DD).
 	LegalTermsVersionDate string `protobuf:"bytes,7,opt,name=legalTermsVersionDate,proto3" json:"legalTermsVersionDate,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// / Fiscal year for punctual SYSCOHADA fulfill (from Checkout Session metadata).
+	FiscalYear    int32 `protobuf:"varint,8,opt,name=fiscalYear,proto3" json:"fiscalYear,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *FulfillLicenseFromStripeRequest) Reset() {
@@ -671,12 +682,21 @@ func (x *FulfillLicenseFromStripeRequest) GetLegalTermsVersionDate() string {
 	return ""
 }
 
+func (x *FulfillLicenseFromStripeRequest) GetFiscalYear() int32 {
+	if x != nil {
+		return x.FiscalYear
+	}
+	return 0
+}
+
 // / Request to fulfill a license from a Stripe Checkout Session (e.g. after success redirect).
 type FulfillFromStripeCheckoutSessionRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	CheckoutSessionId string                 `protobuf:"bytes,1,opt,name=checkoutSessionId,proto3" json:"checkoutSessionId,omitempty"` // e.g. cs_xxx
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// / Same value as sent to createCheckoutSession (YYYY-MM-DD). Persisted on the license; not read from Stripe.
+	LegalTermsVersionDate string `protobuf:"bytes,2,opt,name=legalTermsVersionDate,proto3" json:"legalTermsVersionDate,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
 }
 
 func (x *FulfillFromStripeCheckoutSessionRequest) Reset() {
@@ -716,21 +736,333 @@ func (x *FulfillFromStripeCheckoutSessionRequest) GetCheckoutSessionId() string 
 	return ""
 }
 
+func (x *FulfillFromStripeCheckoutSessionRequest) GetLegalTermsVersionDate() string {
+	if x != nil {
+		return x.LegalTermsVersionDate
+	}
+	return ""
+}
+
+type CreatePawapayCheckoutRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// / Weebi product id from billing_products (e.g. "premium", "syscohada"). Not a Stripe priceId.
+	ProductId string `protobuf:"bytes,1,opt,name=productId,proto3" json:"productId,omitempty"`
+	// / URL the customer is returned to after the hosted payment page (PawaPay returnUrl).
+	ReturnUrl string `protobuf:"bytes,2,opt,name=returnUrl,proto3" json:"returnUrl,omitempty"`
+	// / Optional referral code to apply.
+	ReferralCode string `protobuf:"bytes,3,opt,name=referralCode,proto3" json:"referralCode,omitempty"`
+	// / Optional credit (cents) to apply. Deducted from firm balance.
+	CreditAppliedCents int32 `protobuf:"varint,4,opt,name=creditAppliedCents,proto3" json:"creditAppliedCents,omitempty"`
+	// / CGV / terms version the buyer accepted before checkout (YYYY-MM-DD).
+	LegalTermsVersionDate string `protobuf:"bytes,5,opt,name=legalTermsVersionDate,proto3" json:"legalTermsVersionDate,omitempty"`
+	// / Fiscal/calendar year for punctual SYSCOHADA purchases (required when productId is syscohada).
+	FiscalYear    int32 `protobuf:"varint,6,opt,name=fiscalYear,proto3" json:"fiscalYear,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreatePawapayCheckoutRequest) Reset() {
+	*x = CreatePawapayCheckoutRequest{}
+	mi := &file_billing_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreatePawapayCheckoutRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreatePawapayCheckoutRequest) ProtoMessage() {}
+
+func (x *CreatePawapayCheckoutRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreatePawapayCheckoutRequest.ProtoReflect.Descriptor instead.
+func (*CreatePawapayCheckoutRequest) Descriptor() ([]byte, []int) {
+	return file_billing_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CreatePawapayCheckoutRequest) GetProductId() string {
+	if x != nil {
+		return x.ProductId
+	}
+	return ""
+}
+
+func (x *CreatePawapayCheckoutRequest) GetReturnUrl() string {
+	if x != nil {
+		return x.ReturnUrl
+	}
+	return ""
+}
+
+func (x *CreatePawapayCheckoutRequest) GetReferralCode() string {
+	if x != nil {
+		return x.ReferralCode
+	}
+	return ""
+}
+
+func (x *CreatePawapayCheckoutRequest) GetCreditAppliedCents() int32 {
+	if x != nil {
+		return x.CreditAppliedCents
+	}
+	return 0
+}
+
+func (x *CreatePawapayCheckoutRequest) GetLegalTermsVersionDate() string {
+	if x != nil {
+		return x.LegalTermsVersionDate
+	}
+	return ""
+}
+
+func (x *CreatePawapayCheckoutRequest) GetFiscalYear() int32 {
+	if x != nil {
+		return x.FiscalYear
+	}
+	return 0
+}
+
+type CreatePawapayCheckoutResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// / UUIDv4 checkout id (also used as licenseId suffix: lic_pawapay_{checkoutId}).
+	CheckoutId string `protobuf:"bytes,1,opt,name=checkoutId,proto3" json:"checkoutId,omitempty"`
+	// / Hosted payment page URL — redirect the customer here.
+	RedirectUrl   string `protobuf:"bytes,2,opt,name=redirectUrl,proto3" json:"redirectUrl,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreatePawapayCheckoutResponse) Reset() {
+	*x = CreatePawapayCheckoutResponse{}
+	mi := &file_billing_service_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreatePawapayCheckoutResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreatePawapayCheckoutResponse) ProtoMessage() {}
+
+func (x *CreatePawapayCheckoutResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreatePawapayCheckoutResponse.ProtoReflect.Descriptor instead.
+func (*CreatePawapayCheckoutResponse) Descriptor() ([]byte, []int) {
+	return file_billing_service_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *CreatePawapayCheckoutResponse) GetCheckoutId() string {
+	if x != nil {
+		return x.CheckoutId
+	}
+	return ""
+}
+
+func (x *CreatePawapayCheckoutResponse) GetRedirectUrl() string {
+	if x != nil {
+		return x.RedirectUrl
+	}
+	return ""
+}
+
+// / productId is the source of truth; billing_service maps it via billing_products.
+type FulfillLicenseFromPawapayRequest struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	FirmId string                 `protobuf:"bytes,1,opt,name=firmId,proto3" json:"firmId,omitempty"`
+	// / Deterministic license id, e.g. lic_pawapay_{checkoutId}.
+	LicenseId string `protobuf:"bytes,2,opt,name=licenseId,proto3" json:"licenseId,omitempty"`
+	// / PawaPay checkout UUID (idempotency / reconciliation key).
+	CheckoutId string `protobuf:"bytes,3,opt,name=checkoutId,proto3" json:"checkoutId,omitempty"`
+	// / Weebi product id (e.g. "premium", "syscohada").
+	ProductId          string `protobuf:"bytes,4,opt,name=productId,proto3" json:"productId,omitempty"`
+	ReferralCode       string `protobuf:"bytes,5,opt,name=referralCode,proto3" json:"referralCode,omitempty"`
+	CreditAppliedCents int32  `protobuf:"varint,6,opt,name=creditAppliedCents,proto3" json:"creditAppliedCents,omitempty"`
+	// / CGV / terms version from checkout metadata (YYYY-MM-DD).
+	LegalTermsVersionDate string `protobuf:"bytes,7,opt,name=legalTermsVersionDate,proto3" json:"legalTermsVersionDate,omitempty"`
+	// / Fiscal year for punctual SYSCOHADA fulfill.
+	FiscalYear    int32 `protobuf:"varint,8,opt,name=fiscalYear,proto3" json:"fiscalYear,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FulfillLicenseFromPawapayRequest) Reset() {
+	*x = FulfillLicenseFromPawapayRequest{}
+	mi := &file_billing_service_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FulfillLicenseFromPawapayRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FulfillLicenseFromPawapayRequest) ProtoMessage() {}
+
+func (x *FulfillLicenseFromPawapayRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FulfillLicenseFromPawapayRequest.ProtoReflect.Descriptor instead.
+func (*FulfillLicenseFromPawapayRequest) Descriptor() ([]byte, []int) {
+	return file_billing_service_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *FulfillLicenseFromPawapayRequest) GetFirmId() string {
+	if x != nil {
+		return x.FirmId
+	}
+	return ""
+}
+
+func (x *FulfillLicenseFromPawapayRequest) GetLicenseId() string {
+	if x != nil {
+		return x.LicenseId
+	}
+	return ""
+}
+
+func (x *FulfillLicenseFromPawapayRequest) GetCheckoutId() string {
+	if x != nil {
+		return x.CheckoutId
+	}
+	return ""
+}
+
+func (x *FulfillLicenseFromPawapayRequest) GetProductId() string {
+	if x != nil {
+		return x.ProductId
+	}
+	return ""
+}
+
+func (x *FulfillLicenseFromPawapayRequest) GetReferralCode() string {
+	if x != nil {
+		return x.ReferralCode
+	}
+	return ""
+}
+
+func (x *FulfillLicenseFromPawapayRequest) GetCreditAppliedCents() int32 {
+	if x != nil {
+		return x.CreditAppliedCents
+	}
+	return 0
+}
+
+func (x *FulfillLicenseFromPawapayRequest) GetLegalTermsVersionDate() string {
+	if x != nil {
+		return x.LegalTermsVersionDate
+	}
+	return ""
+}
+
+func (x *FulfillLicenseFromPawapayRequest) GetFiscalYear() int32 {
+	if x != nil {
+		return x.FiscalYear
+	}
+	return 0
+}
+
+// / Request to fulfill a license from a completed PawaPay checkout (e.g. after returnUrl).
+type FulfillFromPawapayCheckoutRequest struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	CheckoutId string                 `protobuf:"bytes,1,opt,name=checkoutId,proto3" json:"checkoutId,omitempty"`
+	// / Same value as sent to createPawapayCheckout (YYYY-MM-DD). Persisted on the license.
+	LegalTermsVersionDate string `protobuf:"bytes,2,opt,name=legalTermsVersionDate,proto3" json:"legalTermsVersionDate,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *FulfillFromPawapayCheckoutRequest) Reset() {
+	*x = FulfillFromPawapayCheckoutRequest{}
+	mi := &file_billing_service_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FulfillFromPawapayCheckoutRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FulfillFromPawapayCheckoutRequest) ProtoMessage() {}
+
+func (x *FulfillFromPawapayCheckoutRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FulfillFromPawapayCheckoutRequest.ProtoReflect.Descriptor instead.
+func (*FulfillFromPawapayCheckoutRequest) Descriptor() ([]byte, []int) {
+	return file_billing_service_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *FulfillFromPawapayCheckoutRequest) GetCheckoutId() string {
+	if x != nil {
+		return x.CheckoutId
+	}
+	return ""
+}
+
+func (x *FulfillFromPawapayCheckoutRequest) GetLegalTermsVersionDate() string {
+	if x != nil {
+		return x.LegalTermsVersionDate
+	}
+	return ""
+}
+
 // / Billing product (license plan). Stored in billing_products collection.
 // / Single source of truth for price mapping; replaces STRIPE_PRICE_* and STRIPE_PRODUCT_* env vars.
 type BillingProduct struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	ProductId        string                 `protobuf:"bytes,1,opt,name=productId,proto3" json:"productId,omitempty"` // e.g. "solo", "trio", "pro"
-	LicensePlan      license.LicensePlan    `protobuf:"varint,2,opt,name=licensePlan,proto3,enum=weebi.license.LicensePlan" json:"licensePlan,omitempty"`
-	MaxUsers         int32                  `protobuf:"varint,3,opt,name=maxUsers,proto3" json:"maxUsers,omitempty"`
-	AmountCents      int32                  `protobuf:"varint,4,opt,name=amountCents,proto3" json:"amountCents,omitempty"`
-	Currency         string                 `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
-	StripeProductId  string                 `protobuf:"bytes,6,opt,name=stripeProductId,proto3" json:"stripeProductId,omitempty"`
-	StripePriceId    string                 `protobuf:"bytes,7,opt,name=stripePriceId,proto3" json:"stripePriceId,omitempty"`       // Used for checkout and webhook
-	PawapayProductId string                 `protobuf:"bytes,8,opt,name=pawapayProductId,proto3" json:"pawapayProductId,omitempty"` // Optional, for future
-	CreationDateUTC  *g_timestamp.Timestamp `protobuf:"bytes,9,opt,name=creationDateUTC,proto3" json:"creationDateUTC,omitempty"`
-	UpdateDateUTC    *g_timestamp.Timestamp `protobuf:"bytes,10,opt,name=updateDateUTC,proto3" json:"updateDateUTC,omitempty"`
-	DeletionDateUTC  *g_timestamp.Timestamp `protobuf:"bytes,11,opt,name=deletionDateUTC,proto3" json:"deletionDateUTC,omitempty"`
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ProductId       string                 `protobuf:"bytes,1,opt,name=productId,proto3" json:"productId,omitempty"` // e.g. "entreprise", "premium"
+	LicensePlan     license.LicensePlan    `protobuf:"varint,2,opt,name=licensePlan,proto3,enum=weebi.license.LicensePlan" json:"licensePlan,omitempty"`
+	MaxUsers        int32                  `protobuf:"varint,3,opt,name=maxUsers,proto3" json:"maxUsers,omitempty"`
+	AmountCents     int32                  `protobuf:"varint,4,opt,name=amountCents,proto3" json:"amountCents,omitempty"`
+	Currency        string                 `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
+	StripeProductId string                 `protobuf:"bytes,6,opt,name=stripeProductId,proto3" json:"stripeProductId,omitempty"`
+	StripePriceId   string                 `protobuf:"bytes,7,opt,name=stripePriceId,proto3" json:"stripePriceId,omitempty"` // Used for checkout and webhook
+	// / Optional internal SKU / label for PawaPay; amounts are sent explicitly (no Stripe-like Price IDs).
+	PawapayProductId string                 `protobuf:"bytes,8,opt,name=pawapayProductId,proto3" json:"pawapayProductId,omitempty"`
+	CreationDateUTC  *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=creationDateUTC,proto3" json:"creationDateUTC,omitempty"`
+	UpdateDateUTC    *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updateDateUTC,proto3" json:"updateDateUTC,omitempty"`
+	DeletionDateUTC  *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=deletionDateUTC,proto3" json:"deletionDateUTC,omitempty"`
 	IsDeleted        bool                   `protobuf:"varint,12,opt,name=isDeleted,proto3" json:"isDeleted,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
@@ -738,7 +1070,7 @@ type BillingProduct struct {
 
 func (x *BillingProduct) Reset() {
 	*x = BillingProduct{}
-	mi := &file_billing_service_proto_msgTypes[12]
+	mi := &file_billing_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -750,7 +1082,7 @@ func (x *BillingProduct) String() string {
 func (*BillingProduct) ProtoMessage() {}
 
 func (x *BillingProduct) ProtoReflect() protoreflect.Message {
-	mi := &file_billing_service_proto_msgTypes[12]
+	mi := &file_billing_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -763,7 +1095,7 @@ func (x *BillingProduct) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BillingProduct.ProtoReflect.Descriptor instead.
 func (*BillingProduct) Descriptor() ([]byte, []int) {
-	return file_billing_service_proto_rawDescGZIP(), []int{12}
+	return file_billing_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *BillingProduct) GetProductId() string {
@@ -822,21 +1154,21 @@ func (x *BillingProduct) GetPawapayProductId() string {
 	return ""
 }
 
-func (x *BillingProduct) GetCreationDateUTC() *g_timestamp.Timestamp {
+func (x *BillingProduct) GetCreationDateUTC() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreationDateUTC
 	}
 	return nil
 }
 
-func (x *BillingProduct) GetUpdateDateUTC() *g_timestamp.Timestamp {
+func (x *BillingProduct) GetUpdateDateUTC() *timestamppb.Timestamp {
 	if x != nil {
 		return x.UpdateDateUTC
 	}
 	return nil
 }
 
-func (x *BillingProduct) GetDeletionDateUTC() *g_timestamp.Timestamp {
+func (x *BillingProduct) GetDeletionDateUTC() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DeletionDateUTC
 	}
@@ -859,7 +1191,7 @@ type ReadBillingProductsResponse struct {
 
 func (x *ReadBillingProductsResponse) Reset() {
 	*x = ReadBillingProductsResponse{}
-	mi := &file_billing_service_proto_msgTypes[13]
+	mi := &file_billing_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -871,7 +1203,7 @@ func (x *ReadBillingProductsResponse) String() string {
 func (*ReadBillingProductsResponse) ProtoMessage() {}
 
 func (x *ReadBillingProductsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_billing_service_proto_msgTypes[13]
+	mi := &file_billing_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -884,12 +1216,159 @@ func (x *ReadBillingProductsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadBillingProductsResponse.ProtoReflect.Descriptor instead.
 func (*ReadBillingProductsResponse) Descriptor() ([]byte, []int) {
-	return file_billing_service_proto_rawDescGZIP(), []int{13}
+	return file_billing_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ReadBillingProductsResponse) GetProducts() []*BillingProduct {
 	if x != nil {
 		return x.Products
+	}
+	return nil
+}
+
+// / One punctual SYSCOHADA fiscal-year purchase (not a subscription).
+type AccountingYearPurchase struct {
+	state                   protoimpl.MessageState `protogen:"open.v1"`
+	Year                    int32                  `protobuf:"varint,1,opt,name=year,proto3" json:"year,omitempty"`
+	StripeCheckoutSessionId string                 `protobuf:"bytes,2,opt,name=stripeCheckoutSessionId,proto3" json:"stripeCheckoutSessionId,omitempty"`
+	StripePriceId           string                 `protobuf:"bytes,3,opt,name=stripePriceId,proto3" json:"stripePriceId,omitempty"`
+	PaidAtUTC               string                 `protobuf:"bytes,4,opt,name=paidAtUTC,proto3" json:"paidAtUTC,omitempty"`
+	AmountCents             int32                  `protobuf:"varint,5,opt,name=amountCents,proto3" json:"amountCents,omitempty"`
+	Currency                string                 `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`
+	// / Set when paid via PawaPay (mutually exclusive with stripeCheckoutSessionId in practice).
+	PawapayCheckoutId string `protobuf:"bytes,7,opt,name=pawapayCheckoutId,proto3" json:"pawapayCheckoutId,omitempty"`
+	// / Which provider processed this purchase.
+	PaymentProvider license.PaymentProvider `protobuf:"varint,8,opt,name=paymentProvider,proto3,enum=weebi.license.PaymentProvider" json:"paymentProvider,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *AccountingYearPurchase) Reset() {
+	*x = AccountingYearPurchase{}
+	mi := &file_billing_service_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountingYearPurchase) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountingYearPurchase) ProtoMessage() {}
+
+func (x *AccountingYearPurchase) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountingYearPurchase.ProtoReflect.Descriptor instead.
+func (*AccountingYearPurchase) Descriptor() ([]byte, []int) {
+	return file_billing_service_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *AccountingYearPurchase) GetYear() int32 {
+	if x != nil {
+		return x.Year
+	}
+	return 0
+}
+
+func (x *AccountingYearPurchase) GetStripeCheckoutSessionId() string {
+	if x != nil {
+		return x.StripeCheckoutSessionId
+	}
+	return ""
+}
+
+func (x *AccountingYearPurchase) GetStripePriceId() string {
+	if x != nil {
+		return x.StripePriceId
+	}
+	return ""
+}
+
+func (x *AccountingYearPurchase) GetPaidAtUTC() string {
+	if x != nil {
+		return x.PaidAtUTC
+	}
+	return ""
+}
+
+func (x *AccountingYearPurchase) GetAmountCents() int32 {
+	if x != nil {
+		return x.AmountCents
+	}
+	return 0
+}
+
+func (x *AccountingYearPurchase) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *AccountingYearPurchase) GetPawapayCheckoutId() string {
+	if x != nil {
+		return x.PawapayCheckoutId
+	}
+	return ""
+}
+
+func (x *AccountingYearPurchase) GetPaymentProvider() license.PaymentProvider {
+	if x != nil {
+		return x.PaymentProvider
+	}
+	return license.PaymentProvider(0)
+}
+
+type ReadAccountingYearPurchasesResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Purchases     []*AccountingYearPurchase `protobuf:"bytes,1,rep,name=purchases,proto3" json:"purchases,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReadAccountingYearPurchasesResponse) Reset() {
+	*x = ReadAccountingYearPurchasesResponse{}
+	mi := &file_billing_service_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReadAccountingYearPurchasesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReadAccountingYearPurchasesResponse) ProtoMessage() {}
+
+func (x *ReadAccountingYearPurchasesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReadAccountingYearPurchasesResponse.ProtoReflect.Descriptor instead.
+func (*ReadAccountingYearPurchasesResponse) Descriptor() ([]byte, []int) {
+	return file_billing_service_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *ReadAccountingYearPurchasesResponse) GetPurchases() []*AccountingYearPurchase {
+	if x != nil {
+		return x.Purchases
 	}
 	return nil
 }
@@ -922,7 +1401,7 @@ const file_billing_service_proto_rawDesc = "" +
 	"\x0eminPayoutCents\x18\x03 \x01(\x05R\x0eminPayoutCents\"\x8f\x01\n" +
 	"\x1dRequestReferralPayoutResponse\x12L\n" +
 	"\x0estatusResponse\x18\x01 \x01(\v2$.google.retail.common.StatusResponseR\x0estatusResponse\x12 \n" +
-	"\vamountCents\x18\x02 \x01(\x05R\vamountCents\"\x80\x02\n" +
+	"\vamountCents\x18\x02 \x01(\x05R\vamountCents\"\xa0\x02\n" +
 	"\x1cCreateCheckoutSessionRequest\x12\x18\n" +
 	"\apriceId\x18\x01 \x01(\tR\apriceId\x12\x1e\n" +
 	"\n" +
@@ -931,9 +1410,12 @@ const file_billing_service_proto_rawDesc = "" +
 	"\tcancelUrl\x18\x03 \x01(\tR\tcancelUrl\x12\"\n" +
 	"\freferralCode\x18\x04 \x01(\tR\freferralCode\x12.\n" +
 	"\x12creditAppliedCents\x18\x05 \x01(\x05R\x12creditAppliedCents\x124\n" +
-	"\x15legalTermsVersionDate\x18\x06 \x01(\tR\x15legalTermsVersionDate\"A\n" +
+	"\x15legalTermsVersionDate\x18\x06 \x01(\tR\x15legalTermsVersionDate\x12\x1e\n" +
+	"\n" +
+	"fiscalYear\x18\a \x01(\x05R\n" +
+	"fiscalYear\"A\n" +
 	"\x1dCreateCheckoutSessionResponse\x12 \n" +
-	"\vcheckoutUrl\x18\x01 \x01(\tR\vcheckoutUrl\"\xa7\x02\n" +
+	"\vcheckoutUrl\x18\x01 \x01(\tR\vcheckoutUrl\"\xc7\x02\n" +
 	"\x1fFulfillLicenseFromStripeRequest\x12\x16\n" +
 	"\x06firmId\x18\x01 \x01(\tR\x06firmId\x12\x1c\n" +
 	"\tlicenseId\x18\x02 \x01(\tR\tlicenseId\x12\x18\n" +
@@ -941,9 +1423,45 @@ const file_billing_service_proto_rawDesc = "" +
 	"\x10stripeCustomerId\x18\x04 \x01(\tR\x10stripeCustomerId\x12\"\n" +
 	"\freferralCode\x18\x05 \x01(\tR\freferralCode\x12.\n" +
 	"\x12creditAppliedCents\x18\x06 \x01(\x05R\x12creditAppliedCents\x124\n" +
-	"\x15legalTermsVersionDate\x18\a \x01(\tR\x15legalTermsVersionDate\"W\n" +
+	"\x15legalTermsVersionDate\x18\a \x01(\tR\x15legalTermsVersionDate\x12\x1e\n" +
+	"\n" +
+	"fiscalYear\x18\b \x01(\x05R\n" +
+	"fiscalYear\"\x8d\x01\n" +
 	"'FulfillFromStripeCheckoutSessionRequest\x12,\n" +
-	"\x11checkoutSessionId\x18\x01 \x01(\tR\x11checkoutSessionId\"\xae\x04\n" +
+	"\x11checkoutSessionId\x18\x01 \x01(\tR\x11checkoutSessionId\x124\n" +
+	"\x15legalTermsVersionDate\x18\x02 \x01(\tR\x15legalTermsVersionDate\"\x84\x02\n" +
+	"\x1cCreatePawapayCheckoutRequest\x12\x1c\n" +
+	"\tproductId\x18\x01 \x01(\tR\tproductId\x12\x1c\n" +
+	"\treturnUrl\x18\x02 \x01(\tR\treturnUrl\x12\"\n" +
+	"\freferralCode\x18\x03 \x01(\tR\freferralCode\x12.\n" +
+	"\x12creditAppliedCents\x18\x04 \x01(\x05R\x12creditAppliedCents\x124\n" +
+	"\x15legalTermsVersionDate\x18\x05 \x01(\tR\x15legalTermsVersionDate\x12\x1e\n" +
+	"\n" +
+	"fiscalYear\x18\x06 \x01(\x05R\n" +
+	"fiscalYear\"a\n" +
+	"\x1dCreatePawapayCheckoutResponse\x12\x1e\n" +
+	"\n" +
+	"checkoutId\x18\x01 \x01(\tR\n" +
+	"checkoutId\x12 \n" +
+	"\vredirectUrl\x18\x02 \x01(\tR\vredirectUrl\"\xc0\x02\n" +
+	" FulfillLicenseFromPawapayRequest\x12\x16\n" +
+	"\x06firmId\x18\x01 \x01(\tR\x06firmId\x12\x1c\n" +
+	"\tlicenseId\x18\x02 \x01(\tR\tlicenseId\x12\x1e\n" +
+	"\n" +
+	"checkoutId\x18\x03 \x01(\tR\n" +
+	"checkoutId\x12\x1c\n" +
+	"\tproductId\x18\x04 \x01(\tR\tproductId\x12\"\n" +
+	"\freferralCode\x18\x05 \x01(\tR\freferralCode\x12.\n" +
+	"\x12creditAppliedCents\x18\x06 \x01(\x05R\x12creditAppliedCents\x124\n" +
+	"\x15legalTermsVersionDate\x18\a \x01(\tR\x15legalTermsVersionDate\x12\x1e\n" +
+	"\n" +
+	"fiscalYear\x18\b \x01(\x05R\n" +
+	"fiscalYear\"y\n" +
+	"!FulfillFromPawapayCheckoutRequest\x12\x1e\n" +
+	"\n" +
+	"checkoutId\x18\x01 \x01(\tR\n" +
+	"checkoutId\x124\n" +
+	"\x15legalTermsVersionDate\x18\x02 \x01(\tR\x15legalTermsVersionDate\"\xae\x04\n" +
 	"\x0eBillingProduct\x12\x1c\n" +
 	"\tproductId\x18\x01 \x01(\tR\tproductId\x12<\n" +
 	"\vlicensePlan\x18\x02 \x01(\x0e2\x1a.weebi.license.LicensePlanR\vlicensePlan\x12\x1a\n" +
@@ -959,7 +1477,18 @@ const file_billing_service_proto_rawDesc = "" +
 	"\x0fdeletionDateUTC\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\x0fdeletionDateUTC\x12\x1c\n" +
 	"\tisDeleted\x18\f \x01(\bR\tisDeleted\"`\n" +
 	"\x1bReadBillingProductsResponse\x12A\n" +
-	"\bproducts\x18\x01 \x03(\v2%.weebi.billing.service.BillingProductR\bproducts2\xdd\t\n" +
+	"\bproducts\x18\x01 \x03(\v2%.weebi.billing.service.BillingProductR\bproducts\"\xe0\x02\n" +
+	"\x16AccountingYearPurchase\x12\x12\n" +
+	"\x04year\x18\x01 \x01(\x05R\x04year\x128\n" +
+	"\x17stripeCheckoutSessionId\x18\x02 \x01(\tR\x17stripeCheckoutSessionId\x12$\n" +
+	"\rstripePriceId\x18\x03 \x01(\tR\rstripePriceId\x12\x1c\n" +
+	"\tpaidAtUTC\x18\x04 \x01(\tR\tpaidAtUTC\x12 \n" +
+	"\vamountCents\x18\x05 \x01(\x05R\vamountCents\x12\x1a\n" +
+	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12,\n" +
+	"\x11pawapayCheckoutId\x18\a \x01(\tR\x11pawapayCheckoutId\x12H\n" +
+	"\x0fpaymentProvider\x18\b \x01(\x0e2\x1e.weebi.license.PaymentProviderR\x0fpaymentProvider\"r\n" +
+	"#ReadAccountingYearPurchasesResponse\x12K\n" +
+	"\tpurchases\x18\x01 \x03(\v2-.weebi.billing.service.AccountingYearPurchaseR\tpurchases2\xe4\r\n" +
 	"\x0eBillingService\x12j\n" +
 	"\rcreateLicense\x12+.weebi.billing.service.CreateLicenseRequest\x1a,.weebi.billing.service.CreateLicenseResponse\x12V\n" +
 	"\freadLicenses\x12\x19.weebi.common.empty.Empty\x1a+.weebi.billing.service.ReadLicensesResponse\x12d\n" +
@@ -971,7 +1500,11 @@ const file_billing_service_proto_rawDesc = "" +
 	"\x15requestReferralPayout\x12\x19.weebi.common.empty.Empty\x1a4.weebi.billing.service.RequestReferralPayoutResponse\x12\x82\x01\n" +
 	"\x15createCheckoutSession\x123.weebi.billing.service.CreateCheckoutSessionRequest\x1a4.weebi.billing.service.CreateCheckoutSessionResponse\x12\x80\x01\n" +
 	"\x18fulfillLicenseFromStripe\x126.weebi.billing.service.FulfillLicenseFromStripeRequest\x1a,.weebi.billing.service.CreateLicenseResponse\x12\x90\x01\n" +
-	" fulfillFromStripeCheckoutSession\x12>.weebi.billing.service.FulfillFromStripeCheckoutSessionRequest\x1a,.weebi.billing.service.CreateLicenseResponseb\x06proto3"
+	" fulfillFromStripeCheckoutSession\x12>.weebi.billing.service.FulfillFromStripeCheckoutSessionRequest\x1a,.weebi.billing.service.CreateLicenseResponse\x12\x82\x01\n" +
+	"\x15createPawapayCheckout\x123.weebi.billing.service.CreatePawapayCheckoutRequest\x1a4.weebi.billing.service.CreatePawapayCheckoutResponse\x12\x82\x01\n" +
+	"\x19fulfillLicenseFromPawapay\x127.weebi.billing.service.FulfillLicenseFromPawapayRequest\x1a,.weebi.billing.service.CreateLicenseResponse\x12\x84\x01\n" +
+	"\x1afulfillFromPawapayCheckout\x128.weebi.billing.service.FulfillFromPawapayCheckoutRequest\x1a,.weebi.billing.service.CreateLicenseResponse\x12t\n" +
+	"\x1breadAccountingYearPurchases\x12\x19.weebi.common.empty.Empty\x1a:.weebi.billing.service.ReadAccountingYearPurchasesResponseb\x06proto3"
 
 var (
 	file_billing_service_proto_rawDescOnce sync.Once
@@ -985,7 +1518,7 @@ func file_billing_service_proto_rawDescGZIP() []byte {
 	return file_billing_service_proto_rawDescData
 }
 
-var file_billing_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_billing_service_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_billing_service_proto_goTypes = []any{
 	(*CreateLicenseRequest)(nil),                    // 0: weebi.billing.service.CreateLicenseRequest
 	(*CreateLicenseResponse)(nil),                   // 1: weebi.billing.service.CreateLicenseResponse
@@ -999,53 +1532,70 @@ var file_billing_service_proto_goTypes = []any{
 	(*CreateCheckoutSessionResponse)(nil),           // 9: weebi.billing.service.CreateCheckoutSessionResponse
 	(*FulfillLicenseFromStripeRequest)(nil),         // 10: weebi.billing.service.FulfillLicenseFromStripeRequest
 	(*FulfillFromStripeCheckoutSessionRequest)(nil), // 11: weebi.billing.service.FulfillFromStripeCheckoutSessionRequest
-	(*BillingProduct)(nil),                          // 12: weebi.billing.service.BillingProduct
-	(*ReadBillingProductsResponse)(nil),             // 13: weebi.billing.service.ReadBillingProductsResponse
-	(*license.License)(nil),                         // 14: weebi.license.License
-	(*g_common.StatusResponse)(nil),                 // 15: google.retail.common.StatusResponse
-	(license.LicensePlan)(0),                        // 16: weebi.license.LicensePlan
-	(*g_timestamp.Timestamp)(nil),                   // 17: google.protobuf.Timestamp
-	(*empty.Empty)(nil),                             // 18: weebi.common.empty.Empty
+	(*CreatePawapayCheckoutRequest)(nil),            // 12: weebi.billing.service.CreatePawapayCheckoutRequest
+	(*CreatePawapayCheckoutResponse)(nil),           // 13: weebi.billing.service.CreatePawapayCheckoutResponse
+	(*FulfillLicenseFromPawapayRequest)(nil),        // 14: weebi.billing.service.FulfillLicenseFromPawapayRequest
+	(*FulfillFromPawapayCheckoutRequest)(nil),       // 15: weebi.billing.service.FulfillFromPawapayCheckoutRequest
+	(*BillingProduct)(nil),                          // 16: weebi.billing.service.BillingProduct
+	(*ReadBillingProductsResponse)(nil),             // 17: weebi.billing.service.ReadBillingProductsResponse
+	(*AccountingYearPurchase)(nil),                  // 18: weebi.billing.service.AccountingYearPurchase
+	(*ReadAccountingYearPurchasesResponse)(nil),     // 19: weebi.billing.service.ReadAccountingYearPurchasesResponse
+	(*license.License)(nil),                         // 20: weebi.license.License
+	(*g_common.StatusResponse)(nil),                 // 21: google.retail.common.StatusResponse
+	(license.LicensePlan)(0),                        // 22: weebi.license.LicensePlan
+	(*timestamppb.Timestamp)(nil),                   // 23: google.protobuf.Timestamp
+	(license.PaymentProvider)(0),                    // 24: weebi.license.PaymentProvider
+	(*empty.Empty)(nil),                             // 25: weebi.common.empty.Empty
 }
 var file_billing_service_proto_depIdxs = []int32{
-	14, // 0: weebi.billing.service.CreateLicenseRequest.license:type_name -> weebi.license.License
-	15, // 1: weebi.billing.service.CreateLicenseResponse.statusResponse:type_name -> google.retail.common.StatusResponse
-	14, // 2: weebi.billing.service.CreateLicenseResponse.license:type_name -> weebi.license.License
-	14, // 3: weebi.billing.service.ReadLicensesResponse.licenses:type_name -> weebi.license.License
-	14, // 4: weebi.billing.service.UpdateLicenseRequest.license:type_name -> weebi.license.License
-	15, // 5: weebi.billing.service.RequestReferralPayoutResponse.statusResponse:type_name -> google.retail.common.StatusResponse
-	16, // 6: weebi.billing.service.BillingProduct.licensePlan:type_name -> weebi.license.LicensePlan
-	17, // 7: weebi.billing.service.BillingProduct.creationDateUTC:type_name -> google.protobuf.Timestamp
-	17, // 8: weebi.billing.service.BillingProduct.updateDateUTC:type_name -> google.protobuf.Timestamp
-	17, // 9: weebi.billing.service.BillingProduct.deletionDateUTC:type_name -> google.protobuf.Timestamp
-	12, // 10: weebi.billing.service.ReadBillingProductsResponse.products:type_name -> weebi.billing.service.BillingProduct
-	0,  // 11: weebi.billing.service.BillingService.createLicense:input_type -> weebi.billing.service.CreateLicenseRequest
-	18, // 12: weebi.billing.service.BillingService.readLicenses:input_type -> weebi.common.empty.Empty
-	18, // 13: weebi.billing.service.BillingService.readBillingProducts:input_type -> weebi.common.empty.Empty
-	3,  // 14: weebi.billing.service.BillingService.updateLicense:input_type -> weebi.billing.service.UpdateLicenseRequest
-	4,  // 15: weebi.billing.service.BillingService.deleteLicense:input_type -> weebi.billing.service.DeleteLicenseRequest
-	5,  // 16: weebi.billing.service.BillingService.updatePaymentCustomerId:input_type -> weebi.billing.service.UpdatePaymentCustomerIdRequest
-	18, // 17: weebi.billing.service.BillingService.getReferralInfo:input_type -> weebi.common.empty.Empty
-	18, // 18: weebi.billing.service.BillingService.requestReferralPayout:input_type -> weebi.common.empty.Empty
-	8,  // 19: weebi.billing.service.BillingService.createCheckoutSession:input_type -> weebi.billing.service.CreateCheckoutSessionRequest
-	10, // 20: weebi.billing.service.BillingService.fulfillLicenseFromStripe:input_type -> weebi.billing.service.FulfillLicenseFromStripeRequest
-	11, // 21: weebi.billing.service.BillingService.fulfillFromStripeCheckoutSession:input_type -> weebi.billing.service.FulfillFromStripeCheckoutSessionRequest
-	1,  // 22: weebi.billing.service.BillingService.createLicense:output_type -> weebi.billing.service.CreateLicenseResponse
-	2,  // 23: weebi.billing.service.BillingService.readLicenses:output_type -> weebi.billing.service.ReadLicensesResponse
-	13, // 24: weebi.billing.service.BillingService.readBillingProducts:output_type -> weebi.billing.service.ReadBillingProductsResponse
-	15, // 25: weebi.billing.service.BillingService.updateLicense:output_type -> google.retail.common.StatusResponse
-	15, // 26: weebi.billing.service.BillingService.deleteLicense:output_type -> google.retail.common.StatusResponse
-	15, // 27: weebi.billing.service.BillingService.updatePaymentCustomerId:output_type -> google.retail.common.StatusResponse
-	6,  // 28: weebi.billing.service.BillingService.getReferralInfo:output_type -> weebi.billing.service.GetReferralInfoResponse
-	7,  // 29: weebi.billing.service.BillingService.requestReferralPayout:output_type -> weebi.billing.service.RequestReferralPayoutResponse
-	9,  // 30: weebi.billing.service.BillingService.createCheckoutSession:output_type -> weebi.billing.service.CreateCheckoutSessionResponse
-	1,  // 31: weebi.billing.service.BillingService.fulfillLicenseFromStripe:output_type -> weebi.billing.service.CreateLicenseResponse
-	1,  // 32: weebi.billing.service.BillingService.fulfillFromStripeCheckoutSession:output_type -> weebi.billing.service.CreateLicenseResponse
-	22, // [22:33] is the sub-list for method output_type
-	11, // [11:22] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	20, // 0: weebi.billing.service.CreateLicenseRequest.license:type_name -> weebi.license.License
+	21, // 1: weebi.billing.service.CreateLicenseResponse.statusResponse:type_name -> google.retail.common.StatusResponse
+	20, // 2: weebi.billing.service.CreateLicenseResponse.license:type_name -> weebi.license.License
+	20, // 3: weebi.billing.service.ReadLicensesResponse.licenses:type_name -> weebi.license.License
+	20, // 4: weebi.billing.service.UpdateLicenseRequest.license:type_name -> weebi.license.License
+	21, // 5: weebi.billing.service.RequestReferralPayoutResponse.statusResponse:type_name -> google.retail.common.StatusResponse
+	22, // 6: weebi.billing.service.BillingProduct.licensePlan:type_name -> weebi.license.LicensePlan
+	23, // 7: weebi.billing.service.BillingProduct.creationDateUTC:type_name -> google.protobuf.Timestamp
+	23, // 8: weebi.billing.service.BillingProduct.updateDateUTC:type_name -> google.protobuf.Timestamp
+	23, // 9: weebi.billing.service.BillingProduct.deletionDateUTC:type_name -> google.protobuf.Timestamp
+	16, // 10: weebi.billing.service.ReadBillingProductsResponse.products:type_name -> weebi.billing.service.BillingProduct
+	24, // 11: weebi.billing.service.AccountingYearPurchase.paymentProvider:type_name -> weebi.license.PaymentProvider
+	18, // 12: weebi.billing.service.ReadAccountingYearPurchasesResponse.purchases:type_name -> weebi.billing.service.AccountingYearPurchase
+	0,  // 13: weebi.billing.service.BillingService.createLicense:input_type -> weebi.billing.service.CreateLicenseRequest
+	25, // 14: weebi.billing.service.BillingService.readLicenses:input_type -> weebi.common.empty.Empty
+	25, // 15: weebi.billing.service.BillingService.readBillingProducts:input_type -> weebi.common.empty.Empty
+	3,  // 16: weebi.billing.service.BillingService.updateLicense:input_type -> weebi.billing.service.UpdateLicenseRequest
+	4,  // 17: weebi.billing.service.BillingService.deleteLicense:input_type -> weebi.billing.service.DeleteLicenseRequest
+	5,  // 18: weebi.billing.service.BillingService.updatePaymentCustomerId:input_type -> weebi.billing.service.UpdatePaymentCustomerIdRequest
+	25, // 19: weebi.billing.service.BillingService.getReferralInfo:input_type -> weebi.common.empty.Empty
+	25, // 20: weebi.billing.service.BillingService.requestReferralPayout:input_type -> weebi.common.empty.Empty
+	8,  // 21: weebi.billing.service.BillingService.createCheckoutSession:input_type -> weebi.billing.service.CreateCheckoutSessionRequest
+	10, // 22: weebi.billing.service.BillingService.fulfillLicenseFromStripe:input_type -> weebi.billing.service.FulfillLicenseFromStripeRequest
+	11, // 23: weebi.billing.service.BillingService.fulfillFromStripeCheckoutSession:input_type -> weebi.billing.service.FulfillFromStripeCheckoutSessionRequest
+	12, // 24: weebi.billing.service.BillingService.createPawapayCheckout:input_type -> weebi.billing.service.CreatePawapayCheckoutRequest
+	14, // 25: weebi.billing.service.BillingService.fulfillLicenseFromPawapay:input_type -> weebi.billing.service.FulfillLicenseFromPawapayRequest
+	15, // 26: weebi.billing.service.BillingService.fulfillFromPawapayCheckout:input_type -> weebi.billing.service.FulfillFromPawapayCheckoutRequest
+	25, // 27: weebi.billing.service.BillingService.readAccountingYearPurchases:input_type -> weebi.common.empty.Empty
+	1,  // 28: weebi.billing.service.BillingService.createLicense:output_type -> weebi.billing.service.CreateLicenseResponse
+	2,  // 29: weebi.billing.service.BillingService.readLicenses:output_type -> weebi.billing.service.ReadLicensesResponse
+	17, // 30: weebi.billing.service.BillingService.readBillingProducts:output_type -> weebi.billing.service.ReadBillingProductsResponse
+	21, // 31: weebi.billing.service.BillingService.updateLicense:output_type -> google.retail.common.StatusResponse
+	21, // 32: weebi.billing.service.BillingService.deleteLicense:output_type -> google.retail.common.StatusResponse
+	21, // 33: weebi.billing.service.BillingService.updatePaymentCustomerId:output_type -> google.retail.common.StatusResponse
+	6,  // 34: weebi.billing.service.BillingService.getReferralInfo:output_type -> weebi.billing.service.GetReferralInfoResponse
+	7,  // 35: weebi.billing.service.BillingService.requestReferralPayout:output_type -> weebi.billing.service.RequestReferralPayoutResponse
+	9,  // 36: weebi.billing.service.BillingService.createCheckoutSession:output_type -> weebi.billing.service.CreateCheckoutSessionResponse
+	1,  // 37: weebi.billing.service.BillingService.fulfillLicenseFromStripe:output_type -> weebi.billing.service.CreateLicenseResponse
+	1,  // 38: weebi.billing.service.BillingService.fulfillFromStripeCheckoutSession:output_type -> weebi.billing.service.CreateLicenseResponse
+	13, // 39: weebi.billing.service.BillingService.createPawapayCheckout:output_type -> weebi.billing.service.CreatePawapayCheckoutResponse
+	1,  // 40: weebi.billing.service.BillingService.fulfillLicenseFromPawapay:output_type -> weebi.billing.service.CreateLicenseResponse
+	1,  // 41: weebi.billing.service.BillingService.fulfillFromPawapayCheckout:output_type -> weebi.billing.service.CreateLicenseResponse
+	19, // 42: weebi.billing.service.BillingService.readAccountingYearPurchases:output_type -> weebi.billing.service.ReadAccountingYearPurchasesResponse
+	28, // [28:43] is the sub-list for method output_type
+	13, // [13:28] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_billing_service_proto_init() }
@@ -1059,7 +1609,7 @@ func file_billing_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_billing_service_proto_rawDesc), len(file_billing_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -42,7 +42,9 @@ message Chain {
   optional bool isDualCurrencyEnabled = 12 [json_name = 'isDualCurrencyEnabled'];
   optional string secondaryDisplayCurrency = 13 [json_name = 'secondaryDisplayCurrency'];
   optional weebi.boutique.BusinessRules businessRules = 14 [json_name = 'businessRules'];
-  reserved 15 to 100;
+  /// Soft-closed calendar years for SMT (waterfall with firm + boutique).
+  repeated weebi.boutique.ClosedYearPb closed_years = 15 [json_name = 'closedYears'];
+  reserved 16 to 100;
 }
 
 message Chains {

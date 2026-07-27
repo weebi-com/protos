@@ -39,12 +39,17 @@ message TicketMongo {
 // Computation chain (same structure for sell and spend; differs only in
 // whether items_only sums total_price or total_cost):
 //
+// Money rounding uses boutique/currency fraction digits:
+//   - 0 for OHADA integer currencies (XOF/XAF/GNF/KMF/CDF/FCFA)
+//   - 4 otherwise (legacy round4)
+// Below, roundMoney(x) means round to those fraction digits.
+//
 //   items_only
-//     → promo_val                     = round4(items_only × promo / 100)
+//     → promo_val                     = roundMoney(items_only × promo / 100)
 //     → markdowns_val                 = promo_val + discountAmount
-//     → markdowns_included_tax_excluded = items_only − markdowns_val
-//     → taxes_value                   = round4(markdowns_included_tax_excluded × taxe.percentage / 100)
-//     → markdowns_and_tax_included    = markdowns_included_tax_excluded + taxes_value
+//     → markdowns_included_tax_excluded = roundMoney(items_only − markdowns_val)
+//     → taxes_value                   = roundMoney(markdowns_included_tax_excluded × taxe.percentage / 100)
+//     → markdowns_and_tax_included    = roundMoney(markdowns_included_tax_excluded + taxes_value)
 //     → change                        = received − markdowns_and_tax_included  (0 when deferred)
 // ---------------------------------------------------------------------------
 
@@ -55,7 +60,7 @@ message TicketSellTotalsPb {
     json_name = "itemsOnly"
   ];
   double promo_val = 2 [
-    (weebi.options.formula) = "round4(items_only * promo / 100)",
+    (weebi.options.formula) = "roundMoney(items_only * promo / 100)",
     json_name = "promoVal"
   ];
   // promo_val + discountAmount
@@ -65,15 +70,15 @@ message TicketSellTotalsPb {
   ];
   // items_only minus all markdowns, before taxes
   double markdowns_included_tax_excluded = 4 [
-    (weebi.options.formula) = "items_only - markdowns_val",
+    (weebi.options.formula) = "roundMoney(items_only - markdowns_val)",
     json_name = "markdownsIncludedTaxExcluded"
   ];
   double taxes_value = 5 [
-    (weebi.options.formula) = "taxe.percentage > 0.0 ? round4(markdowns_included_tax_excluded * (taxe.percentage / 100)) : 0.0",
+    (weebi.options.formula) = "taxe.percentage > 0.0 ? roundMoney(markdowns_included_tax_excluded * (taxe.percentage / 100)) : 0.0",
     json_name = "taxesValue"
   ];
   double markdowns_and_tax_included = 6 [
-    (weebi.options.formula) = "markdowns_included_tax_excluded + taxes_value",
+    (weebi.options.formula) = "roundMoney(markdowns_included_tax_excluded + taxes_value)",
     json_name = "markdownsAndTaxIncluded"
   ];
   // received − markdowns_and_tax_included; 0 when sellDeferred
@@ -91,7 +96,7 @@ message TicketSpendTotalsPb {
     json_name = "itemsOnly"
   ];
   double promo_val = 2 [
-    (weebi.options.formula) = "round4(items_only * promo / 100)",
+    (weebi.options.formula) = "roundMoney(items_only * promo / 100)",
     json_name = "promoVal"
   ];
   double markdowns_val = 3 [
@@ -99,15 +104,15 @@ message TicketSpendTotalsPb {
     json_name = "markdownsVal"
   ];
   double markdowns_included_tax_excluded = 4 [
-    (weebi.options.formula) = "items_only - markdowns_val",
+    (weebi.options.formula) = "roundMoney(items_only - markdowns_val)",
     json_name = "markdownsIncludedTaxExcluded"
   ];
   double taxes_value = 5 [
-    (weebi.options.formula) = "taxe.percentage > 0.0 ? round4(markdowns_included_tax_excluded * (taxe.percentage / 100)) : 0.0",
+    (weebi.options.formula) = "taxe.percentage > 0.0 ? roundMoney(markdowns_included_tax_excluded * (taxe.percentage / 100)) : 0.0",
     json_name = "taxesValue"
   ];
   double markdowns_and_tax_included = 6 [
-    (weebi.options.formula) = "markdowns_included_tax_excluded + taxes_value",
+    (weebi.options.formula) = "roundMoney(markdowns_included_tax_excluded + taxes_value)",
     json_name = "markdownsAndTaxIncluded"
   ];
   // received − markdowns_and_tax_included; 0 when spendDeferred
@@ -117,7 +122,7 @@ message TicketSpendTotalsPb {
   ];
 }
 
-// Cover totals — set when ticketType is sellCovered, spendCovered, or wage.
+// Cover totals — set when ticketType is sellCovered, spendCovered, or rebalance.
 // No item computation: total equals the received amount.
 message TicketCoverTotalPb {
   double total = 1 [
@@ -174,7 +179,7 @@ message TicketPb {
   // one case is set based on ticketType:
   //   sell / sellDeferred   → sell_totals
   //   spend / spendDeferred → spend_totals
-  //   sellCovered / spendCovered / wage → cover_totals
+  //   sellCovered / spendCovered / rebalance → cover_totals
   //   stock types           → (unset)
   oneof totals {
     TicketSellTotalsPb  sell_totals  = 23;
@@ -184,7 +189,15 @@ message TicketPb {
 
   optional string replaced_ticket_id = 26 [json_name = 'replacedTicketId'];
 
-  reserved 27 to 98;
+  /// SYSCOHADA account code for hors-catalogue sell/spend (owner-classified).
+  optional string ohada_account_code = 27 [json_name = 'ohadaAccountCode'];
+
+  /// SMT treasury pocket leaving (571 / 521 / 554) for ticketType rebalance.
+  optional string treasury_from = 28 [json_name = 'treasuryFrom'];
+  /// SMT treasury pocket receiving (571 / 521 / 554) for ticketType rebalance.
+  optional string treasury_to = 29 [json_name = 'treasuryTo'];
+
+  reserved 30 to 98;
 }
 
 message Counterfoil {
