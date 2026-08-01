@@ -63,7 +63,8 @@ message UserPermissions {
   BillingRights billingRights = 13 [json_name = 'billingRights'];
   BoolRights boolRights = 14 [json_name = 'boolRights'];
   bool is_firm_creator = 15 [json_name = 'isFirmCreator'];
-  reserved 16 to 98;
+  bool has_closed_years = 16 [json_name = 'hasClosedYears'];
+  reserved 17 to 98;
   /// True for the user who created the firm (set once at createFirm). Carried in JWT; not a chain/boutique access rule.
 }
 

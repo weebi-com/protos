@@ -1,5 +1,9 @@
 # changelog
 
+## 1.3.11 - august 2026
+
+- add hasClosedYears in UserPermission
+
 ## 1.3.10 - july 2026
 
 - `BusinessClassification` message: composite key `isicCode` (string) + `subCode`
