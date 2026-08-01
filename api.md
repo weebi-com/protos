@@ -4126,6 +4126,7 @@ there is no such a thing as updating a ticket, one can simply disable or restore
 | billingRights | [BillingRights](#weebi-user-permissions-BillingRights) |  |  |
 | boolRights | [BoolRights](#weebi-user-permissions-BoolRights) |  |  |
 | is_firm_creator | [bool](#bool) |  |  |
+| has_closed_years | [bool](#bool) |  |  |
 
 
 
