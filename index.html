@@ -850,6 +850,73 @@
         
           
           <li>
+            <a href="#evaluation_service.proto">evaluation_service.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.BusinessDiagnostic"><span class="badge">M</span>BusinessDiagnostic</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.BusinessDiagnostic.ClientExtrasEntry"><span class="badge">M</span>BusinessDiagnostic.ClientExtrasEntry</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.MoneyAmount"><span class="badge">M</span>MoneyAmount</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.PhoneContact"><span class="badge">M</span>PhoneContact</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.RegistrationDetails"><span class="badge">M</span>RegistrationDetails</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.SubmitEvaluationRequest"><span class="badge">M</span>SubmitEvaluationRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.SubmitEvaluationResponse"><span class="badge">M</span>SubmitEvaluationResponse</a>
+                </li>
+              
+              
+                <li>
+                  <a href="#weebi.evaluation.service.CashSeparation"><span class="badge">E</span>CashSeparation</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.CustomerCreditTracking"><span class="badge">E</span>CustomerCreditTracking</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.LegalForm"><span class="badge">E</span>LegalForm</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.RestockFrequency"><span class="badge">E</span>RestockFrequency</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.ShopTenure"><span class="badge">E</span>ShopTenure</a>
+                </li>
+              
+                <li>
+                  <a href="#weebi.evaluation.service.SupplierCredit"><span class="badge">E</span>SupplierCredit</a>
+                </li>
+              
+              
+              
+                <li>
+                  <a href="#weebi.evaluation.service.EvaluationService"><span class="badge">S</span>EvaluationService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+          
+          <li>
             <a href="#fence_service.proto">fence_service.proto</a>
             <ul>
               
@@ -7370,6 +7437,581 @@ the server will check they fit the permissions </p></td>
       
 
       
+    
+      
+      <div class="file-heading">
+        <h2 id="evaluation_service.proto">evaluation_service.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="weebi.evaluation.service.BusinessDiagnostic">BusinessDiagnostic</h3>
+        <p>Immutable core (identity / activity) + Q1–Q5 + optional loan ask.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>activity_isic_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>--- identity / activity (always asked) --- </p></td>
+                </tr>
+              
+                <tr>
+                  <td>activity_sub_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>is_registered</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>shop_tenure</td>
+                  <td><a href="#weebi.evaluation.service.ShopTenure">ShopTenure</a></td>
+                  <td></td>
+                  <td><p>--- Q1–Q5 --- </p></td>
+                </tr>
+              
+                <tr>
+                  <td>supplier_credit</td>
+                  <td><a href="#weebi.evaluation.service.SupplierCredit">SupplierCredit</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>cash_separation</td>
+                  <td><a href="#weebi.evaluation.service.CashSeparation">CashSeparation</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>customer_credit_tracking</td>
+                  <td><a href="#weebi.evaluation.service.CustomerCreditTracking">CustomerCreditTracking</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>restock_frequency</td>
+                  <td><a href="#weebi.evaluation.service.RestockFrequency">RestockFrequency</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>wants_loan</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>--- financing ask (collection only) --- </p></td>
+                </tr>
+              
+                <tr>
+                  <td>requested_loan_amount</td>
+                  <td><a href="#weebi.evaluation.service.MoneyAmount">MoneyAmount</a></td>
+                  <td></td>
+                  <td><p>when wants_loan </p></td>
+                </tr>
+              
+                <tr>
+                  <td>registration</td>
+                  <td><a href="#weebi.evaluation.service.RegistrationDetails">RegistrationDetails</a></td>
+                  <td></td>
+                  <td><p>when is_registered </p></td>
+                </tr>
+              
+                <tr>
+                  <td>client_extras</td>
+                  <td><a href="#weebi.evaluation.service.BusinessDiagnostic.ClientExtrasEntry">BusinessDiagnostic.ClientExtrasEntry</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.evaluation.service.BusinessDiagnostic.ClientExtrasEntry">BusinessDiagnostic.ClientExtrasEntry</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>key</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>value</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.evaluation.service.MoneyAmount">MoneyAmount</h3>
+        <p>ISO 4217 amount (loan request, etc.). Currency from country mapping on the client.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>amount_minor</td>
+                  <td><a href="#int64">int64</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>e.g. XAF, XOF, GNF, CDF </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.evaluation.service.PhoneContact">PhoneContact</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>phone</td>
+                  <td><a href="#weebi.common.phone.Phone">weebi.common.phone.Phone</a></td>
+                  <td></td>
+                  <td><p>REQUIRED </p></td>
+                </tr>
+              
+                <tr>
+                  <td>country</td>
+                  <td><a href="#weebi.common.country.Country">weebi.common.country.Country</a></td>
+                  <td></td>
+                  <td><p>REQUIRED (ISO-2 in code2Letters) </p></td>
+                </tr>
+              
+                <tr>
+                  <td>city</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>REQUIRED </p></td>
+                </tr>
+              
+                <tr>
+                  <td>merchant_name</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>optional </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.evaluation.service.RegistrationDetails">RegistrationDetails</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>commercial_register_number</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>RCCM, optional </p></td>
+                </tr>
+              
+                <tr>
+                  <td>legal_form</td>
+                  <td><a href="#weebi.evaluation.service.LegalForm">LegalForm</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.evaluation.service.SubmitEvaluationRequest">SubmitEvaluationRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>contact</td>
+                  <td><a href="#weebi.evaluation.service.PhoneContact">PhoneContact</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>diagnostic</td>
+                  <td><a href="#weebi.evaluation.service.BusinessDiagnostic">BusinessDiagnostic</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>campaign_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.evaluation.service.SubmitEvaluationResponse">SubmitEvaluationResponse</h3>
+        <p>Store-only ack — no financial_health_score (computed client-side).</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>evaluation_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>created_at</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+        <h3 id="weebi.evaluation.service.CashSeparation">CashSeparation</h3>
+        <p>Q3 — Discipline de séparation des caisses.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>CASH_SEPARATION_UNSPECIFIED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>MIXED_HOUSEHOLD</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>FIXED_SALARY_OR_LOGGED</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>FULLY_SEPARATED</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="weebi.evaluation.service.CustomerCreditTracking">CustomerCreditTracking</h3>
+        <p>Q4 — Suivi et maîtrise du crédit client.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>CUSTOMER_CREDIT_TRACKING_UNSPECIFIED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>MEMORY_ONLY</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>PAPER_NOTEBOOK</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>DEDICATED_OR_APP</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="weebi.evaluation.service.LegalForm">LegalForm</h3>
+        <p>OHADA-oriented legal form (acronyms on the wire; UI shows full labels).</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>LEGAL_FORM_UNSPECIFIED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>EI</td>
+                <td>1</td>
+                <td><p>Entreprise individuelle</p></td>
+              </tr>
+            
+              <tr>
+                <td>ENTREPRENANT</td>
+                <td>2</td>
+                <td><p>Entreprenant</p></td>
+              </tr>
+            
+              <tr>
+                <td>SARL</td>
+                <td>3</td>
+                <td><p>Société à responsabilité limitée</p></td>
+              </tr>
+            
+              <tr>
+                <td>SA</td>
+                <td>4</td>
+                <td><p>Société anonyme</p></td>
+              </tr>
+            
+              <tr>
+                <td>SAS</td>
+                <td>5</td>
+                <td><p>Société par actions simplifiée</p></td>
+              </tr>
+            
+              <tr>
+                <td>GIE</td>
+                <td>6</td>
+                <td><p>Groupement d&#39;intérêt économique</p></td>
+              </tr>
+            
+              <tr>
+                <td>OTHER</td>
+                <td>7</td>
+                <td><p>Autre</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="weebi.evaluation.service.RestockFrequency">RestockFrequency</h3>
+        <p>Q5 — Dynamique de réapprovisionnement.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>RESTOCK_FREQUENCY_UNSPECIFIED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>LESS_THAN_WEEKLY</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>ONE_TO_TWO_PER_WEEK</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>MORE_THAN_TWICE_WEEKLY</td>
+                <td>3</td>
+                <td><p>quotidien inclus</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="weebi.evaluation.service.ShopTenure">ShopTenure</h3>
+        <p>Q1 — Ancienneté du commerce au même emplacement.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>SHOP_TENURE_UNSPECIFIED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>UNDER_ONE_YEAR</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>ONE_TO_THREE_YEARS</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>OVER_THREE_YEARS</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="weebi.evaluation.service.SupplierCredit">SupplierCredit</h3>
+        <p>Q2 — Confiance grossistes / crédit fournisseur.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>SUPPLIER_CREDIT_UNSPECIFIED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>CASH_ONLY</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>SHORT_TERM</td>
+                <td>2</td>
+                <td><p>1–3 jours / fin de semaine</p></td>
+              </tr>
+            
+              <tr>
+                <td>REGULAR_CONSIGNMENT</td>
+                <td>3</td>
+                <td><p>tempérament / dépôt-vente</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+
+      
+
+      
+        <h3 id="weebi.evaluation.service.EvaluationService">EvaluationService</h3>
+        <p>Lead capture for BoutiqueScore auto-évaluation.</p><p>/ Scoring is client-side (WASM / boutiquescore); this RPC only persists structured data</p><p>/ (Turso later — not MongoDB).</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>SubmitEvaluation</td>
+                <td><a href="#weebi.evaluation.service.SubmitEvaluationRequest">SubmitEvaluationRequest</a></td>
+                <td><a href="#weebi.evaluation.service.SubmitEvaluationResponse">SubmitEvaluationResponse</a></td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
     
       
       <div class="file-heading">

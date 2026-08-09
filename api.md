@@ -166,6 +166,24 @@
     - [Devices](#weebi-device-Devices)
     - [HardwareInfo](#weebi-device-HardwareInfo)
   
+- [evaluation_service.proto](#evaluation_service-proto)
+    - [BusinessDiagnostic](#weebi-evaluation-service-BusinessDiagnostic)
+    - [BusinessDiagnostic.ClientExtrasEntry](#weebi-evaluation-service-BusinessDiagnostic-ClientExtrasEntry)
+    - [MoneyAmount](#weebi-evaluation-service-MoneyAmount)
+    - [PhoneContact](#weebi-evaluation-service-PhoneContact)
+    - [RegistrationDetails](#weebi-evaluation-service-RegistrationDetails)
+    - [SubmitEvaluationRequest](#weebi-evaluation-service-SubmitEvaluationRequest)
+    - [SubmitEvaluationResponse](#weebi-evaluation-service-SubmitEvaluationResponse)
+  
+    - [CashSeparation](#weebi-evaluation-service-CashSeparation)
+    - [CustomerCreditTracking](#weebi-evaluation-service-CustomerCreditTracking)
+    - [LegalForm](#weebi-evaluation-service-LegalForm)
+    - [RestockFrequency](#weebi-evaluation-service-RestockFrequency)
+    - [ShopTenure](#weebi-evaluation-service-ShopTenure)
+    - [SupplierCredit](#weebi-evaluation-service-SupplierCredit)
+  
+    - [EvaluationService](#weebi-evaluation-service-EvaluationService)
+  
 - [fence_service.proto](#fence_service-proto)
     - [Access](#weebi-fence-service-Access)
     - [ApproveDeviceRequest](#weebi-fence-service-ApproveDeviceRequest)
@@ -2768,6 +2786,247 @@ come from weebi_app, not set by web
  
 
  
+
+ 
+
+
+
+<a name="evaluation_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## evaluation_service.proto
+
+
+
+<a name="weebi-evaluation-service-BusinessDiagnostic"></a>
+
+### BusinessDiagnostic
+Immutable core (identity / activity) &#43; Q1–Q5 &#43; optional loan ask.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| activity_isic_code | [string](#string) |  | --- identity / activity (always asked) --- |
+| activity_sub_code | [string](#string) |  |  |
+| is_registered | [bool](#bool) |  |  |
+| shop_tenure | [ShopTenure](#weebi-evaluation-service-ShopTenure) |  | --- Q1–Q5 --- |
+| supplier_credit | [SupplierCredit](#weebi-evaluation-service-SupplierCredit) |  |  |
+| cash_separation | [CashSeparation](#weebi-evaluation-service-CashSeparation) |  |  |
+| customer_credit_tracking | [CustomerCreditTracking](#weebi-evaluation-service-CustomerCreditTracking) |  |  |
+| restock_frequency | [RestockFrequency](#weebi-evaluation-service-RestockFrequency) |  |  |
+| wants_loan | [bool](#bool) |  | --- financing ask (collection only) --- |
+| requested_loan_amount | [MoneyAmount](#weebi-evaluation-service-MoneyAmount) |  | when wants_loan |
+| registration | [RegistrationDetails](#weebi-evaluation-service-RegistrationDetails) |  | when is_registered |
+| client_extras | [BusinessDiagnostic.ClientExtrasEntry](#weebi-evaluation-service-BusinessDiagnostic-ClientExtrasEntry) | repeated |  |
+
+
+
+
+
+
+<a name="weebi-evaluation-service-BusinessDiagnostic-ClientExtrasEntry"></a>
+
+### BusinessDiagnostic.ClientExtrasEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="weebi-evaluation-service-MoneyAmount"></a>
+
+### MoneyAmount
+ISO 4217 amount (loan request, etc.). Currency from country mapping on the client.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| amount_minor | [int64](#int64) |  |  |
+| currency | [string](#string) |  | e.g. XAF, XOF, GNF, CDF |
+
+
+
+
+
+
+<a name="weebi-evaluation-service-PhoneContact"></a>
+
+### PhoneContact
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| phone | [weebi.common.phone.Phone](#weebi-common-phone-Phone) |  | REQUIRED |
+| country | [weebi.common.country.Country](#weebi-common-country-Country) |  | REQUIRED (ISO-2 in code2Letters) |
+| city | [string](#string) |  | REQUIRED |
+| merchant_name | [string](#string) |  | optional |
+
+
+
+
+
+
+<a name="weebi-evaluation-service-RegistrationDetails"></a>
+
+### RegistrationDetails
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| commercial_register_number | [string](#string) |  | RCCM, optional |
+| legal_form | [LegalForm](#weebi-evaluation-service-LegalForm) |  |  |
+
+
+
+
+
+
+<a name="weebi-evaluation-service-SubmitEvaluationRequest"></a>
+
+### SubmitEvaluationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| contact | [PhoneContact](#weebi-evaluation-service-PhoneContact) |  |  |
+| diagnostic | [BusinessDiagnostic](#weebi-evaluation-service-BusinessDiagnostic) |  |  |
+| campaign_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="weebi-evaluation-service-SubmitEvaluationResponse"></a>
+
+### SubmitEvaluationResponse
+Store-only ack — no financial_health_score (computed client-side).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| evaluation_id | [string](#string) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+ 
+
+
+<a name="weebi-evaluation-service-CashSeparation"></a>
+
+### CashSeparation
+Q3 — Discipline de séparation des caisses.
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| CASH_SEPARATION_UNSPECIFIED | 0 |  |
+| MIXED_HOUSEHOLD | 1 |  |
+| FIXED_SALARY_OR_LOGGED | 2 |  |
+| FULLY_SEPARATED | 3 |  |
+
+
+
+<a name="weebi-evaluation-service-CustomerCreditTracking"></a>
+
+### CustomerCreditTracking
+Q4 — Suivi et maîtrise du crédit client.
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| CUSTOMER_CREDIT_TRACKING_UNSPECIFIED | 0 |  |
+| MEMORY_ONLY | 1 |  |
+| PAPER_NOTEBOOK | 2 |  |
+| DEDICATED_OR_APP | 3 |  |
+
+
+
+<a name="weebi-evaluation-service-LegalForm"></a>
+
+### LegalForm
+OHADA-oriented legal form (acronyms on the wire; UI shows full labels).
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| LEGAL_FORM_UNSPECIFIED | 0 |  |
+| EI | 1 | Entreprise individuelle |
+| ENTREPRENANT | 2 | Entreprenant |
+| SARL | 3 | Société à responsabilité limitée |
+| SA | 4 | Société anonyme |
+| SAS | 5 | Société par actions simplifiée |
+| GIE | 6 | Groupement d&#39;intérêt économique |
+| OTHER | 7 | Autre |
+
+
+
+<a name="weebi-evaluation-service-RestockFrequency"></a>
+
+### RestockFrequency
+Q5 — Dynamique de réapprovisionnement.
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| RESTOCK_FREQUENCY_UNSPECIFIED | 0 |  |
+| LESS_THAN_WEEKLY | 1 |  |
+| ONE_TO_TWO_PER_WEEK | 2 |  |
+| MORE_THAN_TWICE_WEEKLY | 3 | quotidien inclus |
+
+
+
+<a name="weebi-evaluation-service-ShopTenure"></a>
+
+### ShopTenure
+Q1 — Ancienneté du commerce au même emplacement.
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| SHOP_TENURE_UNSPECIFIED | 0 |  |
+| UNDER_ONE_YEAR | 1 |  |
+| ONE_TO_THREE_YEARS | 2 |  |
+| OVER_THREE_YEARS | 3 |  |
+
+
+
+<a name="weebi-evaluation-service-SupplierCredit"></a>
+
+### SupplierCredit
+Q2 — Confiance grossistes / crédit fournisseur.
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| SUPPLIER_CREDIT_UNSPECIFIED | 0 |  |
+| CASH_ONLY | 1 |  |
+| SHORT_TERM | 2 | 1–3 jours / fin de semaine |
+| REGULAR_CONSIGNMENT | 3 | tempérament / dépôt-vente |
+
+
+ 
+
+ 
+
+
+<a name="weebi-evaluation-service-EvaluationService"></a>
+
+### EvaluationService
+Lead capture for BoutiqueScore auto-évaluation.
+/ Scoring is client-side (WASM / boutiquescore); this RPC only persists structured data
+/ (Turso later — not MongoDB).
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| SubmitEvaluation | [SubmitEvaluationRequest](#weebi-evaluation-service-SubmitEvaluationRequest) | [SubmitEvaluationResponse](#weebi-evaluation-service-SubmitEvaluationResponse) |  |
 
  
 
