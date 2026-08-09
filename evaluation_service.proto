@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package weebi.evaluation.service;
+
+import "common/country.proto";
+import "common/g_timestamp.proto";
+import "common/phone.proto";
+
+/// Lead capture for BoutiqueScore auto-évaluation.
+/// Scoring is client-side (WASM / boutiquescore); this RPC only persists structured data
+/// (Turso later — not MongoDB).
+service EvaluationService {
+  rpc SubmitEvaluation(SubmitEvaluationRequest) returns (SubmitEvaluationResponse);
+}
+
+/// ISO 4217 amount (loan request, etc.). Currency from country mapping on the client.
+message MoneyAmount {
+  int64 amount_minor = 1 [json_name = 'amountMinor'];
+  string currency = 2 [json_name = 'currency']; // e.g. XAF, XOF, GNF, CDF
+}
+
+message PhoneContact {
+  weebi.common.phone.Phone phone = 1 [json_name = 'phone']; // REQUIRED
+  weebi.common.country.Country country = 2 [json_name = 'country']; // REQUIRED (ISO-2 in code2Letters)
+  string city = 3 [json_name = 'city']; // REQUIRED
+  string merchant_name = 4 [json_name = 'merchantName']; // optional
+}
+
+// --- Q1–Q5 diagnostic signals (persisted). Scoring weights live only in boutiquescore. ---
+
+/// Q1 — Ancienneté du commerce au même emplacement.
+enum ShopTenure {
+  SHOP_TENURE_UNSPECIFIED = 0;
+  UNDER_ONE_YEAR = 1;
+  ONE_TO_THREE_YEARS = 2;
+  OVER_THREE_YEARS = 3;
+}
+
+/// Q2 — Confiance grossistes / crédit fournisseur.
+enum SupplierCredit {
+  SUPPLIER_CREDIT_UNSPECIFIED = 0;
+  CASH_ONLY = 1;
+  SHORT_TERM = 2;             // 1–3 jours / fin de semaine
+  REGULAR_CONSIGNMENT = 3;    // tempérament / dépôt-vente
+}
+
+/// Q3 — Discipline de séparation des caisses.
+enum CashSeparation {
+  CASH_SEPARATION_UNSPECIFIED = 0;
+  MIXED_HOUSEHOLD = 1;
+  FIXED_SALARY_OR_LOGGED = 2;
+  FULLY_SEPARATED = 3;
+}
+
+/// Q4 — Suivi et maîtrise du crédit client.
+enum CustomerCreditTracking {
+  CUSTOMER_CREDIT_TRACKING_UNSPECIFIED = 0;
+  MEMORY_ONLY = 1;
+  PAPER_NOTEBOOK = 2;
+  DEDICATED_OR_APP = 3;
+}
+
+/// Q5 — Dynamique de réapprovisionnement.
+enum RestockFrequency {
+  RESTOCK_FREQUENCY_UNSPECIFIED = 0;
+  LESS_THAN_WEEKLY = 1;
+  ONE_TO_TWO_PER_WEEK = 2;
+  MORE_THAN_TWICE_WEEKLY = 3; // quotidien inclus
+}
+
+/// OHADA-oriented legal form (acronyms on the wire; UI shows full labels).
+enum LegalForm {
+  LEGAL_FORM_UNSPECIFIED = 0;
+  EI = 1;            // Entreprise individuelle
+  ENTREPRENANT = 2;  // Entreprenant
+  SARL = 3;          // Société à responsabilité limitée
+  SA = 4;            // Société anonyme
+  SAS = 5;           // Société par actions simplifiée
+  GIE = 6;           // Groupement d'intérêt économique
+  OTHER = 7;         // Autre
+}
+
+message RegistrationDetails {
+  string commercial_register_number = 1 [json_name = 'commercialRegisterNumber']; // RCCM, optional
+  LegalForm legal_form = 2 [json_name = 'legalForm'];
+}
+
+/// Immutable core (identity / activity) + Q1–Q5 + optional loan ask.
+message BusinessDiagnostic {
+  // --- identity / activity (always asked) ---
+  string activity_isic_code = 1 [json_name = 'activityIsicCode'];
+  string activity_sub_code = 2 [json_name = 'activitySubCode'];
+  bool is_registered = 3 [json_name = 'isRegistered'];
+
+  // --- Q1–Q5 ---
+  ShopTenure shop_tenure = 4 [json_name = 'shopTenure'];
+  SupplierCredit supplier_credit = 5 [json_name = 'supplierCredit'];
+  CashSeparation cash_separation = 6 [json_name = 'cashSeparation'];
+  CustomerCreditTracking customer_credit_tracking = 7 [json_name = 'customerCreditTracking'];
+  RestockFrequency restock_frequency = 8 [json_name = 'restockFrequency'];
+
+  // --- financing ask (collection only) ---
+  bool wants_loan = 9 [json_name = 'wantsLoan'];
+  MoneyAmount requested_loan_amount = 10 [json_name = 'requestedLoanAmount']; // when wants_loan
+
+  RegistrationDetails registration = 11 [json_name = 'registration']; // when is_registered
+  map<string, string> client_extras = 12 [json_name = 'clientExtras'];
+}
+
+message SubmitEvaluationRequest {
+  PhoneContact contact = 1 [json_name = 'contact'];
+  BusinessDiagnostic diagnostic = 2 [json_name = 'diagnostic'];
+  string campaign_id = 3 [json_name = 'campaignId'];
+}
+
+/// Store-only ack — no financial_health_score (computed client-side).
+message SubmitEvaluationResponse {
+  string evaluation_id = 1 [json_name = 'evaluationId'];
+  google.protobuf.Timestamp created_at = 2 [json_name = 'createdAt'];
+}
