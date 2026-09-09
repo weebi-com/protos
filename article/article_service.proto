@@ -64,7 +64,14 @@ message ReadCalibreRequest {
 message ReadAllRequest {
   string chainId = 1;
   // optional used for weebi_app device back online
-  google.protobuf.Timestamp lastFetchTimestampUTC =  2 ; 
+  google.protobuf.Timestamp lastFetchTimestampUTC =  2 ;
+  // Portal pagination. limit == 0 means full dump (weebi_app sync).
+  int32 offset = 3;
+  int32 limit = 4;
+  // Case-insensitive match on title, designation, barcodeEAN.
+  string query = 5;
+  // 0 = all, 1 = active only, 2 = inactive only
+  int32 statusFilter = 6;
 }
 
 message CalibreRequest {
@@ -80,6 +87,10 @@ message CalibresRequest {
 
 message CalibresResponse {
   repeated weebi.article.CalibrePb calibres = 1;
+  int32 total = 2;
+  int32 offset = 3;
+  bool hasMore = 4;
+  int32 batchSize = 5;
 }
 
 message ReadIdsRequest {

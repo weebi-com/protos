@@ -48,7 +48,14 @@ message ReadContactRequest {
 message ReadAllContactsRequest {
   string chainId = 1 [json_name = 'chainId'];
   // optional used for weebi_app device back online
-  google.protobuf.Timestamp lastFetchTimestampUTC =  2 [json_name = 'lastFetchTimestampUTC']; 
+  google.protobuf.Timestamp lastFetchTimestampUTC =  2 [json_name = 'lastFetchTimestampUTC'];
+  // Portal pagination. limit == 0 means full dump (weebi_app sync).
+  int32 offset = 3 [json_name = 'offset'];
+  int32 limit = 4 [json_name = 'limit'];
+  // Case-insensitive match on firstName, lastName, mail, phone.number.
+  string query = 5 [json_name = 'query'];
+  // 0 = all, 1 = active only, 2 = inactive only
+  int32 statusFilter = 6 [json_name = 'statusFilter'];
 }
 
 message ContactRequest {
@@ -62,6 +69,10 @@ message ContactsRequest {
 
 message ContactsResponse {
   repeated weebi.contact.ContactPb contacts = 1;
+  int32 total = 2;
+  int32 offset = 3;
+  bool hasMore = 4;
+  int32 batchSize = 5;
 }
 
 message ReadContactsIdsRequest {

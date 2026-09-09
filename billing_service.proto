@@ -192,6 +192,9 @@ message BillingProduct {
   google.protobuf.Timestamp updateDateUTC = 10 [json_name = 'updateDateUTC'];
   google.protobuf.Timestamp deletionDateUTC = 11 [json_name = 'deletionDateUTC'];
   bool isDeleted = 12 [json_name = 'isDeleted'];
+  /// Fixed PawaPay list prices by ISO 4217 (minor units): e.g. XOF→9900, CDF→39900.
+  /// Source of truth for mobile-money checkout (not derived from EUR amountCents).
+  map<string, int32> pawapayAmounts = 13 [json_name = 'pawapayAmounts'];
 }
 
 message ReadBillingProductsResponse {

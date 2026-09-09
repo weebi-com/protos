@@ -7,8 +7,8 @@ import "common/g_common.proto";
 import "common/g_timestamp.proto";
 
 service TicketService {
-  /// allows to read tickets from all accessible boutiques
-  /// no need to paginate yet, will conisder streaming
+  /// use [lastFetchTimestampUTC] to only read the latest changes since last fetch.
+  /// Portal pagination: set [limit] > 0. limit == 0 means full dump (weebi_app sync).
   rpc readAll (ReadAllTicketsRequest) returns  (TicketsResponse);
   rpc readOne (FindTicketRequest) returns (weebi.ticket.TicketPb);
   rpc createOne (TicketRequest) returns (google.retail.common.StatusResponse);
@@ -28,7 +28,13 @@ message ReadAllTicketsRequest {
   // optional used for weebi_app device to remove deleted tickets
   bool isDeleted = 5;
   reserved 1 to 1;
-
+  // Portal pagination. limit == 0 means full dump (weebi_app sync).
+  int32 offset = 6 [json_name = 'offset'];
+  int32 limit = 7 [json_name = 'limit'];
+  // Case-insensitive match on comment, contact, user, item designation.
+  string query = 8 [json_name = 'query'];
+  // 0 = all, 1 = active only, 2 = inactive only
+  int32 statusFilter = 9 [json_name = 'statusFilter'];
 }
 
 // consider adding isDeleted param
@@ -51,5 +57,9 @@ message TicketsRequest {
 
 message TicketsResponse {
   repeated weebi.ticket.TicketPb tickets = 1;
+  int32 total = 2;
+  int32 offset = 3;
+  bool hasMore = 4;
+  int32 batchSize = 5;
 }
 

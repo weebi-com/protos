@@ -1,5 +1,10 @@
 # changelog
 
+## 1.4.2 - september 2026
+
+- paginate in article/contact/ticket services
+- referral code in firm
+
 ## 1.3.11 - august 2026
 
 - add hasClosedYears in UserPermission
