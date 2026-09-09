@@ -126,6 +126,7 @@
 - [billing_service.proto](#billing_service-proto)
     - [AccountingYearPurchase](#weebi-billing-service-AccountingYearPurchase)
     - [BillingProduct](#weebi-billing-service-BillingProduct)
+    - [BillingProduct.PawapayAmountsEntry](#weebi-billing-service-BillingProduct-PawapayAmountsEntry)
     - [CreateCheckoutSessionRequest](#weebi-billing-service-CreateCheckoutSessionRequest)
     - [CreateCheckoutSessionResponse](#weebi-billing-service-CreateCheckoutSessionResponse)
     - [CreateLicenseRequest](#weebi-billing-service-CreateLicenseRequest)
@@ -1055,6 +1056,10 @@ include all ids so that offline device can delete objects removed by another use
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | calibres | [weebi.article.CalibrePb](#weebi-article-CalibrePb) | repeated |  |
+| total | [int32](#int32) |  |  |
+| offset | [int32](#int32) |  |  |
+| hasMore | [bool](#bool) |  |  |
+| batchSize | [int32](#int32) |  |  |
 
 
 
@@ -1186,6 +1191,10 @@ Photos
 | ----- | ---- | ----- | ----------- |
 | chainId | [string](#string) |  |  |
 | lastFetchTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | optional used for weebi_app device back online |
+| offset | [int32](#int32) |  | Portal pagination. limit == 0 means full dump (weebi_app sync). |
+| limit | [int32](#int32) |  |  |
+| query | [string](#string) |  | Case-insensitive match on title, designation, barcodeEAN. |
+| statusFilter | [int32](#int32) |  | 0 = all, 1 = active only, 2 = inactive only |
 
 
 
@@ -1579,6 +1588,10 @@ include all ids so that offline device can delete objects removed by another use
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | contacts | [weebi.contact.ContactPb](#weebi-contact-ContactPb) | repeated |  |
+| total | [int32](#int32) |  |  |
+| offset | [int32](#int32) |  |  |
+| hasMore | [bool](#bool) |  |  |
+| batchSize | [int32](#int32) |  |  |
 
 
 
@@ -1595,6 +1608,10 @@ optional used for weebi_app device back online
 | ----- | ---- | ----- | ----------- |
 | chainId | [string](#string) |  |  |
 | lastFetchTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | optional used for weebi_app device back online |
+| offset | [int32](#int32) |  | Portal pagination. limit == 0 means full dump (weebi_app sync). |
+| limit | [int32](#int32) |  |  |
+| query | [string](#string) |  | Case-insensitive match on firstName, lastName, mail, phone.number. |
+| statusFilter | [int32](#int32) |  | 0 = all, 1 = active only, 2 = inactive only |
 
 
 
@@ -1966,6 +1983,10 @@ consider adding isDeleted param
 | boutiqueId | [string](#string) |  |  |
 | lastFetchTimestampUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | optional used for weebi_app device back online |
 | isDeleted | [bool](#bool) |  | optional used for weebi_app device to remove deleted tickets |
+| offset | [int32](#int32) |  | Portal pagination. limit == 0 means full dump (weebi_app sync). |
+| limit | [int32](#int32) |  |  |
+| query | [string](#string) |  | Case-insensitive match on comment, contact, user, item designation. |
+| statusFilter | [int32](#int32) |  | 0 = all, 1 = active only, 2 = inactive only |
 
 
 
@@ -2011,6 +2032,10 @@ consider adding isDeleted param
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | tickets | [weebi.ticket.TicketPb](#weebi-ticket-TicketPb) | repeated |  |
+| total | [int32](#int32) |  |  |
+| offset | [int32](#int32) |  |  |
+| hasMore | [bool](#bool) |  |  |
+| batchSize | [int32](#int32) |  |  |
 
 
 
@@ -2030,7 +2055,7 @@ consider adding isDeleted param
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| readAll | [ReadAllTicketsRequest](#weebi-ticket-service-ReadAllTicketsRequest) | [TicketsResponse](#weebi-ticket-service-TicketsResponse) | allows to read tickets from all accessible boutiques / no need to paginate yet, will conisder streaming |
+| readAll | [ReadAllTicketsRequest](#weebi-ticket-service-ReadAllTicketsRequest) | [TicketsResponse](#weebi-ticket-service-TicketsResponse) | use [lastFetchTimestampUTC] to only read the latest changes since last fetch. / Portal pagination: set [limit] &gt; 0. limit == 0 means full dump (weebi_app sync). |
 | readOne | [FindTicketRequest](#weebi-ticket-service-FindTicketRequest) | [.weebi.ticket.TicketPb](#weebi-ticket-TicketPb) |  |
 | createOne | [TicketRequest](#weebi-ticket-service-TicketRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
 | createMany | [TicketsRequest](#weebi-ticket-service-TicketsRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
@@ -2129,6 +2154,23 @@ Billing product (license plan). Stored in billing_products collection.
 | updateDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | deletionDateUTC | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | isDeleted | [bool](#bool) |  |  |
+| pawapayAmounts | [BillingProduct.PawapayAmountsEntry](#weebi-billing-service-BillingProduct-PawapayAmountsEntry) | repeated | Fixed PawaPay list prices by ISO 4217 (minor units): e.g. XOF→9900, CDF→39900. / Source of truth for mobile-money checkout (not derived from EUR amountCents). |
+
+
+
+
+
+
+<a name="weebi-billing-service-BillingProduct-PawapayAmountsEntry"></a>
+
+### BillingProduct.PawapayAmountsEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [int32](#int32) |  |  |
 
 
 

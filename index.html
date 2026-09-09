@@ -686,6 +686,10 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.billing.service.BillingProduct.PawapayAmountsEntry"><span class="badge">M</span>BillingProduct.PawapayAmountsEntry</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.billing.service.CreateCheckoutSessionRequest"><span class="badge">M</span>CreateCheckoutSessionRequest</a>
                 </li>
               
@@ -2903,6 +2907,34 @@ supplied by the TicketPb context at evaluation time.</p></td>
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>total</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>offset</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>hasMore</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>batchSize</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -3170,6 +3202,34 @@ supplied by the TicketPb context at evaluation time.</p></td>
                   <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
                   <td></td>
                   <td><p>optional used for weebi_app device back online </p></td>
+                </tr>
+              
+                <tr>
+                  <td>offset</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Portal pagination. limit == 0 means full dump (weebi_app sync). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>limit</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>query</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Case-insensitive match on title, designation, barcodeEAN. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>statusFilter</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>0 = all, 1 = active only, 2 = inactive only </p></td>
                 </tr>
               
             </tbody>
@@ -4110,6 +4170,34 @@ supplied by the TicketPb context at evaluation time.</p></td>
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>total</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>offset</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>hasMore</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>batchSize</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -4139,6 +4227,34 @@ supplied by the TicketPb context at evaluation time.</p></td>
                   <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
                   <td></td>
                   <td><p>optional used for weebi_app device back online </p></td>
+                </tr>
+              
+                <tr>
+                  <td>offset</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Portal pagination. limit == 0 means full dump (weebi_app sync). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>limit</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>query</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Case-insensitive match on firstName, lastName, mail, phone.number. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>statusFilter</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>0 = all, 1 = active only, 2 = inactive only </p></td>
                 </tr>
               
             </tbody>
@@ -5272,6 +5388,34 @@ the server will check they fit the permissions </p></td>
                   <td><p>optional used for weebi_app device to remove deleted tickets </p></td>
                 </tr>
               
+                <tr>
+                  <td>offset</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Portal pagination. limit == 0 means full dump (weebi_app sync). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>limit</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>query</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Case-insensitive match on comment, contact, user, item designation. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>statusFilter</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>0 = all, 1 = active only, 2 = inactive only </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -5344,6 +5488,34 @@ the server will check they fit the permissions </p></td>
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>total</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>offset</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>hasMore</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>batchSize</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -5369,8 +5541,8 @@ the server will check they fit the permissions </p></td>
                 <td>readAll</td>
                 <td><a href="#weebi.ticket.service.ReadAllTicketsRequest">ReadAllTicketsRequest</a></td>
                 <td><a href="#weebi.ticket.service.TicketsResponse">TicketsResponse</a></td>
-                <td><p>allows to read tickets from all accessible boutiques
-/ no need to paginate yet, will conisder streaming</p></td>
+                <td><p>use [lastFetchTimestampUTC] to only read the latest changes since last fetch.
+/ Portal pagination: set [limit] &gt; 0. limit == 0 means full dump (weebi_app sync).</p></td>
               </tr>
             
               <tr>
@@ -5680,6 +5852,45 @@ the server will check they fit the permissions </p></td>
                 <tr>
                   <td>isDeleted</td>
                   <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>pawapayAmounts</td>
+                  <td><a href="#weebi.billing.service.BillingProduct.PawapayAmountsEntry">BillingProduct.PawapayAmountsEntry</a></td>
+                  <td>repeated</td>
+                  <td><p>Fixed PawaPay list prices by ISO 4217 (minor units): e.g. XOF→9900, CDF→39900.
+/ Source of truth for mobile-money checkout (not derived from EUR amountCents). </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="weebi.billing.service.BillingProduct.PawapayAmountsEntry">BillingProduct.PawapayAmountsEntry</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>key</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>value</td>
+                  <td><a href="#int32">int32</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
