@@ -1,5 +1,9 @@
 # changelog
 
+## 1.4.4 - october 2026
+
+- `CreateFirmRequest.boutiqueMail` / `boutiquePhone`: optional shop contact stamped on the default boutique
+
 ## 1.4.3 - october 2026
 
 - `deleteAll` chain wipe (articles, contacts); `deleteAllCategories` / `deleteAllPhotos`
