@@ -57,6 +57,7 @@
     - [CalibresResponse](#weebi-article-service-CalibresResponse)
     - [CategoriesResponse](#weebi-article-service-CategoriesResponse)
     - [CategoryRequest](#weebi-article-service-CategoryRequest)
+    - [DeleteAllRequest](#weebi-article-service-DeleteAllRequest)
     - [FindCategoryRequest](#weebi-article-service-FindCategoryRequest)
     - [FindPhotoRequest](#weebi-article-service-FindPhotoRequest)
     - [PhotoRequest](#weebi-article-service-PhotoRequest)
@@ -91,6 +92,7 @@
     - [ContactsIdsResponse](#weebi-contact-service-ContactsIdsResponse)
     - [ContactsRequest](#weebi-contact-service-ContactsRequest)
     - [ContactsResponse](#weebi-contact-service-ContactsResponse)
+    - [DeleteAllContactsRequest](#weebi-contact-service-DeleteAllContactsRequest)
     - [ReadAllContactsRequest](#weebi-contact-service-ReadAllContactsRequest)
     - [ReadContactRequest](#weebi-contact-service-ReadContactRequest)
     - [ReadContactsIdsRequest](#weebi-contact-service-ReadContactsIdsRequest)
@@ -112,6 +114,7 @@
     - [TicketPb.PaymentTypePb](#weebi-ticket-TicketPb-PaymentTypePb)
   
 - [ticket/ticket_service.proto](#ticket_ticket_service-proto)
+    - [DeleteAllTicketsRequest](#weebi-ticket-service-DeleteAllTicketsRequest)
     - [FindTicketRequest](#weebi-ticket-service-FindTicketRequest)
     - [ReadAllTicketsRequest](#weebi-ticket-service-ReadAllTicketsRequest)
     - [TicketRequest](#weebi-ticket-service-TicketRequest)
@@ -1097,6 +1100,21 @@ include all ids so that offline device can delete objects removed by another use
 
 
 
+<a name="weebi-article-service-DeleteAllRequest"></a>
+
+### DeleteAllRequest
+chain-scoped wipe (calibres, categories, or photos)
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| chainId | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="weebi-article-service-FindCategoryRequest"></a>
 
 ### FindCategoryRequest
@@ -1288,17 +1306,20 @@ articles are contained in calibres
 | readAllIds | [ReadIdsRequest](#weebi-article-service-ReadIdsRequest) | [CalibresIdsResponse](#weebi-article-service-CalibresIdsResponse) |  |
 | updateOne | [CalibreRequest](#weebi-article-service-CalibreRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | update == upsert (replaceOne upsert) |
 | deleteOne | [CalibreRequest](#weebi-article-service-CalibreRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | hard delete |
+| deleteAll | [DeleteAllRequest](#weebi-article-service-DeleteAllRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | hard delete all calibres on the chain (not an id list) |
 | createOneCategory | [CategoryRequest](#weebi-article-service-CategoryRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | category / |
 | readOneCategory | [FindCategoryRequest](#weebi-article-service-FindCategoryRequest) | [.weebi.category.CategoryPb](#weebi-category-CategoryPb) |  |
 | readAllCategories | [ReadCategoriesRequest](#weebi-article-service-ReadCategoriesRequest) | [CategoriesResponse](#weebi-article-service-CategoriesResponse) |  |
 | updateOneCategory | [CategoryRequest](#weebi-article-service-CategoryRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | upsert works with replaceOne upsert true |
 | deleteOneCategory | [CategoryRequest](#weebi-article-service-CategoryRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
+| deleteAllCategories | [DeleteAllRequest](#weebi-article-service-DeleteAllRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | hard delete all categories on the chain |
 | createOnePhoto | [PhotoRequest](#weebi-article-service-PhotoRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | photo / |
 | createManyPhotos | [PhotosRequest](#weebi-article-service-PhotosRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
 | readOnePhoto | [FindPhotoRequest](#weebi-article-service-FindPhotoRequest) | [.weebi.photo.ArticlePhotoPb](#weebi-photo-ArticlePhotoPb) |  |
 | readAllPhotos | [ReadPhotosRequest](#weebi-article-service-ReadPhotosRequest) | [PhotosResponse](#weebi-article-service-PhotosResponse) | use [lastFetchTimestampUTC] to only read the latest changes since last fetch |
 | updateOnePhoto | [PhotoRequest](#weebi-article-service-PhotoRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | upsert |
 | deleteOnePhoto | [PhotoRequest](#weebi-article-service-PhotoRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
+| deleteAllPhotos | [DeleteAllRequest](#weebi-article-service-DeleteAllRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | hard delete all photos on the chain |
 
  
 
@@ -1598,6 +1619,21 @@ include all ids so that offline device can delete objects removed by another use
 
 
 
+<a name="weebi-contact-service-DeleteAllContactsRequest"></a>
+
+### DeleteAllContactsRequest
+chain-scoped wipe
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| chainId | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="weebi-contact-service-ReadAllContactsRequest"></a>
 
 ### ReadAllContactsRequest
@@ -1676,6 +1712,7 @@ will add contact created by userId someday until them below is confusing string 
 | readAllIds | [ReadContactsIdsRequest](#weebi-contact-service-ReadContactsIdsRequest) | [ContactsIdsResponse](#weebi-contact-service-ContactsIdsResponse) |  |
 | updateOne | [ContactRequest](#weebi-contact-service-ContactRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | == upsert |
 | deleteOne | [ContactRequest](#weebi-contact-service-ContactRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | hard delete |
+| deleteAll | [DeleteAllContactsRequest](#weebi-contact-service-DeleteAllContactsRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | hard delete all contacts on the chain (not an id list) |
 
  
 
@@ -1952,6 +1989,22 @@ Same computation chain as TicketSellTotalsPb but items_only sums total_cost.
 
 
 
+<a name="weebi-ticket-service-DeleteAllTicketsRequest"></a>
+
+### DeleteAllTicketsRequest
+boutique-scoped soft wipe
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| chainId | [string](#string) |  |  |
+| boutiqueId | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="weebi-ticket-service-FindTicketRequest"></a>
 
 ### FindTicketRequest
@@ -2061,6 +2114,7 @@ consider adding isDeleted param
 | createMany | [TicketsRequest](#weebi-ticket-service-TicketsRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
 | updateStatusOne | [TicketRequest](#weebi-ticket-service-TicketRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |
 | deleteOne | [TicketRequest](#weebi-ticket-service-TicketRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | soft delete |
+| deleteAll | [DeleteAllTicketsRequest](#weebi-ticket-service-DeleteAllTicketsRequest) | [.google.retail.common.StatusResponse](#google-retail-common-StatusResponse) | boutique-scoped soft delete (not an id list; never hard-deletes) |
 
  
 

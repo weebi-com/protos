@@ -406,6 +406,10 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.article.service.DeleteAllRequest"><span class="badge">M</span>DeleteAllRequest</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.article.service.FindCategoryRequest"><span class="badge">M</span>FindCategoryRequest</a>
                 </li>
               
@@ -546,6 +550,10 @@
                 </li>
               
                 <li>
+                  <a href="#weebi.contact.service.DeleteAllContactsRequest"><span class="badge">M</span>DeleteAllContactsRequest</a>
+                </li>
+              
+                <li>
                   <a href="#weebi.contact.service.ReadAllContactsRequest"><span class="badge">M</span>ReadAllContactsRequest</a>
                 </li>
               
@@ -626,6 +634,10 @@
           <li>
             <a href="#ticket%2fticket_service.proto">ticket/ticket_service.proto</a>
             <ul>
+              
+                <li>
+                  <a href="#weebi.ticket.service.DeleteAllTicketsRequest"><span class="badge">M</span>DeleteAllTicketsRequest</a>
+                </li>
               
                 <li>
                   <a href="#weebi.ticket.service.FindTicketRequest"><span class="badge">M</span>FindTicketRequest</a>
@@ -2997,6 +3009,30 @@ supplied by the TicketPb context at evaluation time.</p></td>
 
         
       
+        <h3 id="weebi.article.service.DeleteAllRequest">DeleteAllRequest</h3>
+        <p>chain-scoped wipe (calibres, categories, or photos)</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>chainId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.article.service.FindCategoryRequest">FindCategoryRequest</h3>
         <p>categories</p>
 
@@ -3434,6 +3470,13 @@ supplied by the TicketPb context at evaluation time.</p></td>
               </tr>
             
               <tr>
+                <td>deleteAll</td>
+                <td><a href="#weebi.article.service.DeleteAllRequest">DeleteAllRequest</a></td>
+                <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
+                <td><p>hard delete all calibres on the chain (not an id list)</p></td>
+              </tr>
+            
+              <tr>
                 <td>createOneCategory</td>
                 <td><a href="#weebi.article.service.CategoryRequest">CategoryRequest</a></td>
                 <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
@@ -3467,6 +3510,13 @@ supplied by the TicketPb context at evaluation time.</p></td>
                 <td><a href="#weebi.article.service.CategoryRequest">CategoryRequest</a></td>
                 <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
                 <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>deleteAllCategories</td>
+                <td><a href="#weebi.article.service.DeleteAllRequest">DeleteAllRequest</a></td>
+                <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
+                <td><p>hard delete all categories on the chain</p></td>
               </tr>
             
               <tr>
@@ -3510,6 +3560,13 @@ supplied by the TicketPb context at evaluation time.</p></td>
                 <td><a href="#weebi.article.service.PhotoRequest">PhotoRequest</a></td>
                 <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
                 <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>deleteAllPhotos</td>
+                <td><a href="#weebi.article.service.DeleteAllRequest">DeleteAllRequest</a></td>
+                <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
+                <td><p>hard delete all photos on the chain</p></td>
               </tr>
             
           </tbody>
@@ -4205,6 +4262,30 @@ supplied by the TicketPb context at evaluation time.</p></td>
 
         
       
+        <h3 id="weebi.contact.service.DeleteAllContactsRequest">DeleteAllContactsRequest</h3>
+        <p>chain-scoped wipe</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>chainId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.contact.service.ReadAllContactsRequest">ReadAllContactsRequest</h3>
         <p>optional used for weebi_app device back online</p>
 
@@ -4419,6 +4500,13 @@ until them below is confusing
                 <td><a href="#weebi.contact.service.ContactRequest">ContactRequest</a></td>
                 <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
                 <td><p>hard delete</p></td>
+              </tr>
+            
+              <tr>
+                <td>deleteAll</td>
+                <td><a href="#weebi.contact.service.DeleteAllContactsRequest">DeleteAllContactsRequest</a></td>
+                <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
+                <td><p>hard delete all contacts on the chain (not an id list)</p></td>
               </tr>
             
           </tbody>
@@ -5298,6 +5386,37 @@ the server will check they fit the permissions </p></td>
       <p></p>
 
       
+        <h3 id="weebi.ticket.service.DeleteAllTicketsRequest">DeleteAllTicketsRequest</h3>
+        <p>boutique-scoped soft wipe</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>chainId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>boutiqueId</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="weebi.ticket.service.FindTicketRequest">FindTicketRequest</h3>
         <p>consider adding isDeleted param</p>
 
@@ -5578,6 +5697,13 @@ the server will check they fit the permissions </p></td>
                 <td><a href="#weebi.ticket.service.TicketRequest">TicketRequest</a></td>
                 <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
                 <td><p>soft delete</p></td>
+              </tr>
+            
+              <tr>
+                <td>deleteAll</td>
+                <td><a href="#weebi.ticket.service.DeleteAllTicketsRequest">DeleteAllTicketsRequest</a></td>
+                <td><a href="#google.retail.common.StatusResponse">.google.retail.common.StatusResponse</a></td>
+                <td><p>boutique-scoped soft delete (not an id list; never hard-deletes)</p></td>
               </tr>
             
           </tbody>
