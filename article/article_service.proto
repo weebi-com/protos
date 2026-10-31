@@ -25,6 +25,8 @@ service ArticleService {
   rpc updateOne (CalibreRequest) returns (google.retail.common.StatusResponse);
   /// hard delete
   rpc deleteOne (CalibreRequest) returns (google.retail.common.StatusResponse);
+  /// hard delete all calibres on the chain (not an id list)
+  rpc deleteAll (DeleteAllRequest) returns (google.retail.common.StatusResponse);
   
 
   ///
@@ -37,6 +39,8 @@ service ArticleService {
   /// upsert works with replaceOne upsert true
   rpc updateOneCategory (CategoryRequest) returns (google.retail.common.StatusResponse);
   rpc deleteOneCategory (CategoryRequest) returns (google.retail.common.StatusResponse);
+  /// hard delete all categories on the chain
+  rpc deleteAllCategories (DeleteAllRequest) returns (google.retail.common.StatusResponse);
   
   ///
   /// photo
@@ -51,6 +55,8 @@ service ArticleService {
   /// upsert
   rpc updateOnePhoto (PhotoRequest) returns (google.retail.common.StatusResponse);
   rpc deleteOnePhoto (PhotoRequest) returns (google.retail.common.StatusResponse);
+  /// hard delete all photos on the chain
+  rpc deleteAllPhotos (DeleteAllRequest) returns (google.retail.common.StatusResponse);
 
 }
 
@@ -153,4 +159,9 @@ message PhotosResponse {
   int32 offset = 3;   
   bool hasMore = 4;        // More photos available?
   int32 batchSize = 5;
+}
+
+/// chain-scoped wipe (calibres, categories, or photos)
+message DeleteAllRequest {
+  string chainId = 1;
 }

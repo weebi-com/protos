@@ -23,6 +23,8 @@ service ContactService {
   
   /// hard delete
   rpc deleteOne (ContactRequest) returns (google.retail.common.StatusResponse);
+  /// hard delete all contacts on the chain (not an id list)
+  rpc deleteAll (DeleteAllContactsRequest) returns (google.retail.common.StatusResponse);
 }
 
 message ReadContactRequest {
@@ -82,5 +84,10 @@ message ReadContactsIdsRequest {
 /// include all ids so that offline device can delete objects removed by another user/device 
 message ContactsIdsResponse {
   repeated int32 ids = 1;
+}
+
+/// chain-scoped wipe
+message DeleteAllContactsRequest {
+  string chainId = 1;
 }
 

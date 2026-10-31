@@ -18,6 +18,8 @@ service TicketService {
   
   /// soft delete
   rpc deleteOne (TicketRequest) returns (google.retail.common.StatusResponse);
+  /// boutique-scoped soft delete (not an id list; never hard-deletes)
+  rpc deleteAll (DeleteAllTicketsRequest) returns (google.retail.common.StatusResponse);
 }
 
 message ReadAllTicketsRequest {
@@ -61,5 +63,11 @@ message TicketsResponse {
   int32 offset = 3;
   bool hasMore = 4;
   int32 batchSize = 5;
+}
+
+/// boutique-scoped soft wipe
+message DeleteAllTicketsRequest {
+  string chainId = 1;
+  string boutiqueId = 2;
 }
 
