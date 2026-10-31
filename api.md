@@ -3793,6 +3793,8 @@ boutiques &amp; users
 | name | [string](#string) |  | mandatory |
 | currency | [string](#string) | optional | Optional ISO 4217 default stamped on firm and first chain/boutique; server fills platform default if omitted. |
 | commercial_register_number | [string](#string) | optional | Optional RCCM; copied to first chain &#43; boutique only (not stored on Firm). |
+| boutique_mail | [string](#string) | optional | Optional boutique contact email; stamped on the default BoutiquePb. |
+| boutique_phone | [string](#string) | optional | Optional boutique phone display string (e.g. &#34;&#43;243 999999&#34;); stamped on the default BoutiquePb. |
 
 
 
