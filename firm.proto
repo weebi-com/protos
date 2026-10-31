@@ -50,6 +50,10 @@ message CreateFirmRequest {
   optional string currency = 2 [json_name = 'currency'];
   /// Optional RCCM; copied to first chain + boutique only (not stored on Firm).
   optional string commercial_register_number = 3 [json_name = 'commercialRegisterNumber'];
+  /// Optional boutique contact email; stamped on the default BoutiquePb.
+  optional string boutique_mail = 4 [json_name = 'boutiqueMail'];
+  /// Optional boutique phone display string (e.g. "+243 999999"); stamped on the default BoutiquePb.
+  optional string boutique_phone = 5 [json_name = 'boutiquePhone'];
 }
 
 message CreateFirmResponse {
