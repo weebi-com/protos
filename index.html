@@ -2117,7 +2117,16 @@ supplied by the TicketPb context at evaluation time.</p></td>
                   <td>unitsInOnePiece</td>
                   <td><a href="#double">double</a></td>
                   <td></td>
-                  <td><p>no need to mention kind here, each items has a specific attribute </p></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ohada_account_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>SYSCOHADA wallet sub-account when kind is eMoney (e.g. 5521).
+
+no need to mention kind here, each items has a specific attribute </p></td>
                 </tr>
               
             </tbody>
@@ -2226,6 +2235,13 @@ supplied by the TicketPb context at evaluation time.</p></td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ohada_account_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>SYSCOHADA wallet sub-account (e.g. 5521 Orange Money, 5522 MTN). </p></td>
                 </tr>
               
             </tbody>
@@ -2739,6 +2755,12 @@ supplied by the TicketPb context at evaluation time.</p></td>
               <tr>
                 <td>uncountable</td>
                 <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>eMoney</td>
+                <td>4</td>
                 <td><p></p></td>
               </tr>
             
@@ -5178,6 +5200,13 @@ the server will check they fit the permissions </p></td>
                   <td><a href="#string">string</a></td>
                   <td>optional</td>
                   <td><p>SMT treasury pocket receiving (571 / 521 / 554) for ticketType rebalance. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>payment_account_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td>optional</td>
+                  <td><p>Specific wallet SYSCOHADA code when paymentType is mobileMoney (e.g. 5521). </p></td>
                 </tr>
               
             </tbody>

@@ -790,7 +790,10 @@ default type of article shortened on ticket
 | designation | [string](#string) |  |  |
 | price | [double](#double) |  |  |
 | cost | [double](#double) |  |  |
-| unitsInOnePiece | [double](#double) |  | no need to mention kind here, each items has a specific attribute |
+| unitsInOnePiece | [double](#double) |  |  |
+| ohada_account_code | [string](#string) | optional | SYSCOHADA wallet sub-account when kind is eMoney (e.g. 5521).
+
+no need to mention kind here, each items has a specific attribute |
 
 
 
@@ -818,6 +821,7 @@ default type of article
 | cost | [double](#double) |  |  |
 | unitsInOnePiece | [double](#double) |  |  |
 | barcodeEAN | [string](#string) |  |  |
+| ohada_account_code | [string](#string) | optional | SYSCOHADA wallet sub-account (e.g. 5521 Orange Money, 5522 MTN). |
 
 
 
@@ -968,6 +972,7 @@ each article included in the ArticleBasket is referenced using the proxy
 | retail | 1 |  |
 | basket | 2 |  |
 | uncountable | 3 |  |
+| eMoney | 4 |  |
 
 
 
@@ -1907,6 +1912,7 @@ ticketNonUniqueId is to be combined with userId
 | ohada_account_code | [string](#string) | optional | SYSCOHADA account code for hors-catalogue sell/spend (owner-classified). |
 | treasury_from | [string](#string) | optional | SMT treasury pocket leaving (571 / 521 / 554) for ticketType rebalance. |
 | treasury_to | [string](#string) | optional | SMT treasury pocket receiving (571 / 521 / 554) for ticketType rebalance. |
+| payment_account_code | [string](#string) | optional | Specific wallet SYSCOHADA code when paymentType is mobileMoney (e.g. 5521). |
 
 
 
