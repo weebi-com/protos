@@ -197,7 +197,10 @@ message TicketPb {
   /// SMT treasury pocket receiving (571 / 521 / 554) for ticketType rebalance.
   optional string treasury_to = 29 [json_name = 'treasuryTo'];
 
-  reserved 30 to 98;
+  /// Specific wallet SYSCOHADA code when paymentType is mobileMoney (e.g. 5521).
+  optional string payment_account_code = 30 [json_name = 'paymentAccountCode'];
+
+  reserved 31 to 98;
 }
 
 message Counterfoil {

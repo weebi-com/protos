@@ -48,7 +48,8 @@ enum ArticleKindPb {
   unknown = 0 ;
   retail = 1 ;
   basket = 2 ;
-  uncountable = 3 ; 
+  uncountable = 3 ;
+  eMoney = 4 ;
 }
 
 
@@ -65,6 +66,8 @@ message ArticleRetailOnTicketPb {
   double price = 4 [json_name = 'price'];
   double cost = 5 [json_name = 'cost'];
   double unitsInOnePiece = 6 [json_name = 'unitsInOnePiece'];
+  /// SYSCOHADA wallet sub-account when kind is eMoney (e.g. 5521).
+  optional string ohada_account_code = 7 [json_name = 'ohadaAccountCode'];
   // no need to mention kind here, each items has a specific attribute
 }
 
@@ -83,6 +86,8 @@ message ArticleRetailPb {
   double cost = 11 [json_name = 'cost'];
   double unitsInOnePiece = 12 [json_name = 'unitsInOnePiece'];
   string barcodeEAN = 13 [json_name = 'barcodeEAN'];
+  /// SYSCOHADA wallet sub-account (e.g. 5521 Orange Money, 5522 MTN).
+  optional string ohada_account_code = 14 [json_name = 'ohadaAccountCode'];
 }
 
 // a basket of several articles,  a basket cannot contain other baskets
