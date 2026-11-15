@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package weebi.mobile_money.service;
+
+/// One operator in the global mobile-money catalog.
+/// Empty [country_code] means the operator is available in every country.
+message MobileMoneyOperatorPb {
+  enum LogoExtensionPb {
+    unknown = 0;
+    png = 1;
+    jpeg = 2;
+  }
+  string code = 1 [json_name = 'code'];
+  string name = 2 [json_name = 'name'];
+  string country_code = 3 [json_name = 'countryCode'];
+  /// Empty means the client uses its bundled mark (Orange / MTN / Airtel).
+  bytes logo = 4 [json_name = 'logo'];
+  LogoExtensionPb logo_extension = 5 [json_name = 'logoExtension'];
+  bool active = 6 [json_name = 'active'];
+}
+
+message ListMobileMoneyOperatorsRequest {
+  /// ISO 3166-1 alpha-2. Empty returns only global (empty-country) operators.
+  string country_code = 1 [json_name = 'countryCode'];
+}
+
+message ListMobileMoneyOperatorsResponse {
+  repeated MobileMoneyOperatorPb operators = 1 [json_name = 'operators'];
+}
+
+/// Global catalog. Not chain-scoped.
+service MobileMoneyService {
+  rpc listOperators (ListMobileMoneyOperatorsRequest)
+      returns (ListMobileMoneyOperatorsResponse);
+}

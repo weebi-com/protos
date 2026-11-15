@@ -1,5 +1,10 @@
 # changelog
 
+## 1.4.6 - november 2026
+
+- add MobileMoneyService.listOperators and MobileMoneyOperatorPb
+- operator logo as `bytes` + `logo_extension` (not a URL)
+
 ## 1.4.5 - november 2026
 
 - add ArticleKindPb.eMoney
