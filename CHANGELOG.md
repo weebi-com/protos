@@ -1,5 +1,9 @@
 # changelog
 
+## 1.4.7 - november 2026
+
+- MobileMoneyOperatorPb: `country_code` → repeated `country_codes` (empty = global)
+
 ## 1.4.6 - november 2026
 
 - add MobileMoneyService.listOperators and MobileMoneyOperatorPb
