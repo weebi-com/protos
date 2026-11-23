@@ -4134,6 +4134,7 @@ used by admins to create users
 | firstname | [string](#string) |  |  |
 | lastname | [string](#string) |  |  |
 | password | [string](#string) |  |  |
+| phone | [weebi.common.phone.Phone](#weebi-common-phone-Phone) |  |  |
 
 
 
