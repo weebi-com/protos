@@ -59,6 +59,7 @@ message SignUpRequest {
   string firstname = 2 [json_name = 'firstname'];
   string lastname = 3 [json_name = 'lastname'];
   string password = 4 [json_name = 'pwd'];
+  weebi.common.phone.Phone phone = 5 [json_name = 'phone'];
 }
 
 message SignUpResponse {

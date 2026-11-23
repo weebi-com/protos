@@ -1,5 +1,9 @@
 # changelog
 
+## 1.4.9 - november 2026
+
+- `SignUpRequest.phone`: optional phone stored on the user at signup
+
 ## 1.4.7 - november 2026
 
 - MobileMoneyOperatorPb: `country_code` → repeated `country_codes` (empty = global)
