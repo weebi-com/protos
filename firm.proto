@@ -59,4 +59,10 @@ message CreateFirmRequest {
 message CreateFirmResponse {
   google.retail.common.StatusResponse statusResponse = 1 [json_name = 'statusResponse'];
   Firm firm = 2 [json_name = 'firm'];
+  /// Credential minted from the permissions just saved. The caller installs it
+  /// and does not sign in again. Empty when the firm was not created.
+  string accessToken = 3 [json_name = 'accessToken'];
+  string refreshToken = 4 [json_name = 'refreshToken'];
+  /// Set when the call carried x-session-id and that web session was updated.
+  string sessionId = 5 [json_name = 'sessionId'];
 }
