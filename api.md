@@ -3817,6 +3817,9 @@ boutiques &amp; users
 | ----- | ---- | ----- | ----------- |
 | statusResponse | [google.retail.common.StatusResponse](#google-retail-common-StatusResponse) |  |  |
 | firm | [Firm](#weebi-firm-Firm) |  |  |
+| accessToken | [string](#string) |  | Credential minted from the permissions just saved. The caller installs it / and does not sign in again. Empty when the firm was not created. |
+| refreshToken | [string](#string) |  |  |
+| sessionId | [string](#string) |  | Set when the call carried x-session-id and that web session was updated. |
 
 
 
