@@ -755,6 +755,7 @@ a basket of several articles,  a basket cannot contain other baskets
 | proxies | [ProxyArticlePb](#weebi-article-ProxyArticlePb) | repeated |  |
 | discountAmount | [double](#double) |  |  |
 | markupAmount | [double](#double) |  |  |
+| doNotSellProxiesSeparately | [bool](#bool) |  |  |
 
 
 
