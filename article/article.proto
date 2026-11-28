@@ -104,6 +104,7 @@ message ArticleBasketPb {
   repeated ProxyArticlePb proxies = 10 [json_name = 'proxies'];
   double discountAmount = 11 [json_name = 'discountAmountSalesOnly'];
   double markupAmount = 12 [json_name = 'markupAmountSalesOnly'];
+  bool doNotSellProxiesSeparately = 13 [json_name = 'doNotSellProxiesSeparately'];
 }
 
 message ArticleBasketOnTicketPb {

@@ -1,5 +1,13 @@
 # changelog
 
+## 1.5.1 - november 2026
+
+- `ArticleBasketPb.doNotSellProxiesSeparately`: optionally hide basket component articles from separate sale
+
+## 1.5.0 - november 2026
+
+- feat: seamless signup
+
 ## 1.4.9 - november 2026
 
 - `SignUpRequest.phone`: optional phone stored on the user at signup
